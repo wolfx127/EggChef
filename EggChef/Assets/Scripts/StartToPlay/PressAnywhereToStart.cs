@@ -27,7 +27,6 @@ namespace StartToPlay
             isLoading = true;
             Debug.Log("点击进入游戏");
 
-            // 场景切换全部交给 OverallSceneManager，这里只负责"按了什么"
             OverallSceneManager.Instance.StartToConstant();
         }
     }
