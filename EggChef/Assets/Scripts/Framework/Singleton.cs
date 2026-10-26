@@ -1,6 +1,6 @@
 using System;
 
-namespace Overall
+namespace Framework
 {
     public abstract class Singleton<T> where T : Singleton<T>, new()
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Overall
+namespace Framework
 {
     [DisallowMultipleComponent]
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>

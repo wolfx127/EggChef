@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Framework;
 
-namespace TaffyFrame.EventBus
+namespace Framework
 {
     //- 类型即频道：每个 struct 类型自动隔离，不会串台，也不需要字符串 key
     //- 任意参数：需要几个参数就在 struct 里加几个字段，天然兼容各种签名

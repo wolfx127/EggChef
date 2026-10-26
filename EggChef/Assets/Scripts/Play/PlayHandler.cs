@@ -4,58 +4,36 @@ using UnityEngine.InputSystem;
 
 namespace Play
 {
+    //负责输入输出相关，包括键鼠，UI,除此之外的new和拷贝不被允许
     public class PlayHandler : MonoBehaviour
     {
         private PlayInputAction inputAction;
-
-        [SerializeField]private GameObject cameraGO;
+        private GameObject cameraGO;
         private PlayCamera playCamera;
 
+        #region UI事件
+
+        public event Action RefreshUIEvent;
+
+        #endregion
+        
         private void Awake()
         {
             inputAction = new PlayInputAction();
             inputAction.Enable();
             inputAction.map.Enable();
-            
-            if(!cameraGO) Debug.Log("PlayHandler:摄像机游戏对象缺失");
-        }
-
-        private void FixedUpdate()
-        {
-            
+            inputAction.map.Rotation.Enable();
         }
 
         private void LateUpdate()
         {
-            MoveCamera(Time.deltaTime);
+            playCamera.MoveCamera(cameraGO, inputAction, Time.deltaTime);
         }
 
-        public void InitField(PlayCamera playCamera)
+        public void Init(GameObject cameraGO, PlayCamera playCamera)
         {
+            this.cameraGO = cameraGO;
             this.playCamera = playCamera;
-            cameraGO.transform.rotation = Quaternion.Euler(playCamera.beginningY, playCamera.beginningX, 0f);
-        }
-
-        private void MoveCamera(float dt)
-        {
-            if(playCamera == null)
-            {
-                Debug.Log("PlayHandler:没找到摄像机脚本");
-                return;
-            }
-            Vector2 v = inputAction.map.Rotation.ReadValue<Vector2>();
-
-            playCamera.curX = Mathf.Clamp(
-                playCamera.curX + v.x * playCamera.speed_leftNright * dt,
-                playCamera.leftRange, playCamera.rightRange);
-            playCamera.curY = Mathf.Clamp(
-                playCamera.curY - v.y * playCamera.speed_upNdown * dt,
-                playCamera.UpRange, playCamera.DownRange);
-
-            cameraGO.transform.rotation = Quaternion.Euler(
-                playCamera.beginningY + playCamera.curY,
-                playCamera.beginningX + playCamera.curX,
-                0f);
         }
     }
 }

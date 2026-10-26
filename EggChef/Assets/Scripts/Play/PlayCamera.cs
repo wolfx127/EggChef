@@ -19,11 +19,22 @@ namespace Play
         public float curX = 0;
         public float curY = 0;
         
-        public PlayCamera(PlayCameraSO cameraSO)
+        public PlayCamera(GameObject cameraGO, PlayCameraSO cameraSO)
         {
+            cameraGO.transform.rotation = Quaternion.Euler(beginningY, beginningX, 0f);
             this.cameraSO = cameraSO;
             beginningX = cameraSO.beginningX;
             beginningY = cameraSO.beginningY;
+        }
+        
+        public void MoveCamera(GameObject cameraGO, PlayInputAction inputAction, float dt)
+        {
+            Vector2 v = inputAction.map.Rotation.ReadValue<Vector2>();
+
+            curX = Mathf.Clamp(curX + v.x * speed_leftNright * dt, leftRange, rightRange);
+            curY = Mathf.Clamp(curY - v.y * speed_upNdown * dt, UpRange, DownRange); 
+
+            cameraGO.transform.rotation = Quaternion.Euler(beginningY + curY, beginningX + curX, 0f);
         }
     }
 }
