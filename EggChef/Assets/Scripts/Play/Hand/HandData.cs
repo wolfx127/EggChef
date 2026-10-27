@@ -16,7 +16,7 @@ namespace Play.Hand
     {
         #region 基本字段
 
-        private GameObject HandGO;
+        private GameObject handGO;
         private CatchObject catchObject =  CatchObject.nothing;
         private Vector3 dir = Vector3.zero;    
         private float speed;
@@ -31,7 +31,7 @@ namespace Play.Hand
 
         public HandData(GameObject handGO)
         {
-            this.HandGO = handGO;
+            this.handGO = handGO;
             rb = handGO.GetComponent<Rigidbody>();
         }
 
@@ -43,8 +43,8 @@ namespace Play.Hand
 
         public void Move(float fixedDt)
         {
-            curYPos_Y = HandGO.transform.position.y;
-            rb.MovePosition(dir * fixedDt + HandGO.transform.position);
+            curYPos_Y = handGO.transform.position.y;
+            rb.MovePosition(dir * fixedDt + handGO.transform.position);
             speed = prevPos_Y - curYPos_Y;
             prevPos_Y = curYPos_Y;
         }

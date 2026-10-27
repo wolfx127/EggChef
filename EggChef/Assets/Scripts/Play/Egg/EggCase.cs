@@ -15,7 +15,6 @@ namespace Play.Egg
             this.eggSO = eggSO;
             
             eggGO.SetActive(false);
-            egg.perfectSpeed = eggSO.perfectSpeed;
             egg = new EggData(eggSO.perfectSpeed, eggSO.badSpeed);
         }
     }

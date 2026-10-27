@@ -27,7 +27,7 @@ namespace Framework.FSM
         /// <summary>
         /// 转换表
         /// </summary>
-        public List<Transition> transitionTable;
+        public List<Transition> transitionTable = new  List<Transition>();
         //该帧刚进入此状态时执行一次
         public abstract void Enter(T caller, IBoard b);
         //该帧没进入别的状态时执行一次

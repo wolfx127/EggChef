@@ -17,7 +17,7 @@ namespace Play
         [SerializeField] private GameObject eggGO;
         [SerializeField] private GameObject leftHandGO;
         [SerializeField] private GameObject rightHandGO;
-        
+
         //被注入
         public PlayHandler playHandler;
         public PlayMonoController playMonoController;
