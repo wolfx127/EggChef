@@ -11,6 +11,7 @@ namespace Play.Egg
 
         public void Init(GameObject eggGO, EggSO eggSO)
         {
+            Debug.Log("初始化：EggCase");
             this.eggGO = eggGO;
             this.eggSO = eggSO;
             

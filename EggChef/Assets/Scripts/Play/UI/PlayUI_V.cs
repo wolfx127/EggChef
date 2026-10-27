@@ -25,6 +25,7 @@ namespace Play.UI
         //V不用构造是为了拓扑序，注入数据时先p再v，不然同时构造注入数据的话，总会有一方拿不到带数据的实例
         public void Init(IPlayUI_P playUI_P, VisualElement root)
         {
+            Debug.Log("初始化：PlayUI_V");
             this.playUI_P = playUI_P;
             this.root = root;
             CreateUI();

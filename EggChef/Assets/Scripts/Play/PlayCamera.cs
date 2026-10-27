@@ -21,6 +21,7 @@ namespace Play
         
         public PlayCamera(GameObject cameraGO, PlayCameraSO cameraSO)
         {
+            Debug.Log("初始化：PlayCamera构造");
             cameraGO.transform.rotation = Quaternion.Euler(beginningY, beginningX, 0f);
             this.cameraSO = cameraSO;
             beginningX = cameraSO.beginningX;

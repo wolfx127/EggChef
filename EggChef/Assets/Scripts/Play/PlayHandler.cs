@@ -46,6 +46,7 @@ namespace Play
 
         public void Init(GameObject cameraGO, PlayCamera playCamera, HandData leftHand, HandData rightHand)
         {
+            Debug.Log("初始化：PlayHandler");
             this.cameraGO = cameraGO;
             this.playCamera = playCamera;
             this.leftHand = leftHand;

@@ -16,6 +16,7 @@ namespace Play.UI
 
         public PlayUI_P(IPlayUI_V playUI_V, PlayHandler playHandler)
         {
+            Debug.Log("初始化：PlayUI_P构造");
             this.playUI_V = playUI_V;
             this.playHandler = playHandler;
         }

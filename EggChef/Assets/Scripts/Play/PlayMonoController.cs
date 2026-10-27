@@ -32,6 +32,7 @@ namespace Play
 
         public void Init(GameObject cameraGO, PlayCamera camera, HandData leftHand, HandData rightHand)
         {
+            Debug.Log("初始化：PlayMonoController");
             this.cameraGO = cameraGO;
             this.camera = camera;
             this.leftHand = leftHand;

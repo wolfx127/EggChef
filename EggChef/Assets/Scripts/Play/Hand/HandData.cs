@@ -27,10 +27,11 @@ namespace Play.Hand
         #endregion
 
         private Rigidbody rb;
-        private HandFSM handFSM =  new HandFSM();
+        private HandFSM handFSM = new HandFSM();
 
         public HandData(GameObject handGO)
         {
+            Debug.Log("初始化：HandData构造");
             this.handGO = handGO;
             rb = handGO.GetComponent<Rigidbody>();
         }

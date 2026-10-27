@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Play.Egg
 {
     public enum EggState
@@ -15,6 +17,7 @@ namespace Play.Egg
 
         public EggData(float perfectSpeed, float badSpeed)
         {
+            Debug.Log("初始化：EggData构造");
             this.perfectSpeed = perfectSpeed;
             this.badSpeed = badSpeed;
         }
