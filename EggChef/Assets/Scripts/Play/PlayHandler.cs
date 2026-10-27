@@ -1,4 +1,5 @@
 using System;
+using Play.Hand;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,8 @@ namespace Play
         private PlayInputAction inputAction;
         private GameObject cameraGO;
         private PlayCamera playCamera;
+        private HandData leftHand;
+        private HandData rightHand;
 
         #region UI事件
 
@@ -25,15 +28,28 @@ namespace Play
             inputAction.map.Rotation.Enable();
         }
 
+        private void Update()
+        {
+            Vector3 v_left = Vector3.zero;
+            Vector3 v_right = Vector3.zero;
+            
+//TODO:鼠标拖动改v
+            
+            leftHand.SetDir(v_left);
+            rightHand.SetDir(v_right);
+        }
+
         private void LateUpdate()
         {
             playCamera.MoveCamera(cameraGO, inputAction, Time.deltaTime);
         }
 
-        public void Init(GameObject cameraGO, PlayCamera playCamera)
+        public void Init(GameObject cameraGO, PlayCamera playCamera, HandData leftHand, HandData rightHand)
         {
             this.cameraGO = cameraGO;
             this.playCamera = playCamera;
+            this.leftHand = leftHand;
+            this.rightHand = rightHand;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using Play.Egg;
+using Play.Hand;
 using SO.Play;
 using UnityEngine;
 
@@ -14,11 +15,15 @@ namespace Play
         [SerializeField] private GameObject cameraGO;
         [SerializeField] private EggSO eggSO;
         [SerializeField] private GameObject eggGO;
+        [SerializeField] private GameObject leftHandGO;
+        [SerializeField] private GameObject rightHandGO;
         
         //被注入
         public PlayHandler playHandler;
         public PlayMonoController playMonoController;
         public EggCase eggCase;
+        public HandData leftHand;
+        public HandData rightHand;
 
         private void Awake()
         {
@@ -26,12 +31,14 @@ namespace Play
             playHandler = GetComponent<PlayHandler>();
             playMonoController = GetComponent<PlayMonoController>();
         }
-
+        
         //onEnable能确保这些mono实例化完
         private void OnEnable()
         {
-            playHandler.Init(cameraGO, playCamera);
-            playMonoController.Init(cameraGO, playCamera);
+            leftHand = new HandData(leftHandGO);
+            rightHand = new HandData(rightHandGO);
+            playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
+            playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
             eggCase.Init(eggGO, eggSO);
         }
     }

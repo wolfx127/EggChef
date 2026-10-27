@@ -7,7 +7,7 @@ namespace Play.Egg
     {
         private EggSO eggSO;
         private GameObject eggGO;
-        private Egg egg;
+        private EggData egg;
 
         public void Init(GameObject eggGO, EggSO eggSO)
         {
@@ -16,7 +16,7 @@ namespace Play.Egg
             
             eggGO.SetActive(false);
             egg.perfectSpeed = eggSO.perfectSpeed;
-            egg = new Egg(eggSO.perfectSpeed, eggSO.badSpeed);
+            egg = new EggData(eggSO.perfectSpeed, eggSO.badSpeed);
         }
     }
 }

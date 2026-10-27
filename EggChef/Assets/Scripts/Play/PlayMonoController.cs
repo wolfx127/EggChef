@@ -1,4 +1,6 @@
 using System;
+using Play.Egg;
+using Play.Hand;
 using UnityEngine;
 
 namespace Play
@@ -8,10 +10,19 @@ namespace Play
     {
         private PlayCamera camera;
         private GameObject cameraGO;
+        private HandData leftHand;
+        private HandData rightHand;
 
         private void Update()
         {
-            
+            leftHand.Tick(Time.deltaTime);
+            rightHand.Tick(Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            rightHand.Move(Time.fixedDeltaTime);
+            leftHand.Move(Time.fixedDeltaTime);
         }
 
         private void LateUpdate()
@@ -19,10 +30,12 @@ namespace Play
             
         }
 
-        public void Init(GameObject cameraGO, PlayCamera camera)
+        public void Init(GameObject cameraGO, PlayCamera camera, HandData leftHand, HandData rightHand)
         {
             this.cameraGO = cameraGO;
             this.camera = camera;
+            this.leftHand = leftHand;
+            this.rightHand = rightHand;
         }
     }
 }
