@@ -21,8 +21,7 @@ namespace Play
 
         private void FixedUpdate()
         {
-            rightHand.Move(Time.fixedDeltaTime);
-            leftHand.Move(Time.fixedDeltaTime);
+            
         }
 
         private void LateUpdate()

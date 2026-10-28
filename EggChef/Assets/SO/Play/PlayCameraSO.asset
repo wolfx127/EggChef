@@ -20,3 +20,6 @@ MonoBehaviour:
   DownRange: 30
   beginningX: -90
   beginningY: 22.7
+  radius: 10
+  horizontalGap_Percent: 0.2
+  verticalGap_Percent: 0.3

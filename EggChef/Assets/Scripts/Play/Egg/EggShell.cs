@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Play.Egg
 {
-    public class EggCase : MonoBehaviour
+    public class EggShell
     {
         private EggSO eggSO;
         private GameObject eggGO;
         private EggData egg;
 
-        public void Init(GameObject eggGO, EggSO eggSO)
+        public EggShell(GameObject eggGO, EggSO eggSO)
         {
-            Debug.Log("初始化：EggCase");
+            Debug.Log("初始化：EggCase构造");
             this.eggGO = eggGO;
             this.eggSO = eggSO;
             

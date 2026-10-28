@@ -13,5 +13,9 @@ namespace SO.Play
         public float DownRange;
         public float beginningX;
         public float beginningY;
+        
+        public float radius = 0;
+        public float horizontalGap_Percent = 0;
+        public float verticalGap_Percent = 0;
     }
 }

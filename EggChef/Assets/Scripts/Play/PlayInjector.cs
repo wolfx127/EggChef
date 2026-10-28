@@ -13,6 +13,7 @@ namespace Play
         PlayCamera playCamera;
         [SerializeField] private PlayCameraSO cameraSO;
         [SerializeField] private GameObject cameraGO;
+        [SerializeField] private Camera cam;
         [SerializeField] private EggSO eggSO;
         [SerializeField] private GameObject eggGO;
         [SerializeField] private GameObject leftHandGO;
@@ -21,13 +22,13 @@ namespace Play
         //被注入
         public PlayHandler playHandler;
         public PlayMonoController playMonoController;
-        public EggCase eggCase;
+        public EggShell eggShell;
         public HandData leftHand;
         public HandData rightHand;
 
         private void Awake()
         {
-            playCamera = new PlayCamera(cameraGO, cameraSO);
+            playCamera = new PlayCamera(cameraGO, cam, cameraSO, leftHandGO, rightHandGO);
             playHandler = GetComponent<PlayHandler>();
             playMonoController = GetComponent<PlayMonoController>();
         }
@@ -35,11 +36,11 @@ namespace Play
         //onEnable能确保这些mono实例化完
         private void OnEnable()
         {
-            leftHand = new HandData(leftHandGO);
-            rightHand = new HandData(rightHandGO);
+            leftHand = new HandData(leftHandGO, Side.left);
+            rightHand = new HandData(rightHandGO, Side.right);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
-            eggCase.Init(eggGO, eggSO);
+            eggShell = new EggShell(eggGO, eggSO);
         }
     }
 }

@@ -32,11 +32,7 @@ namespace Play
         {
             Vector3 v_left = Vector3.zero;
             Vector3 v_right = Vector3.zero;
-            
-//TODO:鼠标拖动改v
-            
-            leftHand.SetDir(v_left);
-            rightHand.SetDir(v_right);
+            playCamera.CatchingHand(Mouse.current);
         }
 
         private void LateUpdate()
