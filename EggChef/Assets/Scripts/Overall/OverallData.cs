@@ -1,5 +1,6 @@
 namespace Overall
 {
+    //永久数据
     public static class OverallData
     {
         /// <summary>

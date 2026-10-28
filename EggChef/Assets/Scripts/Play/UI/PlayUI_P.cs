@@ -8,6 +8,7 @@ namespace Play.UI
         public void Unsubscribe();
     }
 
+    //负责m和v之间的交互，m和v之间不能直接调用，必须先调用p
     public class PlayUI_P : IPlayUI_P
     {
         private IPlayUI_V playUI_V;

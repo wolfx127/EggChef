@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Overall
 {
+    //控制全局的场景转换，采用异步+unitask，异步加载场景，同时阻塞主线程删除旧场景
     public class OverallSceneManager : Singleton<OverallSceneManager>
     {
         public string startScene = "StartScene";

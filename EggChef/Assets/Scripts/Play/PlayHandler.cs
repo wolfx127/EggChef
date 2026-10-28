@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 namespace Play
 {
     //负责输入输出相关，包括键鼠，UI,除此之外的new和拷贝不被允许
+    //特殊的monoController，只要依赖输入和UI交互的，都要从monoController移到这里
     public class PlayHandler : MonoBehaviour
     {
         private PlayInputAction inputAction;
@@ -30,8 +31,6 @@ namespace Play
 
         private void Update()
         {
-            Vector3 v_left = Vector3.zero;
-            Vector3 v_right = Vector3.zero;
             playCamera.CatchingHand(Mouse.current);
         }
 

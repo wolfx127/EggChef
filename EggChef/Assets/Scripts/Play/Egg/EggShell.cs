@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Play.Egg
 {
+    //控制蛋框
     public class EggShell
     {
         private EggSO eggSO;

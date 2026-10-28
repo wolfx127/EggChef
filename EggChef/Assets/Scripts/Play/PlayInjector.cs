@@ -7,6 +7,7 @@ using UnityEngine;
 namespace Play
 {
     //负责初始化时: 注入mono组件，游戏对象，复用数据(取代单例)，只能有获取引用、拷贝、new的逻辑
+    //主要是使用awake和onenable周期函数
     public class PlayInjector : MonoBehaviour
     {
         //准备注入

@@ -1,5 +1,6 @@
 using Framework;
 using Play.Egg;
+using Play.Pot;
 using UnityEngine;
 
 namespace Play.Hand
@@ -52,14 +53,17 @@ namespace Play.Hand
             EventBus.Subscribe<HandFreeEvent>(HandFree);
         }
 
+        //每帧变更状态机，移动不属于该状态机
         public void Tick(float dt)
         {
             handFSM.SetBoard(speed, catchObject, eggData);
             handFSM.Tick();
         }
 
+        //接收来自相机的事件，使得始终跟随相机
         private void MoveByCamera(HandMoveByCameraEvent evt)
         {
+            //如果这个手没被抓住（不处于被抓住状态），就不跟随
             if (isCatch) return;
             if (side == Side.left)
             {
@@ -72,16 +76,21 @@ namespace Play.Hand
             }
         }
 
+        //接收来自相机的事件，同时相机发来一个 抓住 的状态变更操作，以及变更后的新位置
         private void MoveByMouse(HandMoveByMouseEvent evt)
         {
+            //看自己是不是被抓住的那只手
             if (evt.side == side)
             {
+                //状态变更
                 isCatch = true;
+                //挑自己对应的新位置
                 if(side == Side.left) handGO.transform.position = evt.leftV;
                 else if (side == Side.right) handGO.transform.position = evt.rightV;
             }
         }
         
+        //相机通知该手状态变为 空闲 ，手随之继续跟随相机
         private void HandFree(HandFreeEvent evt) => isCatch = false;
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Play.UI
 {
+    //针对ui的注入，不同于PlayInjector，该脚本只负责mvp三层
     public class PlayUI_Injector : MonoBehaviour
     {
         [SerializeField]private PlayHandler playHandler;

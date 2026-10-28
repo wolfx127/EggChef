@@ -1,6 +1,8 @@
-using UnityEngine;
-
-public class FriedEggData
+namespace Play.Egg
 {
+    //控制煎蛋
+    public class FriedEggData
+    {
     
+    }
 }

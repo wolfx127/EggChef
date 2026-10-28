@@ -9,6 +9,7 @@ namespace Play.Egg
         perfect,
         bad
     }
+    //控制鸡蛋
     public class EggData
     {
         public float perfectSpeed;

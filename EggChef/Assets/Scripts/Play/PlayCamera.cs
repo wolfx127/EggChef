@@ -46,6 +46,7 @@ namespace Play
             this.rightHandGO = rightHandGO;
         }
         
+        //摄像机通过输入旋转，同时给手默认位置，但手是否使用这个位置是手的事，不归相机管
         public void MoveCamera(GameObject cameraGO, PlayInputAction inputAction, float dt)
         {
             Vector2 v = inputAction.map.Rotation.ReadValue<Vector2>();
@@ -68,21 +69,26 @@ namespace Play
 
         }
 
+        //手的位置是鼠标在相机的位置，同时检测鼠标输入
+        //如果鼠标按下，则射线检测点击的是哪个手，手由事件得知自己被选中，同时事件同时发送两个坐标，手得知自己被选中后才会拿对应的坐标
         public void CatchingHand(Mouse mouse)
         {
             if (mouse.leftButton.isPressed)
             {
+                //从相机向世界打出一道射线，起到从屏幕点击到物体的效果
                 Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
                 Vector3 lV = new Vector3();
                 Vector3 rV = new Vector3();
                 if (isCatch == Side.NULL)
                 {
                     catchingHandGO = null;
+                    //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
                     if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 1.1f))
                     {
                         catchingHandGO = hit.collider.gameObject;
                     }
                 }
+                //如果击中手了，广播给这个手的世界位置(在视锥面上)
                 if (catchingHandGO)
                 {
                     if (catchingHandGO.CompareTag("LeftHand"))
@@ -109,6 +115,7 @@ namespace Play
                     }
                 }
             }
+            //如果没击中手，使手恢复默认状态，取消抓取状态
             else
             {
                 isCatch = Side.NULL;

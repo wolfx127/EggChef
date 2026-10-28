@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Play
 {
     //负责需要调用monoAPI的逻辑,不包括输入输出; 包括状态机tick,动画
+    //主要是使用update系列函数
     public class PlayMonoController : MonoBehaviour
     {
         private PlayCamera camera;
