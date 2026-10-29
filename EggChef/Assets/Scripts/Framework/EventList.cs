@@ -9,12 +9,18 @@ namespace Framework
         
     }
 
+    /// <summary>
+    /// 手跟随相机移动
+    /// </summary>
     public struct HandMoveByCameraEvent : IEvent
     {
         public Vector3 leftV;
         public Vector3 rightV;
     }
 
+    /// <summary>
+    /// 手被鼠标拖动
+    /// </summary>
     public struct HandMoveByMouseEvent : IEvent
     {
         public Side side;

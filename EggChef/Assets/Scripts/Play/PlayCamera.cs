@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 
 namespace Play
 {
+    /// <summary>
+    /// 处理相机移动、手跟随相机移动的检测与广播
+    /// </summary>
     public class PlayCamera
     {
         private PlayCameraSO cameraSO;
@@ -31,6 +34,14 @@ namespace Play
         private GameObject catchingHandGO = null;
         private Side isCatch = Side.NULL;
         
+        /// <summary>
+        /// PlayCamera游戏摄像头初始化
+        /// </summary>
+        /// <param name="cameraGO">Camera游戏对象</param>
+        /// <param name="cam">Camera游戏对象上的Camera组件</param>
+        /// <param name="cameraSO">PlayCameraSO</param>
+        /// <param name="leftHandGO">左手游戏对象</param>
+        /// <param name="rightHandGO">右手游戏对象</param>
         public PlayCamera(GameObject cameraGO, Camera cam, PlayCameraSO cameraSO, GameObject leftHandGO, GameObject rightHandGO)
         {
             Debug.Log("初始化：PlayCamera构造");
