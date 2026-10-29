@@ -37,7 +37,10 @@ namespace Play
         private GameObject catchingItemGO = null;
         private bool isLeftHandFree = true;
         private bool isRightHandFree = true;
-        
+
+        //手所在的层（TagManager 里第 6 层是 Hand），射线查物品时要把它排除掉
+        private const int HandLayerMask = 1 << 6;
+
         /// <summary>
         /// PlayCamera游戏摄像头初始化
         /// </summary>
@@ -141,26 +144,35 @@ namespace Play
         //获取一个物品
         public void CatchingItem(Mouse mouse)
         {
-            if (mouse.leftButton.isPressed&&(isLeftHandFree||isRightHandFree))
+            if (!mouse.leftButton.isPressed) return;
+            
+            Side freeHand;
+            if (isRightHandFree)
             {
-                //从相机向世界打出一道射线，起到从屏幕点击到物体的效果
-                Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
-                Vector3 lV = new Vector3();
-                Vector3 rV = new Vector3();
-                
-                //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
-                if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 2f))
-                {
-                    catchingItemGO = hit.collider.gameObject;
-                }
+                freeHand = Side.right;
+            }
+            else if (isLeftHandFree)
+            {
+                freeHand = Side.left;
+            }
+            else return;
+            
+            Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
+            //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
+            if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 1.1f))
+            {
+                catchingHandGO = hit.collider.gameObject;
+            }
 
-                if (catchingItemGO.CompareTag("Oil"))
-                {
-                    if (isRightHandFree)
-                    {
-                        EventBus.Publish(new OilMoveByHandEvent(){side=Side.right,oilGO=catchingItemGO});
-                    }
-                }
+            //按标签决定发布哪个事件；具体怎么用交给手自己
+            switch (catchingHandGO.tag)
+            {
+                case "Oil":
+                    EventBus.Publish(new OilMoveByHandEvent { side = freeHand, oilGO = catchingHandGO }); break;
+                case "Egg":
+                    EventBus.Publish(new EggMoveByHandEvent { side = freeHand, eggGO = catchingHandGO }); break;
+                default:
+                    break;
             }
         }
     }

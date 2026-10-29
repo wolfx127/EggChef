@@ -53,7 +53,8 @@ namespace Play.Hand
             EventBus.Subscribe<HandMoveByCameraEvent>(MoveByCamera);
             EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
             EventBus.Subscribe<HandFreeEvent>(HandFree);
-            EventBus.Subscribe<OilMoveByHandEvent>(MoveByHand);
+            EventBus.Subscribe<OilMoveByHandEvent>(MoveByOil);
+            EventBus.Subscribe<EggMoveByHandEvent>(MoveByEgg);
         }
         
 
@@ -99,12 +100,28 @@ namespace Play.Hand
             }
         }
         
-        private void MoveByHand(OilMoveByHandEvent evt)
+        //相机说“这个油瓶归你”，先看是不是自己，再决定抓着什么
+        private void MoveByOil(OilMoveByHandEvent evt) => AttachItem(evt.side, evt.oilGO);
+
+        //相机说“这个鸡蛋归你”
+        private void MoveByEgg(EggMoveByHandEvent evt) => AttachItem(evt.side, evt.eggGO);
+
+        //两种物品共用同一套处理，区别只在事件里的字段名
+        private void AttachItem(Side evtSide, GameObject item)
         {
-            if (evt.side == side)
+            if (evtSide != side || item == null) return;
+
+            isCatching = true;
+            itemGO = item;
+
+            switch (item.tag)
             {
-                isCatching = true;
-                itemGO = evt.oilGO;
+                case "Egg": 
+                    catchObject = CatchObject.egg; break;
+                case "Oil": 
+                    catchObject = CatchObject.oil; break;
+                default: 
+                    break;
             }
         }
         
