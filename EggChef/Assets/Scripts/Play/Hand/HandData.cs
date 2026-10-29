@@ -25,7 +25,7 @@ namespace Play.Hand
     {
         #region 基本字段
 
-        private Side side = Side.left;
+        private Side side = Side.NULL;
         private GameObject handGO;
         private CatchObject catchObject =  CatchObject.nothing;
         private Vector3 targetPos = Vector3.zero;
