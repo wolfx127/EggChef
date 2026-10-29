@@ -46,7 +46,7 @@ namespace Play
             this.rightHandGO = rightHandGO;
         }
         
-        //摄像机通过输入旋转，同时给手默认位置，但手是否使用这个位置是手的事，不归相机管
+        //摄像机通过输入旋转，同时给手默认位置
         public void MoveCamera(GameObject cameraGO, PlayInputAction inputAction, float dt)
         {
             Vector2 v = inputAction.map.Rotation.ReadValue<Vector2>();
@@ -56,14 +56,10 @@ namespace Play
 
             cameraGO.transform.rotation = Quaternion.Euler(beginningY + curY, beginningX + curX, 0f);
 
+            //计算左右手相对相机的位置，再发布事件通知手，但手是否使用这个位置是手的事，不归相机管
             Vector3 camPos = cameraGO.transform.position;
-            Vector3 leftHandPos = camPos +
-                                  cam.ViewportPointToRay(
-                                      new Vector3(horizontalGap_Percent, verticalGap_Percent, 0f)).direction *
-                                  radius;
-            Vector3 rightHandPos = camPos +
-                                   cam.ViewportPointToRay(new Vector3(1f - horizontalGap_Percent,
-                                       verticalGap_Percent, 0f)).direction * radius;
+            Vector3 leftHandPos = camPos + cam.ViewportPointToRay(new Vector3(horizontalGap_Percent, verticalGap_Percent, 0f)).direction * radius;
+            Vector3 rightHandPos = camPos + cam.ViewportPointToRay(new Vector3(1f - horizontalGap_Percent, verticalGap_Percent, 0f)).direction * radius;
 
             EventBus.Publish(new HandMoveByCameraEvent { leftV = leftHandPos, rightV = rightHandPos });
 
