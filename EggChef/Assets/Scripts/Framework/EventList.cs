@@ -38,14 +38,5 @@ namespace Framework
         public Side side;
         public GameObject oilGO;
     }
-
-    /// <summary>
-    /// 鸡蛋被某只手拿到
-    /// </summary>
-    public struct EggMoveByHandEvent : IEvent
-    {
-        public Side side;
-        public GameObject eggGO;
-    }
 }
 
