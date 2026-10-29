@@ -14,7 +14,7 @@ namespace Play
         private PlayCamera playCamera;
         private HandData leftHand;
         private HandData rightHand;
-
+        private GameObject catchObject;
         #region UI事件
 
         public event Action RefreshUIEvent;
@@ -27,7 +27,9 @@ namespace Play
             inputAction.Enable();
             inputAction.map.Enable();
             inputAction.map.Rotation.Enable();
+            inputAction.map.PickUpItem.started += CreateItem;
         }
+
 
         private void Update()
         {
@@ -46,6 +48,24 @@ namespace Play
             this.playCamera = playCamera;
             this.leftHand = leftHand;
             this.rightHand = rightHand;
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("PickcableItems"))
+            {
+                catchObject=this.gameObject;
+            }
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            catchObject = null;
+        }
+        private void CreateItem(InputAction.CallbackContext obj)
+        {
+            if (catchObject != null)
+            {
+                Instantiate(catchObject);
+            }
         }
     }
 }
