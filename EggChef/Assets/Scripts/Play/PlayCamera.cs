@@ -155,7 +155,8 @@ namespace Play
                     catchingItemGO = hit.collider.gameObject;
                 }
 
-                EventBus.Publish(new ItemMoveByHandEvent(){side=freeSide,itemGO=catchingItemGO});
+                if(catchingItemGO.CompareTag("Egg")||catchingHandGO.CompareTag("Oil"))
+                    EventBus.Publish(new ItemMoveByHandEvent(){side=freeSide,itemGO=catchingItemGO});
             }
         }
     }
