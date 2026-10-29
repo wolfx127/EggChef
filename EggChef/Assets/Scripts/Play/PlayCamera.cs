@@ -143,24 +143,19 @@ namespace Play
         {
             if (mouse.leftButton.isPressed&&(isLeftHandFree||isRightHandFree))
             {
+                Side freeSide = Side.NULL;
+                freeSide = (isRightHandFree) ? Side.right : Side.left;
+                
                 //从相机向世界打出一道射线，起到从屏幕点击到物体的效果
                 Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
-                Vector3 lV = new Vector3();
-                Vector3 rV = new Vector3();
                 
-                //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
+                //TODO 这里半径两倍是怕放太远点不到，具体到时候听策划的再改吧
                 if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 2f))
                 {
                     catchingItemGO = hit.collider.gameObject;
                 }
 
-                if (catchingItemGO.CompareTag("Oil"))
-                {
-                    if (isRightHandFree)
-                    {
-                        EventBus.Publish(new OilMoveByHandEvent(){side=Side.right,oilGO=catchingItemGO});
-                    }
-                }
+                EventBus.Publish(new ItemMoveByHandEvent(){side=freeSide,itemGO=catchingItemGO});
             }
         }
     }

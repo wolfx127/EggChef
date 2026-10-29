@@ -134,3 +134,6 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 *~
+
+# AIGC临时目录
+.workbuddy/

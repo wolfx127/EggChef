@@ -53,7 +53,7 @@ namespace Play.Hand
             EventBus.Subscribe<HandMoveByCameraEvent>(MoveByCamera);
             EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
             EventBus.Subscribe<HandFreeEvent>(HandFree);
-            EventBus.Subscribe<OilMoveByHandEvent>(MoveByHand);
+            EventBus.Subscribe<ItemMoveByHandEvent>(MoveByHand);
         }
         
 
@@ -99,12 +99,24 @@ namespace Play.Hand
             }
         }
         
-        private void MoveByHand(OilMoveByHandEvent evt)
+        private void MoveByHand(ItemMoveByHandEvent evt)
         {
             if (evt.side == side)
             {
                 isCatching = true;
-                itemGO = evt.oilGO;
+                itemGO = evt.itemGO;
+
+                switch (evt.itemGO.tag)
+                {
+                    case "Egg":
+                        catchObject = CatchObject.egg;
+                        break;
+                    case "Oil":
+                        catchObject = CatchObject.oil;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         

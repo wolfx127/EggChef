@@ -33,10 +33,10 @@ namespace Framework
         public Side side;
     }
 
-    public struct OilMoveByHandEvent : IEvent
+    public struct ItemMoveByHandEvent : IEvent
     {
         public Side side;
-        public GameObject oilGO;
+        public GameObject itemGO;
     }
 }
 
