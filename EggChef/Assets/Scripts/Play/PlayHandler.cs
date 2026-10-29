@@ -32,6 +32,7 @@ namespace Play
         private void Update()
         {
             playCamera.CatchingHand(Mouse.current);
+            playCamera.CatchingItem(Mouse.current);
         }
 
         private void LateUpdate()

@@ -39,7 +39,6 @@ namespace Framework
             {
                 //将方法加入委托列表，之后用遍历来实现里面的方法
                 Handlers[key] = handler;
-
             }
         }
 
@@ -61,7 +60,6 @@ namespace Framework
                 {
                     Handlers[key] = updated;
                 }
-
             }
         }
         /// <summary>

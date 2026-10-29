@@ -34,7 +34,9 @@ namespace Play.Hand
         private float curYPos_Y = 0;
         private EggData eggData = null;
         private PotData potData = null;
-        public bool isCatch = false;
+        private GameObject itemGO = null;
+        public bool isCatched = false;//被鼠标抓取
+        public bool isCatching = false;//该手获取物品
         public bool isPut = false;
 
         #endregion
@@ -51,20 +53,27 @@ namespace Play.Hand
             EventBus.Subscribe<HandMoveByCameraEvent>(MoveByCamera);
             EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
             EventBus.Subscribe<HandFreeEvent>(HandFree);
+            EventBus.Subscribe<OilMoveByHandEvent>(MoveByHand);
         }
+        
 
         //每帧变更状态机，移动不属于该状态机
         public void Tick(float dt)
         {
             handFSM.SetBoard(speed, catchObject, eggData);
             handFSM.Tick();
+
+            if (isCatching)
+            {
+                itemGO.transform.position = handGO.transform.position;
+            }
         }
 
         //接收来自相机的事件，使得始终跟随相机
         private void MoveByCamera(HandMoveByCameraEvent evt)
         {
             //如果这个手没被抓住（不处于被抓住状态），就不跟随
-            if (isCatch) return;
+            if (isCatched) return;
             if (side == Side.left)
             {
                 handGO.transform.position = evt.leftV;
@@ -83,14 +92,23 @@ namespace Play.Hand
             if (evt.side == side)
             {
                 //状态变更
-                isCatch = true;
+                isCatched = true;
                 //挑自己对应的新位置
                 if(side == Side.left) handGO.transform.position = evt.leftV;
                 else if (side == Side.right) handGO.transform.position = evt.rightV;
             }
         }
         
+        private void MoveByHand(OilMoveByHandEvent evt)
+        {
+            if (evt.side == side)
+            {
+                isCatching = true;
+                itemGO = evt.oilGO;
+            }
+        }
+        
         //相机通知该手状态变为 空闲 ，手随之继续跟随相机
-        private void HandFree(HandFreeEvent evt) => isCatch = false;
+        private void HandFree(HandFreeEvent evt) => isCatched = false;
     }
 }

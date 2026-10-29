@@ -32,7 +32,11 @@ namespace Play
         private float horizontalGap_Percent = 0;
         private float verticalGap_Percent = 0;
         private GameObject catchingHandGO = null;
-        private Side isCatch = Side.NULL;
+        private Side isCatchingHand = Side.NULL;
+        
+        private GameObject catchingItemGO = null;
+        private bool isLeftHandFree = true;
+        private bool isRightHandFree = true;
         
         /// <summary>
         /// PlayCamera游戏摄像头初始化
@@ -86,7 +90,7 @@ namespace Play
                 Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
                 Vector3 lV = new Vector3();
                 Vector3 rV = new Vector3();
-                if (isCatch == Side.NULL)
+                if (isCatchingHand == Side.NULL)
                 {
                     catchingHandGO = null;
                     //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
@@ -100,7 +104,7 @@ namespace Play
                 {
                     if (catchingHandGO.CompareTag("LeftHand"))
                     {
-                        isCatch = Side.left;
+                        isCatchingHand = Side.left;
                         lV = mouseRay.GetPoint(radius);
                         rV = rightHandGO.transform.position;
                         EventBus.Publish(new HandMoveByMouseEvent{
@@ -111,7 +115,7 @@ namespace Play
                     }
                     else if (catchingHandGO.CompareTag("RightHand"))
                     {
-                        isCatch = Side.right;
+                        isCatchingHand = Side.right;
                         lV = leftHandGO.transform.position;
                         rV = mouseRay.GetPoint(radius);
                         EventBus.Publish(new HandMoveByMouseEvent{
@@ -122,15 +126,41 @@ namespace Play
                     }
                 }
             }
-            //如果没击中手，使手恢复默认状态，取消抓取状态
+            //如果鼠标松开，使手恢复默认状态，取消抓取状态
             else
             {
-                isCatch = Side.NULL;
+                isCatchingHand = Side.NULL;
                 if(catchingHandGO && catchingHandGO.CompareTag("LeftHand"))
                     EventBus.Publish(new HandFreeEvent{side = Side.left});
                 else if(catchingHandGO && catchingHandGO.CompareTag("RightHand"))
                     EventBus.Publish(new HandFreeEvent{side = Side.right});
                 catchingHandGO = null;
+            }
+        }
+        
+        //获取一个物品
+        public void CatchingItem(Mouse mouse)
+        {
+            if (mouse.leftButton.isPressed&&(isLeftHandFree||isRightHandFree))
+            {
+                //从相机向世界打出一道射线，起到从屏幕点击到物体的效果
+                Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
+                Vector3 lV = new Vector3();
+                Vector3 rV = new Vector3();
+                
+                //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
+                if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 2f))
+                {
+                    catchingItemGO = hit.collider.gameObject;
+                }
+
+                if (catchingItemGO.CompareTag("Oil"))
+                {
+                    if (isRightHandFree)
+                    {
+                        EventBus.Publish(new OilMoveByHandEvent(){side=Side.right,oilGO=catchingItemGO});
+                    }
+                }
             }
         }
     }

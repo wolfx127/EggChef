@@ -6,6 +6,9 @@ TagManager:
   tags:
   - LeftHand
   - RightHand
+  - Oil
+  - Egg
+  - Pot
   layers:
   - Default
   - TransparentFX
