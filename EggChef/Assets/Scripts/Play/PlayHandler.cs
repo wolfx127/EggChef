@@ -10,7 +10,7 @@ namespace Play
     public class PlayHandler : MonoBehaviour
     {
         private PlayInputAction inputAction;
-        private GameObject cameraGO;
+        private GameObject cameraGO; 
         private PlayCamera playCamera;
         private HandData leftHand;
         private HandData rightHand;
