@@ -21,7 +21,8 @@ namespace Framework
     /// </summary>
     public static class EventBus
     {
-        private static readonly Dictionary<Type, List<Delegate>> Handlers = new ();
+        private static readonly Dictionary<Type, Delegate> Handlers = new Dictionary<Type, Delegate>();
+
         //采用列表形式，防止不同的订阅同时触发
 
         /// <summary>
@@ -30,13 +31,16 @@ namespace Framework
         public static void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEvent
         {
             Type key = typeof(TEvent);
-            if(!Handlers.TryGetValue(key,out var list))//询问TEvent有无对应的委托列表，如果没有就创建
+            if(!Handlers.TryGetValue(key,out Delegate existing))//询问TEvent有无对应的委托列表，如果没有就创建
             {
-                list = new List<Delegate>();
-                Handlers.Add(key, list);//创建了一个键值对，TEvent对应一个委托列表
+                Handlers[key] = Delegate.Combine(existing, handler);//创建了一个键值对，TEvent对应一个委托列表
             }
-            if(!list.Contains(handler))//判断列表里是否已经存在要注册的事件
-            list.Add(handler);//将方法加入委托列表，之后用遍历来实现里面的方法
+            else //判断列表里是否已经存在要注册的事件
+            {
+                //将方法加入委托列表，之后用遍历来实现里面的方法
+                Handlers[key] = handler;
+
+            }
         }
 
         /// <summary>
@@ -45,12 +49,19 @@ namespace Framework
         public static void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEvent
         {
             Type key = typeof(TEvent);
-            if (Handlers.TryGetValue(key, out var list))
+            if (Handlers.TryGetValue(key,out Delegate existing))
             {
-                list.Remove(handler);
-
+                Delegate updated = Delegate.Remove(existing, handler);
                 // 如果没人监听了，把键值对一起删掉，释放内存
-                if (list.Count == 0) Handlers.Remove(key);
+                if (updated == null)
+                {
+                    Handlers.Remove(key);
+                }
+                else
+                {
+                    Handlers[key] = updated;
+                }
+
             }
         }
         /// <summary>
@@ -59,17 +70,10 @@ namespace Framework
         public static void Publish<TEvent>(TEvent evt) where TEvent : struct, IEvent
         {
             Type key = typeof(TEvent);
-            if (Handlers.TryGetValue(key, out var list))//通过TEvent获取对应的委托列表
+            if (Handlers.TryGetValue(key, out Delegate existing))//通过TEvent获取对应的委托列表
             {
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    // 将基类 Delegate 安全转换为 Action<TEvent>，然后执行
-                    if (list[i] is Action<TEvent> action)
-                    {
-                        action.Invoke(evt);
-                    }
-                }
-
+                // 将基类 Delegate 安全转换为 Action<TEvent>，然后执行
+                ((Action<TEvent>)existing).Invoke(evt);
             }
         }
 
