@@ -29,7 +29,6 @@ namespace Play
 
         private void Awake()
         {
-            playCamera = new PlayCamera(cameraGO, cam, cameraSO, leftHandGO, rightHandGO);
             playHandler = GetComponent<PlayHandler>();
             playMonoController = GetComponent<PlayMonoController>();
         }
@@ -39,6 +38,8 @@ namespace Play
         {
             leftHand = new HandData(leftHandGO, Side.left);
             rightHand = new HandData(rightHandGO, Side.right);
+            playCamera = new PlayCamera(cameraGO, cam, cameraSO, leftHandGO, rightHandGO,
+                leftHand.GetHandState, rightHand.GetHandState);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
             eggShell = new EggShell(eggGO, eggSO);

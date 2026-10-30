@@ -31,7 +31,7 @@ namespace Framework
         public static void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEvent
         {
             Type key = typeof(TEvent);
-            if(!Handlers.TryGetValue(key,out Delegate existing))//询问TEvent有无对应的委托列表，如果没有就创建
+            if(Handlers.TryGetValue(key,out Delegate existing))//询问TEvent有无对应的委托列表，如果没有就创建
             {
                 Handlers[key] = Delegate.Combine(existing, handler);//创建了一个键值对，TEvent对应一个委托列表
             }

@@ -7,11 +7,12 @@ namespace Play.Hand
 {
     public enum CatchObject
     {
-        nothing,
-        egg,
-        pot,
-        oil,
-        FriedEgg
+        Nothing,
+        Egg,
+        Pot,
+        Oil,
+        FriedEgg,
+        Bow
     }
 
     public enum Side
@@ -27,7 +28,7 @@ namespace Play.Hand
 
         private Side side = Side.NULL;
         private GameObject handGO;
-        private CatchObject catchObject =  CatchObject.nothing;
+        private CatchObject catchObject =  CatchObject.Nothing;
         private Vector3 targetPos = Vector3.zero;
         private float speed = 1;
         private float prevPos_Y = 0;
@@ -35,8 +36,9 @@ namespace Play.Hand
         private EggData eggData = null;
         private PotData potData = null;
         private GameObject itemGO = null;
-        public bool isCatched = false;//被鼠标抓取
-        public bool isCatching = false;//该手获取物品
+        public bool isMouseControlling = false;//被鼠标抓取着
+        public bool isCatchingItem = false;//该手抓着蛋、油、煎蛋
+        public bool isHolding = false;//该手把着锅、弹弓
         public bool isPut = false;
 
         #endregion
@@ -63,7 +65,7 @@ namespace Play.Hand
             handFSM.SetBoard(speed, catchObject, eggData);
             handFSM.Tick();
 
-            if (isCatching)
+            if (isCatchingItem)
             {
                 itemGO.transform.position = handGO.transform.position;
             }
@@ -73,7 +75,7 @@ namespace Play.Hand
         private void MoveByCamera(HandMoveByCameraEvent evt)
         {
             //如果这个手没被抓住（不处于被抓住状态），就不跟随
-            if (isCatched) return;
+            if (isCatchingItem) return;
             if (side == Side.left)
             {
                 handGO.transform.position = evt.leftV;
@@ -92,7 +94,7 @@ namespace Play.Hand
             if (evt.side == side)
             {
                 //状态变更
-                isCatched = true;
+                isCatchingItem = true;
                 //挑自己对应的新位置
                 if(side == Side.left) handGO.transform.position = evt.leftV;
                 else if (side == Side.right) handGO.transform.position = evt.rightV;
@@ -103,24 +105,53 @@ namespace Play.Hand
         {
             if (evt.side == side)
             {
-                isCatching = true;
+                isCatchingItem = true;
                 itemGO = evt.itemGO;
 
                 switch (evt.itemGO.tag)
                 {
                     case "Egg":
-                        catchObject = CatchObject.egg;
+                        catchObject = CatchObject.Egg;
                         break;
                     case "Oil":
-                        catchObject = CatchObject.oil;
+                        catchObject = CatchObject.Oil;
+                        break;
+                    case "FriedEgg":
+                        catchObject = CatchObject.FriedEgg;
                         break;
                     default:
                         break;
                 }
             }
         }
-        
+
+        private void HandHoldByItem(HandMoveByItemEvent evt)
+        {
+            if (evt.side == side)
+            {
+                isCatchingItem = true;
+                itemGO = evt.itemGO;
+
+                switch (evt.itemGO.tag)
+                {
+                    case "Pot":
+                        catchObject = CatchObject.Pot;
+                        break;
+                    case "Bow":
+                        catchObject = CatchObject.Bow;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         //相机通知该手状态变为 空闲 ，手随之继续跟随相机
-        private void HandFree(HandFreeEvent evt) => isCatched = false;
+        private void HandFree(HandFreeEvent evt) => isMouseControlling = false;
+
+        public (bool isMouseControlling, bool isCatchingItem, bool isHolding) GetHandState()
+        {
+            return (isMouseControlling, isCatchingItem, isHolding);
+        }
     }
 }

@@ -38,5 +38,11 @@ namespace Framework
         public Side side;
         public GameObject itemGO;
     }
+
+    public struct HandMoveByItemEvent : IEvent
+    {
+        public Side side;
+        public GameObject itemGO;
+    }
 }
 
