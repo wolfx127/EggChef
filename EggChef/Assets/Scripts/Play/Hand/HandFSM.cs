@@ -1,5 +1,6 @@
 using Framework.FSM;
 using Play.Egg;
+using UnityEngine;
 
 namespace Play.Hand
 {
@@ -13,14 +14,10 @@ namespace Play.Hand
         }
 
         public void SetBoard(float speed, 
-            CatchObject catchObject,
-            EggData eggData)
+            GameObject itemGO,
+            bool isMouseControlling)
         {
             HandBoard board = (HandBoard)b;
-            board.speed = speed;
-            board.catchObject = catchObject;
-            board.eggState = EggState.NULL;
-            if(eggData != null) board.eggState = eggData.eggState;
         }
     }
 }

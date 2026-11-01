@@ -6,8 +6,8 @@ namespace Play.Hand
 {
     public class HandBoard : IBoard
     {
-        public float speed;
+        public float speed = 0;
         public CatchObject catchObject = CatchObject.Nothing;
-        public EggState eggState = EggState.normal;
+        public bool isMouseControlling = false;
     }
 }

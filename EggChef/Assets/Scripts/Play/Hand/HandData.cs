@@ -2,9 +2,13 @@ using Framework;
 using Play.Egg;
 using Play.Pot;
 using UnityEngine;
+using Object = System.Object;
 
 namespace Play.Hand
 {
+    /// <summary>
+    /// 主要给黑板用
+    /// </summary>
     public enum CatchObject
     {
         Nothing,
@@ -33,16 +37,12 @@ namespace Play.Hand
 
         private Side side = Side.NULL;
         private GameObject handGO;
-        private CatchObject catchObject =  CatchObject.Nothing;
-        private Vector3 targetPos = Vector3.zero;
         private float speed = 1;
         private float prevPos_Y = 0;
         private float curYPos_Y = 0;
-        private EggData eggData = null;
-        private PotData potData = null;
-        private GameObject itemGO = null;
-        public bool isMouseControlling = false;//被鼠标抓取着
-        public bool hasItem = false;//手里抓着东西
+        private Object itemData = null;//手持物品的数据脚本，到时候用is判断类型
+        private GameObject itemGO = null;//手里抓着的东西
+        private bool isMouseControlling = false;//被鼠标抓取着
         public bool isPut = false;//是否放下道具（指把蛋、油、煎蛋这些放进指定位置，如蛋放进锅里，煎蛋放进弹弓里）
 
         #endregion
@@ -66,12 +66,22 @@ namespace Play.Hand
         //每帧变更状态机，移动不属于该状态机
         public void Tick(float dt)
         {
-            handFSM.SetBoard(speed, catchObject, eggData);
+            UpdateSpeed(dt);
+            handFSM.SetBoard(speed, itemGO, isMouseControlling);
             handFSM.Tick();
         }
-
+        
+        //其实下面的方法都和状态有关，但是他们为什么不被塞进状态机？
+        //状态机里的状态都是互斥，至少针对传统fsm是这样
+        //如果要强塞进状态机也可以，比如再造并行状态机，但是成本可想而知。
+        //对于框架，通常只意味着 在编写时有相关的思想趋势，需要尽可能的去符合框架去写，但不一定非要这么写。
+        //当其他因素的优势大于框架规范，可以试着绕过框架，图个方便，因为所有设计都以 代码能跑就行 为主要目标
+        //框架服务于问题，而不是问题服务于框架
+        //接下来对每个方法逐个分析
+        
         //接收来自相机的事件，使得始终跟随相机
-        private void MoveByCamera(HandMoveByCameraEvent evt)
+        private void MoveByCamera(HandMoveByCameraEvent evt)//它接收一个事件，也就依赖于事件的状态，但不强依赖本类状态
+                                                            //所以它的行为不受本类状态控制，只是稍微控制一下状态
         {
             //如果这个手没被抓住（不处于被抓住状态），就不跟随
             if (isMouseControlling) return;
@@ -87,7 +97,7 @@ namespace Play.Hand
         }
 
         //接收来自相机的事件，同时相机发来一个 抓住 的状态变更操作，以及变更后的新位置
-        private void MoveByMouse(HandMoveByMouseEvent evt)
+        private void MoveByMouse(HandMoveByMouseEvent evt)//同MoveByCamera
         {
             //看自己是不是被抓住的那只手
             if (evt.side == side)
@@ -101,49 +111,65 @@ namespace Play.Hand
         }
 
         //相机通知该手状态变为 空闲 ，手随之继续跟随相机
-        private void HandFree(HandFreeEvent evt) => isMouseControlling = false;
+        private void HandFree(HandFreeEvent evt) => isMouseControlling = false;//同MoveByCamera
 
-        private void CatchItem(CatchItemEvent evt)
+        private void CatchItem(CatchItemEvent evt)//这个虽然依赖事件，但其实和状态也是强依赖的，方法内频繁查改状态
+                                                  //而依赖的状态中，它只是由状态推导出下一状态，而事后这些状态完全独立(指本类内)
+                                                  //且其中没有哪个状态顺便执行行为
         {
             //有以下逻辑：
-            //if[该手为右手]
+            //if[该手为右手]且[相机的操作手是右手]
             //    if[发来的是freeItem]
             //        if[该手没抓着东西]且[该手没握着东西]
             //            抓取()
-            //        else告诉相机去管左手()
+            //        else改为[相机的操作手是左手]()
             //    else if[发来的是freezeItem]
             //        if[该手没抓着东西]且[该手没握着东西]
             //            握住()
-            //        else告诉相机去管左手()
-            //else if[该手为左手]
+            //        else改为[相机的操作手是左手]()
+            //else if[该手为左手]且[相机的操作手是左手]
             //    if[发来的是freeItem]
             //        if[该手没抓着东西]且[该手没握着东西]
             //            抓取()
-            //        else告诉相机左手没空()
+            //        else改为[相机的操作手是NULL]()
             //    else if[发来的是freezeItem]
             //        if[该手没抓着东西]且[该手没握着东西]
             //            握住()
-            //        else告诉相机左手没空()
+            //        else改为[相机的操作手是NULL]()
             
-            //按照生成顺序为先new右手后new左手来说，注册顺序也会是先右后左，所以必定是右手先执行事件，而 左手通知相机没空 也不会冲突
-
-            //使用离散数学的逻辑学简化逻辑，并引入状态机，并引入上述条件[先右后左]
-            //if[该手有空]
-            //    拿到发来的道具准备交给状态机()
-            //    通知相机该手拿到了()
-            //    使[该手有空]变为[该手没空]()
-            //else if[该手为右手]
-            //    告诉相机去管左手()
-            //else告诉相机左手没空()
-            if (!hasItem)
+            //使用离散数学的逻辑学简化逻辑，并把部分逻辑(具体抓到了什么及怎么处理)引入状态机
+            //有以下逻辑：
+            //if[camera的操作手不是该手] 不执行任何逻辑并退出()
+            //if[该手没空]
+            //    if[该手为右手]
+            //        改为[camera操控的是左手]()
+            //    else
+            //        改为[camera操控的是NULL]()
+            //else if[发来的是freeItem]或[发来的是freezeItem]
+            //    该手没空()
+            //    接收发来的item()
+            //TODO：后期还要引入一个条件，如果这个物体已经被这个手抓住了，那么另一个手不能去抓
+            
+            if (evt.side.value != side) return;
+            if (itemGO)
+            {
+                evt.side.value = side == Side.right ? Side.left : Side.NULL;
+            }
+            else if (evt.item.layer == LayerMask.NameToLayer("FreeItem") ||
+                evt.item.layer == LayerMask.NameToLayer("FreezeItem"))
             {
                 itemGO = evt.item;
-                evt.side.value = side;
-                hasItem = true;
             }
-            else if(side == Side.right)
-                evt.side.value = Side.left;
-            else evt.side.value = Side.NULL;
+        }
+
+        //获取速度
+        private void UpdateSpeed(float dt)//只改状态而不驱动行为，这部分没必要进状态机。而驱动行为的逻辑确实在状态机里
+                                          //所以思路倒是可以让它勉强进状态机，比如在手握鸡蛋或锅时触发
+                                          //不过多个状态同时触发扔不建议进状态机，因为这意味着每个相关状态都得写一遍，简单一行计算不至于如此优化，干脆一直判断得了
+        {
+            curYPos_Y = handGO.transform.position.y;
+            speed = (prevPos_Y - curYPos_Y)/dt;
+            prevPos_Y = handGO.transform.position.y;
         }
     }
 }

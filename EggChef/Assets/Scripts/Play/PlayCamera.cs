@@ -76,7 +76,11 @@ namespace Play
         {
             Ray ray = cam.ScreenPointToRay(mousePos);
             if (!Physics.Raycast(ray, out RaycastHit hit, radius * 2f))
+            {
+                side.value = Side.NULL;
+                isMouseControllingHand = false;
                 return;
+            }
             isMouseControllingHand = true;
             if (hit.collider.CompareTag("LeftHand"))
                 side.value = Side.left;
@@ -84,12 +88,16 @@ namespace Play
                 side.value = Side.right;
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("FreeItem") ||
                      hit.collider.gameObject.layer == LayerMask.NameToLayer("FreezeItem"))
-                EventBus.Publish(new CatchItemEvent{side = this.side, item = hit.collider.gameObject});
+            {
+                side.value = Side.right;//先通知右手，反正经过一轮广播后side会恢复成正确数值
+                EventBus.Publish(new CatchItemEvent { side = this.side, item = hit.collider.gameObject });
+                Debug.Log($"{side.value}Hand抓到道具[{hit.collider.gameObject.tag}]");
+            }
             else isMouseControllingHand = false;
         }
         
         //本质上是handler在借用camera的能力，去找屏幕之于世界的位置
-        public void MoveHand(Vector2 mousePos)
+        public void MoveHandByMouse(Vector2 mousePos)
         {
             //说明左右手都没给相机回信，1可能是回了但是回的null，2两个手都没空所以没回，3干脆没回，忘记写回消息的逻辑了
             if (side.value == Side.NULL) return;
@@ -103,12 +111,16 @@ namespace Play
 
         public void CancelCatching()
         {
-            if(side.value == Side.NULL) return;
-            isMouseControllingHand = false;
+            if(side.value == Side.NULL)
+            {
+                isMouseControllingHand = false;
+                return;
+            }
             if(side.value == Side.left)
                 EventBus.Publish(new HandFreeEvent{side = Side.left});
             else if(side.value == Side.right)
                 EventBus.Publish(new HandFreeEvent{side = Side.right});
+            side.value = Side.NULL;
         }
     }
 }
