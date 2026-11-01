@@ -27,20 +27,12 @@ namespace Play
         private float curY = 0;
 
         private Camera cam;
-        private GameObject leftHandGO;
-        private GameObject rightHandGO;
         private float radius = 0;
         private float horizontalGap_Percent = 0;
         private float verticalGap_Percent = 0;
-        private GameObject catchingHandGO = null;
         
-        private GameObject catchingItemGO = null;
-        private bool isCatchingHand = false;
-
-        //func是C#写好的delegate，就像Action。Func允许带返回值，规定为泛型参数的最后一个
-        //返回元组，元组可以看做结构体的语法糖
-        private Func<(bool isMouseControlling, bool isCatchingItem, bool isHolding)> GetLeftHandState;
-        private Func<(bool isMouseControlling, bool isCatchingItem, bool isHolding)> GetRightHandState;
+        private SideData side = new SideData();//用引用类型封装枚举，起到指针的效果，外部类拿到引用就能跨类改数值
+        private bool isMouseControllingHand = false;
         
         /// <summary>
         /// PlayCamera游戏摄像头初始化
@@ -48,13 +40,7 @@ namespace Play
         /// <param name="cameraGO">Camera游戏对象</param>
         /// <param name="cam">Camera游戏对象上的Camera组件</param>
         /// <param name="cameraSO">PlayCameraSO</param>
-        /// <param name="leftHandGO">左手游戏对象</param>
-        /// <param name="rightHandGO">右手游戏对象</param>
-        /// <param name="GetLeftHandState">左手的获取状态方法</param>
-        /// <param name="GetRightHandState">右手的获取状态方法</param>
-        public PlayCamera(GameObject cameraGO, Camera cam, PlayCameraSO cameraSO, 
-            GameObject leftHandGO, GameObject rightHandGO,
-            Func<(bool, bool, bool)> GetLeftHandState, Func<(bool, bool, bool)> GetRightHandState)
+        public PlayCamera(GameObject cameraGO, Camera cam, PlayCameraSO cameraSO)
         {
             Debug.Log("初始化：PlayCamera构造");
             cameraGO.transform.rotation = Quaternion.Euler(beginningY, beginningX, 0f);
@@ -65,10 +51,6 @@ namespace Play
             radius = cameraSO.radius;
             horizontalGap_Percent = cameraSO.horizontalGap_Percent;
             verticalGap_Percent = cameraSO.verticalGap_Percent;
-            this.leftHandGO = leftHandGO;
-            this.rightHandGO = rightHandGO;
-            this.GetLeftHandState = GetLeftHandState;
-            this.GetRightHandState = GetRightHandState;
         }
         
         //摄像机通过输入旋转，同时给手默认位置
@@ -89,145 +71,44 @@ namespace Play
             EventBus.Publish(new HandMoveByCameraEvent { leftV = leftHandPos, rightV = rightHandPos });
         }
 
-        public void Catching(Mouse mouse)
+        //接收鼠标位于屏幕的位置，制造射线一次性检测是否打到手以及物体
+        public void Catching(Vector2 mousePos)
         {
-            if (mouse.leftButton.isPressed)
-            {
-                Ray mouseRay = cam.ScreenPointToRay(mouse.position.ReadValue());
-                CatchingHand(mouseRay);
-                CatchingItem(mouseRay);
-                HoldingItem(mouseRay);
-            }
-            else
-            {
-                CancelCatching();
-            }
+            Ray ray = cam.ScreenPointToRay(mousePos);
+            if (!Physics.Raycast(ray, out RaycastHit hit, radius * 2f))
+                return;
+            isMouseControllingHand = true;
+            if (hit.collider.CompareTag("LeftHand"))
+                side.value = Side.left;
+            else if (hit.collider.CompareTag("RightHand"))
+                side.value = Side.right;
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("FreeItem") ||
+                     hit.collider.gameObject.layer == LayerMask.NameToLayer("FreezeItem"))
+                EventBus.Publish(new CatchItemEvent{side = this.side, item = hit.collider.gameObject});
+            else isMouseControllingHand = false;
+        }
+        
+        //本质上是handler在借用camera的能力，去找屏幕之于世界的位置
+        public void MoveHand(Vector2 mousePos)
+        {
+            //说明左右手都没给相机回信，1可能是回了但是回的null，2两个手都没空所以没回，3干脆没回，忘记写回消息的逻辑了
+            if (side.value == Side.NULL) return;
+            
+            Ray ray = cam.ScreenPointToRay(mousePos);
+            Vector3 lV = ray.GetPoint(radius);
+            Vector3 rV = ray.GetPoint(radius);
+            
+            EventBus.Publish(new HandMoveByMouseEvent{side = side.value, leftV = lV, rightV = rV});
         }
 
-        private void CancelCatching()
+        public void CancelCatching()
         {
-            isCatchingHand = false;
-            if(catchingHandGO && catchingHandGO.CompareTag("LeftHand"))
+            if(side.value == Side.NULL) return;
+            isMouseControllingHand = false;
+            if(side.value == Side.left)
                 EventBus.Publish(new HandFreeEvent{side = Side.left});
-            else if(catchingHandGO && catchingHandGO.CompareTag("RightHand"))
+            else if(side.value == Side.right)
                 EventBus.Publish(new HandFreeEvent{side = Side.right});
-            catchingHandGO = null;
-        }
-
-        //手的位置是鼠标在相机的位置，同时检测鼠标输入
-        //如果鼠标按下，则射线检测点击的是哪个手，手由事件得知自己被选中，同时事件同时发送两个坐标，手得知自己被选中后才会拿对应的坐标
-        private void CatchingHand(Ray mouseRay)
-        {
-            Vector3 lV = new Vector3();
-            Vector3 rV = new Vector3();
-            //这个if用来使鼠标看起来像一次性点击的，因为鼠标是一直发射射线，如果按住时没击中手，但是按住再动鼠标移到手了也会吸附手
-            //，不要让这种事出现
-            if (!isCatchingHand)
-            {
-                catchingHandGO = null;
-                //射线检测，判断射线击中了哪些物体，out返回被点击到的物体
-                if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 1.1f))
-                {
-                    catchingHandGO = hit.collider.gameObject;
-                    //如果没检测到手&&不是手 退出
-                    if (!catchingHandGO || catchingHandGO.layer != LayerMask.NameToLayer("Hand")) return;
-                    isCatchingHand = true;
-                }
-            }
-
-            if (catchingHandGO.CompareTag("LeftHand"))
-            {
-                lV = mouseRay.GetPoint(radius);
-                rV = rightHandGO.transform.position;
-                EventBus.Publish(new HandMoveByMouseEvent
-                {
-                    side = Side.left,
-                    leftV = lV,
-                    rightV = rV
-                });
-            }
-            else if (catchingHandGO.CompareTag("RightHand"))
-            {
-                lV = leftHandGO.transform.position;
-                rV = mouseRay.GetPoint(radius);
-                EventBus.Publish(new HandMoveByMouseEvent
-                {
-                    side = Side.right,
-                    leftV = lV,
-                    rightV = rV
-                });
-            }
-        }
-        
-        //获取一个能手里拿着的物品
-        private void CatchingItem(Ray mouseRay)
-        {
-            //如果鼠标抓着手呢就不能抓物体，因为客观世界是这样的效果
-            if (isCatchingHand) return;
-            //判断物体能不能抓
-            if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 2f))
-            {
-                //没检测到物体&&物体层级不对 直接退出
-                if (!hit.collider.gameObject) return;
-                var layer =  hit.collider.gameObject.layer;
-                if (layer != LayerMask.NameToLayer("FreeItem"))
-                    return;
-            }
-
-            isCatchingHand = true;
-            if(!GetRightHandState().isMouseControlling &&
-               !GetRightHandState().isCatchingItem &&
-               !GetRightHandState().isHolding)
-            {
-                EventBus.Publish(new ItemMoveByHandEvent
-                {
-                    side = Side.right, itemGO = hit.collider.gameObject
-                });
-            }
-            else if (!GetLeftHandState().isMouseControlling &&
-                     !GetLeftHandState().isCatchingItem &&
-                     !GetLeftHandState().isHolding)
-            {
-                EventBus.Publish(new ItemMoveByHandEvent
-                {
-                    side = Side.left, itemGO = hit.collider.gameObject
-                });
-            }
-        }
-        
-        private void HoldingItem(Ray mouseRay)
-        {
-            //如果鼠标抓着手呢就不能抓物体，因为客观世界是这样的效果
-            if (isCatchingHand) return;
-            //判断物体能不能抓
-            if (Physics.Raycast(mouseRay, out RaycastHit hit, radius * 2f))
-            {
-                //没检测到物体&&物体层级不对 直接退出
-                if (!hit.collider.gameObject) return;
-                var layer =  hit.collider.gameObject.layer;
-                if (layer != LayerMask.NameToLayer("FreezeItem"))
-                    return;
-            }
-
-            isCatchingHand = true;
-            if(!GetRightHandState().isMouseControlling &&
-               !GetRightHandState().isCatchingItem &&
-               !GetRightHandState().isHolding)
-            {
-                EventBus.Publish(new HandMoveByItemEvent
-                {
-                    side = Side.right, itemGO = hit.collider.gameObject
-                });
-            }
-            else if (!GetLeftHandState().isMouseControlling &&
-                     !GetLeftHandState().isCatchingItem &&
-                     !GetLeftHandState().isHolding)
-            {
-                EventBus.Publish(new HandMoveByItemEvent
-                {
-                    side = Side.left, itemGO = hit.collider.gameObject
-                });
-            }
         }
     }
 }

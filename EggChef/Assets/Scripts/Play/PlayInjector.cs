@@ -36,10 +36,9 @@ namespace Play
         //onEnable能确保这些mono实例化完
         private void OnEnable()
         {
-            leftHand = new HandData(leftHandGO, Side.left);
             rightHand = new HandData(rightHandGO, Side.right);
-            playCamera = new PlayCamera(cameraGO, cam, cameraSO, leftHandGO, rightHandGO,
-                leftHand.GetHandState, rightHand.GetHandState);
+            leftHand = new HandData(leftHandGO, Side.left);
+            playCamera = new PlayCamera(cameraGO, cam, cameraSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
             eggShell = new EggShell(eggGO, eggSO);

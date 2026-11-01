@@ -33,16 +33,13 @@ namespace Framework
         public Side side;
     }
 
-    public struct ItemMoveByHandEvent : IEvent
+    public struct CatchItemEvent : IEvent
     {
-        public Side side;
-        public GameObject itemGO;
-    }
-
-    public struct HandMoveByItemEvent : IEvent
-    {
-        public Side side;
-        public GameObject itemGO;
+        public SideData side;
+        /// <summary>
+        /// 用作查看tag和layer等身份证明
+        /// </summary>
+        public GameObject item;
     }
 }
 
