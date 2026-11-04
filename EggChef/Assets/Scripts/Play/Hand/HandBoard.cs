@@ -9,5 +9,6 @@ namespace Play.Hand
         public float speed = 0;
         public CatchObject catchObject = CatchObject.Nothing;
         public bool isMouseControlling = false;
+        public bool isPut = false;
     }
 }

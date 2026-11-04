@@ -8,9 +8,14 @@ namespace Framework.FSM
         NULL,
         CatchOil,
         CatchPot,
+        CatchEggShell,
         CatchEgg,
         CatchFriedEgg,
-        CatchNothing
+        CatchNothing,
+        CatchBow,
+        PutOil,
+        PutEgg,
+        CancelCatching
     }
 
     /// <summary>

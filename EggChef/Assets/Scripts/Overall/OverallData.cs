@@ -10,11 +10,11 @@ namespace Overall
         /// <summary>
         /// 鸡蛋数
         /// </summary>
-        public static float eggCount = 0;
+        public static int eggCount = 0;
         /// <summary>
         /// 鸡蛋数上限
         /// </summary>
-        public static float eggMaxCount = 0;
+        public static int eggMaxCount = 0;
         /// <summary>
         /// 油量
         /// </summary>

@@ -12,6 +12,7 @@ namespace Play.Hand
     public enum CatchObject
     {
         Nothing,
+        EggShell,
         Egg,
         Pot,
         Oil,
@@ -37,13 +38,15 @@ namespace Play.Hand
 
         private Side side = Side.NULL;
         private GameObject handGO;
+        public Transform transform => handGO.transform;
         private float speed = 1;
         private float prevPos_Y = 0;
         private float curYPos_Y = 0;
-        private Object itemData = null;//手持物品的数据脚本，到时候用is判断类型
-        private GameObject itemGO = null;//手里抓着的东西
-        private bool isMouseControlling = false;//被鼠标抓取着
-        public bool isPut = false;//是否放下道具（指把蛋、油、煎蛋这些放进指定位置，如蛋放进锅里，煎蛋放进弹弓里）
+        public Object itemData = null;//手持物品的数据脚本，到时候用is判断类型
+        public GameObject itemGO = null;//鼠标点到的东西
+        private bool isMouseControlling = false;//被鼠标控制着
+        private bool isPut = false;//是否放下道具（指把蛋、油、煎蛋这些放进指定位置，如蛋放进锅里，煎蛋放进弹弓里）
+        
 
         #endregion
 
@@ -60,14 +63,15 @@ namespace Play.Hand
             EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
             EventBus.Subscribe<HandFreeEvent>(HandFree);
             EventBus.Subscribe<CatchItemEvent>(CatchItem);
+            EventBus.Subscribe<CancelCatchItemEvent>(CancelCatchItem);
         }
         
 
-        //每帧变更状态机，移动不属于该状态机
+        //每帧变更状态机，手的移动不属于该状态机
         public void Tick(float dt)
         {
             UpdateSpeed(dt);
-            handFSM.SetBoard(speed, itemGO, isMouseControlling);
+            handFSM.SetBoard(speed, itemGO, isMouseControlling, isPut);
             handFSM.Tick();
         }
         
@@ -78,6 +82,7 @@ namespace Play.Hand
         //当其他因素的优势大于框架规范，可以试着绕过框架，图个方便，因为所有设计都以 代码能跑就行 为主要目标
         //框架服务于问题，而不是问题服务于框架
         //接下来对每个方法逐个分析
+        //(其实有的放进黑板也行)
         
         //接收来自相机的事件，使得始终跟随相机
         private void MoveByCamera(HandMoveByCameraEvent evt)//它接收一个事件，也就依赖于事件的状态，但不强依赖本类状态
@@ -162,10 +167,19 @@ namespace Play.Hand
             }
         }
 
+        //把GO引用先null，是因为黑板只看GO，如果GO == null，会变成CatchNothing，于是状态机当前状态退出
+        //那为什么data不在这里null? 是因为黑板不看data，保证有的状态退出时，可以执行data的逻辑，然后状态执行完记得再data置null
+        private void CancelCatchItem(CancelCatchItemEvent evt)
+        {
+            if (evt.side != side) return;
+            itemGO = null;
+        }
+
         //获取速度
         private void UpdateSpeed(float dt)//只改状态而不驱动行为，这部分没必要进状态机。而驱动行为的逻辑确实在状态机里
                                           //所以思路倒是可以让它勉强进状态机，比如在手握鸡蛋或锅时触发
-                                          //不过多个状态同时触发扔不建议进状态机，因为这意味着每个相关状态都得写一遍，简单一行计算不至于如此优化，干脆一直判断得了
+                                          //不过多个状态同时触发扔不建议进状态机，因为这意味着每个相关状态都得写一遍
+                                          //简单一行计算不至于如此优化，干脆一直判断得了
         {
             curYPos_Y = handGO.transform.position.y;
             speed = (prevPos_Y - curYPos_Y)/dt;

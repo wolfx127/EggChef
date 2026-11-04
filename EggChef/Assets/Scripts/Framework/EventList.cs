@@ -1,3 +1,4 @@
+using Play.Egg;
 using Play.Hand;
 using UnityEngine;
 
@@ -40,6 +41,19 @@ namespace Framework
         /// 用作查看tag和layer等身份证明
         /// </summary>
         public GameObject item;
+    }
+
+    public struct CancelCatchItemEvent : IEvent
+    {
+        public Side side;
+    }
+
+    /// <summary>
+    /// 通过发布该事件返回一个鸡蛋，靠引用返回值
+    /// </summary>
+    public struct ReturnEggEvent : IEvent
+    {
+        public EggData eggData;
     }
 }
 

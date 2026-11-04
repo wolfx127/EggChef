@@ -17,6 +17,7 @@ namespace Play
         [SerializeField] private Camera cam;
         [SerializeField] private EggSO eggSO;
         [SerializeField] private GameObject eggGO;
+        [SerializeField] private GameObject eggShellGO;
         [SerializeField] private GameObject leftHandGO;
         [SerializeField] private GameObject rightHandGO;
 
@@ -41,7 +42,7 @@ namespace Play
             playCamera = new PlayCamera(cameraGO, cam, cameraSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
-            eggShell = new EggShell(eggGO, eggSO);
+            eggShell = new EggShell(eggGO, eggSO, eggShellGO);
         }
     }
 }

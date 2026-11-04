@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace Play
 {
     /// <summary>
-    /// 处理相机移动、手跟随相机移动的检测与广播
+    /// 处理相机移动、手跟随相机移动的检测与广播，因为手和输入都需要依赖相机确定位置，所以方法就写在这了
     /// </summary>
     public class PlayCamera
     {
@@ -53,6 +53,7 @@ namespace Play
             verticalGap_Percent = cameraSO.verticalGap_Percent;
         }
         
+        //摄像机自己的移动逻辑
         //摄像机通过输入旋转，同时给手默认位置
         public void MoveCamera(GameObject cameraGO, PlayInputAction inputAction, float dt)
         {
@@ -71,8 +72,9 @@ namespace Play
             EventBus.Publish(new HandMoveByCameraEvent { leftV = leftHandPos, rightV = rightHandPos });
         }
 
+        //handler的[抓取(按住鼠标左键)]输入执行，让手接下来会跟着鼠标跑(跟随动作不在这，仅表示 已跟随 状态)，前提是鼠标一开始就点到手 或 点到物体
         //接收鼠标位于屏幕的位置，制造射线一次性检测是否打到手以及物体
-        public void Catching(Vector2 mousePos)
+        public void CatchItem(Vector2 mousePos)
         {
             Ray ray = cam.ScreenPointToRay(mousePos);
             if (!Physics.Raycast(ray, out RaycastHit hit, radius * 2f))
@@ -81,7 +83,9 @@ namespace Play
                 isMouseControllingHand = false;
                 return;
             }
+            //表示 正在控制手
             isMouseControllingHand = true;
+            //表示 控制的是哪个手
             if (hit.collider.CompareTag("LeftHand"))
                 side.value = Side.left;
             else if (hit.collider.CompareTag("RightHand"))
@@ -96,6 +100,16 @@ namespace Play
             else isMouseControllingHand = false;
         }
         
+        //将鼠标点中的手执行释放物体逻辑
+        //原理同CatchItem，但是右键专属
+        public void CancelCatchItem(Vector2 mousePos)
+        {
+            if (!isMouseControllingHand) return;
+            EventBus.Publish(new CancelCatchItemEvent{side = side.value});
+            side.value = Side.NULL;
+        }
+
+        //在成功让 手已跟着鼠标 的前提下，执行具体的手跟随鼠标位置的逻辑
         //本质上是handler在借用camera的能力，去找屏幕之于世界的位置
         public void MoveHandByMouse(Vector2 mousePos)
         {
@@ -109,7 +123,8 @@ namespace Play
             EventBus.Publish(new HandMoveByMouseEvent{side = side.value, leftV = lV, rightV = rV});
         }
 
-        public void CancelCatching()
+        //handler松开鼠标，让被控制的手恢复原样
+        public void CancelMoveHandByMouse()
         {
             if(side.value == Side.NULL)
             {

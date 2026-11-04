@@ -36,12 +36,13 @@ namespace Play
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
             var left = Mouse.current.leftButton;
+            var right = Mouse.current.rightButton;
 
             //刚按下的一帧
             if (left.wasPressedThisFrame)
             {
                 //这样catching()只需要执行一次，而不是只要鼠标按着就一直catching()
-                playCamera.Catching(mousePos);
+                playCamera.CatchItem(mousePos);
                 isMouseLeftButtonHolding = true;
             }
             //按住期间
@@ -55,9 +56,14 @@ namespace Play
             {
                 if (isMouseLeftButtonHolding)
                 {
-                    playCamera.CancelCatching();
+                    playCamera.CancelMoveHandByMouse();
                     isMouseLeftButtonHolding = false;
                 }
+            }
+
+            if (right.isPressed)
+            {
+                
             }
         }
 
