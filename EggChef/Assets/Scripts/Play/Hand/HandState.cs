@@ -12,53 +12,53 @@ namespace Play.Hand
         {
             transitionTable = new List<Transition>();
             //由[什么都没抓]状态 可以切换到一下状态：
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
-            transitionTable.Add(new Transition(State.CatchEggShell, 
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell ));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEggShell,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
         }
 
         public override void Enter(HandData caller, IBoard b)
         {
-            
+
         }
 
         public override void Update(HandData caller, IBoard b)
         {
-            
+
         }
 
         public override void Exit(HandData caller, IBoard b)
         {
-            
+
         }
     }
-    
+
     public class HandCatchEggShell : BaseState<HandData>
     {
         public HandCatchEggShell()
         {
             transitionTable = new List<Transition>();
-            transitionTable.Add(new Transition(State.CatchNothing,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.Nothing));
             transitionTable.Add(new Transition(State.CatchEgg,
                 b => b is HandBoard hb && hb.catchObject == CatchObject.Egg));
+            transitionTable.Add(new Transition(State.CatchNothing,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.Nothing));
         }
 
         public override void Enter(HandData caller, IBoard b)
         {
-            EventBus.Publish(new ReturnEggEvent{eggData = caller.itemData as EggData});
-            if (caller.itemData is EggData egg)
+            EggData egg = caller.itemGO.GetComponent<EggShell>().GetEgg();
+            if (caller.itemData is EggData)
             {
                 caller.itemGO = egg.eggGO;
             }
@@ -71,15 +71,15 @@ namespace Play.Hand
 
         public override void Update(HandData caller, IBoard b)
         {
-            
+
         }
 
         public override void Exit(HandData caller, IBoard b)
         {
-            
+
         }
     }
-    
+
     public class HandCatchEgg : BaseState<HandData>
     {
         public HandCatchEgg()
@@ -91,7 +91,7 @@ namespace Play.Hand
 
         public override void Enter(HandData caller, IBoard b)
         {
-            
+
         }
 
         public override void Update(HandData caller, IBoard b)
@@ -113,16 +113,19 @@ namespace Play.Hand
                     {
                         egg.TurnBadEgg();
                     }
+
                     if (caller.itemGO)
                     {
                         caller.itemGO.transform.position = caller.transform.position;
                     }
+
                     return;
                 }
             }
+
             caller.itemData = null;
             caller.itemGO = null;
-            
+
         }
 
         public override void Exit(HandData caller, IBoard b)
@@ -132,99 +135,8 @@ namespace Play.Hand
             {
                 egg.ExitFromHand();
             }
+
             caller.itemData = null;
-        }
-    }
-    
-    public class HandCatchFriedEgg : BaseState<HandData>
-    {
-        public HandCatchFriedEgg()
-        {
-            transitionTable = new List<Transition>();
-        }
-
-        public override void Enter(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Update(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Exit(HandData caller, IBoard b)
-        {
-            
-        }
-    }
-    
-    public class HandCatchOil : BaseState<HandData>
-    {
-        public HandCatchOil()
-        {
-            transitionTable = new List<Transition>();
-        }
-
-        public override void Enter(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Update(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Exit(HandData caller, IBoard b)
-        {
-            
-        }
-    }
-    
-    public class HandCatchPot : BaseState<HandData>
-    {
-        public HandCatchPot()
-        {
-            transitionTable = new List<Transition>();
-        }
-
-        public override void Enter(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Update(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Exit(HandData caller, IBoard b)
-        {
-            
-        }
-    }
-    
-    public class HandCatchBow : BaseState<HandData>
-    {
-        public HandCatchBow()
-        {
-            transitionTable = new List<Transition>();
-        }
-
-        public override void Enter(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Update(HandData caller, IBoard b)
-        {
-            
-        }
-
-        public override void Exit(HandData caller, IBoard b)
-        {
-            
         }
     }
 }

@@ -1158,6 +1158,7 @@ MonoBehaviour:
   rightHandGO: {fileID: 169534479}
   playHandler: {fileID: 1258224508}
   playMonoController: {fileID: 1258224506}
+  eggShell: {fileID: 3267871784442282388}
 --- !u!114 &1258224508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,6 +1576,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4995360405866050484, guid: c22f871692e2af447a3dadcb13faf3a1, type: 3}
   m_PrefabInstance: {fileID: 3267871784442282386}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3267871784442282388 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1550558490213385484, guid: c22f871692e2af447a3dadcb13faf3a1, type: 3}
+  m_PrefabInstance: {fileID: 3267871784442282386}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3267871784442282387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6707c34f1271b924b8dbfc503ca5ff97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Play.Egg.EggShell
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ namespace Play.Hand
         #endregion
 
         private Rigidbody rb;
-        private HandFSM handFSM = new HandFSM();
+        private HandFSM handFSM;
 
         public HandData(GameObject handGO, Side side)
         {
@@ -59,6 +59,8 @@ namespace Play.Hand
             this.handGO = handGO;
             rb = handGO.GetComponent<Rigidbody>();
             this.side = side;
+            
+            handFSM = new HandFSM(this);
             EventBus.Subscribe<HandMoveByCameraEvent>(MoveByCamera);
             EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
             EventBus.Subscribe<HandFreeEvent>(HandFree);

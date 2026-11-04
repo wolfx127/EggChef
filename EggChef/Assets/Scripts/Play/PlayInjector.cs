@@ -42,7 +42,7 @@ namespace Play
             playCamera = new PlayCamera(cameraGO, cam, cameraSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
-            eggShell = new EggShell(eggGO, eggSO, eggShellGO);
+            eggShell.Init(eggGO, eggSO, eggShellGO);
         }
     }
 }

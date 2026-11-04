@@ -47,13 +47,5 @@ namespace Framework
     {
         public Side side;
     }
-
-    /// <summary>
-    /// 通过发布该事件返回一个鸡蛋，靠引用返回值
-    /// </summary>
-    public struct ReturnEggEvent : IEvent
-    {
-        public EggData eggData;
-    }
 }
 

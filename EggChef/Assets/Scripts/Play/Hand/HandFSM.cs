@@ -6,17 +6,14 @@ namespace Play.Hand
 {
     public class HandFSM : BaseFSM<HandData>
     {
-        public HandFSM()
+        public HandFSM(HandData caller)
         {
             b = new HandBoard();
             cur = State.CatchNothing;
+            this.caller = caller;
             stateTable.Add(State.CatchNothing, new HandCatchNothing());
             stateTable.Add(State.CatchEggShell, new HandCatchEggShell());
             stateTable.Add(State.CatchEgg, new HandCatchEgg());
-            stateTable.Add(State.CatchFriedEgg, new HandCatchFriedEgg());
-            stateTable.Add(State.CatchOil, new HandCatchOil());
-            stateTable.Add(State.CatchPot, new HandCatchPot());
-            stateTable.Add(State.CatchBow, new HandCatchBow());
         }
 
         public void SetBoard(float speed, 
@@ -28,36 +25,16 @@ namespace Play.Hand
             board.isMouseControlling = isMouseControlling;
             board.isPut = isPut;
             board.speed = speed;
-            if (board.catchObject == CatchObject.Nothing && itemGO)
+            if(!itemGO) board.catchObject = CatchObject.Nothing;
+            else switch (itemGO.tag)
             {
-                if (itemGO.CompareTag("EggShell"))
-                {
-                    board.catchObject = CatchObject.EggShell;
-                }
-                if (itemGO.CompareTag("Egg"))
-                {
-                    board.catchObject = CatchObject.Egg;
-                }
-                if (itemGO.CompareTag("FriedEgg"))
-                {
-                    board.catchObject = CatchObject.FriedEgg;
-                }
-                if (itemGO.CompareTag("Oil"))
-                {
-                    board.catchObject = CatchObject.Oil;
-                }
-                if (itemGO.CompareTag("Pot"))
-                {
-                    board.catchObject = CatchObject.Pot;
-                }
-                if (itemGO.CompareTag("Bow"))
-                {
-                    board.catchObject = CatchObject.Bow;
-                }
-            }
-            else
-            {
-                board.catchObject = CatchObject.Nothing;
+                case "EggShell": board.catchObject = CatchObject.EggShell; break;
+                case "Egg":      board.catchObject = CatchObject.Egg; break;
+                case "FriedEgg": board.catchObject = CatchObject.FriedEgg; break;
+                case "Oil":      board.catchObject = CatchObject.Oil; break;
+                case "Pot":      board.catchObject = CatchObject.Pot; break;
+                case "Bow":      board.catchObject = CatchObject.Bow; break;
+                default:         board.catchObject = CatchObject.Nothing; break;
             }
         }
     }

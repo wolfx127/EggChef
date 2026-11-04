@@ -68,6 +68,7 @@ GameObject:
   - component: {fileID: 5517662450803254684}
   - component: {fileID: 1335398286740394141}
   - component: {fileID: 709357061972416064}
+  - component: {fileID: 1550558490213385484}
   m_Layer: 0
   m_Name: Eggshell
   m_TagString: Untagged
@@ -197,3 +198,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1550558490213385484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995360405866050484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6707c34f1271b924b8dbfc503ca5ff97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Play.Egg.EggShell

@@ -7,16 +7,17 @@ using Object = System.Object;
 namespace Play.Egg
 {
     //游戏中交付鸡蛋的工厂
-    public class EggShell
+    //mono是因为要射线击中蛋筐，方便击中后直接返回脚本类
+    public class EggShell : MonoBehaviour
     {
         private EggSO eggSO;
         private GameObject eggGO;
         private EggData egg;
         private GameObject eggShellGO;
 
-        private int eggCount => OverallData.eggCount;
+        private int eggCount {get =>OverallData.eggCount; set =>OverallData.eggCount = value; }
 
-        public EggShell(GameObject eggGO, EggSO eggSO, GameObject eggShellGO)
+        public void Init(GameObject eggGO, EggSO eggSO, GameObject eggShellGO)
         {
             Debug.Log("初始化：EggCase构造");
             this.eggGO = eggGO;
@@ -25,12 +26,6 @@ namespace Play.Egg
             
             eggGO.SetActive(false);
             egg = new EggData(eggSO.perfectSpeed, eggSO.badSpeed);
-            EventBus.Subscribe<ReturnEggEvent>(ReturnEgg);
-        }
-
-        private void ReturnEgg(ReturnEggEvent evt)
-        {
-            evt.eggData = GetEgg();
         }
 
         public EggData GetEgg()
@@ -46,6 +41,8 @@ namespace Play.Egg
                 newEggGO.GetComponent<Rigidbody>().useGravity = false;
                 newEggGO.SetActive(true);
                 newEgg.eggGO = newEggGO;
+
+                eggCount--;
             }
             return newEgg;
         }
