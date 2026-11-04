@@ -33,7 +33,7 @@ namespace Play.Egg
             EggData newEgg = null;
             if (eggCount > 0)
             {
-                newEgg = new EggData(egg.perfectSpeed, egg.perfectSpeed);
+                newEgg = new EggData(egg.perfectSpeed, egg.badSpeed);
                 GameObject newEggGO = UnityEngine.Object.Instantiate(eggGO);
                 newEggGO.transform.SetParent(eggShellGO.transform);
                 newEggGO.transform.position = eggShellGO.transform.position;

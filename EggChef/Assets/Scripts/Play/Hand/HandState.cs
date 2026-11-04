@@ -58,9 +58,10 @@ namespace Play.Hand
         public override void Enter(HandData caller, IBoard b)
         {
             EggData egg = caller.itemGO.GetComponent<EggShell>().GetEgg();
-            if (caller.itemData is EggData)
+            if (egg != null)
             {
                 caller.itemGO = egg.eggGO;
+                caller.itemData = egg;
             }
             else
             {
