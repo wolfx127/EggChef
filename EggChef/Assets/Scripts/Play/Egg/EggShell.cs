@@ -25,7 +25,8 @@ namespace Play.Egg
             this.eggShellGO = eggShellGO;
             
             eggGO.SetActive(false);
-            egg = new EggData(eggSO.perfectSpeed, eggSO.badSpeed);
+            egg = eggGO.GetComponent<EggData>();
+            egg.Init(eggSO.perfectSpeed, eggSO.badSpeed, this);
         }
 
         public EggData GetEgg()
@@ -33,18 +34,28 @@ namespace Play.Egg
             EggData newEgg = null;
             if (eggCount > 0)
             {
-                newEgg = new EggData(egg.perfectSpeed, egg.badSpeed);
-                GameObject newEggGO = UnityEngine.Object.Instantiate(eggGO);
+                GameObject newEggGO = Instantiate(eggGO);
                 newEggGO.transform.SetParent(eggShellGO.transform);
                 newEggGO.transform.position = eggShellGO.transform.position;
                 newEggGO.GetComponent<Collider>().isTrigger = true;
                 newEggGO.GetComponent<Rigidbody>().useGravity = false;
                 newEggGO.SetActive(true);
+                newEgg = newEggGO.GetComponent<EggData>();
+                newEgg.Init(egg.perfectSpeed, egg.badSpeed, this);
                 newEgg.eggGO = newEggGO;
 
                 eggCount--;
+                Debug.Log("成功给出一个新鸡蛋");
             }
+            else Debug.Log($"鸡蛋数量不够{'\n'}可能的原因：①鸡蛋给玩光了；②鸡蛋数没初始化，默认值是0，需要重回start场景启动一下");
             return newEgg;
+        }
+
+        public void ReturnEgg(EggData egg)
+        {
+            Destroy(egg.eggGO);
+            eggCount++;
+            Debug.Log("鸡蛋已安全放回");
         }
     }
 }

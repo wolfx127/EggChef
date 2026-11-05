@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d1c2d52d2c2ed42843a69846d6988c, type: 3}
+  m_Name: OverallDataSO
+  m_EditorClassIdentifier: Assembly-CSharp::OverallDataSO
+  money: 1000
+  eggCount: 10
+  eggMaxCount: 10
+  oilCount: 1
+  oilMaxCount: 1
+  Grade: 1
+  rent: 300
+  cookSpeed: 1
+  cookMaxSpeed: 1

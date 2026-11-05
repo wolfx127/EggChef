@@ -106,7 +106,6 @@ namespace Play
         {
             if (!isMouseControllingHand) return;
             EventBus.Publish(new CancelCatchItemEvent{side = side.value});
-            side.value = Side.NULL;
         }
 
         //在成功让 手已跟着鼠标 的前提下，执行具体的手跟随鼠标位置的逻辑

@@ -63,7 +63,7 @@ namespace Play
 
             if (right.isPressed)
             {
-                
+                playCamera.CancelCatchItem(mousePos);
             }
         }
 

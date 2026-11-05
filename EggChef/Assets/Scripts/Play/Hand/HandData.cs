@@ -118,7 +118,11 @@ namespace Play.Hand
         }
 
         //相机通知该手状态变为 空闲 ，手随之继续跟随相机
-        private void HandFree(HandFreeEvent evt) => isMouseControlling = false;//同MoveByCamera
+        private void HandFree(HandFreeEvent evt) //同MoveByCamera
+        {
+            if (evt.side == side) isMouseControlling = false;
+            speed = 0;
+        }
 
         private void CatchItem(CatchItemEvent evt)//这个虽然依赖事件，但其实和状态也是强依赖的，方法内频繁查改状态
                                                   //而依赖的状态中，它只是由状态推导出下一状态，而事后这些状态完全独立(指本类内)
@@ -184,7 +188,9 @@ namespace Play.Hand
                                           //简单一行计算不至于如此优化，干脆一直判断得了
         {
             curYPos_Y = handGO.transform.position.y;
-            speed = (prevPos_Y - curYPos_Y)/dt;
+            //保证手被鼠标拖拽时才能敲鸡蛋
+            if(isMouseControlling)
+                speed = (prevPos_Y - curYPos_Y) / dt;
             prevPos_Y = handGO.transform.position.y;
         }
     }

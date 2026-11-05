@@ -39,5 +39,18 @@ namespace Overall
         /// 煎蛋速度上限
         /// </summary>
         public static float cookMaxSpeed = 0;
+
+        public static void CopyFieldsBySO(OverallDataSO so)
+        {
+            money = so.money;   
+            eggCount = so.eggCount;
+            eggMaxCount = so.eggMaxCount;
+            oilCount = so.oilCount;
+            oilMaxCount = so.oilMaxCount;
+            Grade = so.Grade;
+            rent = so.rent;
+            cookSpeed = so.cookSpeed;
+            cookMaxSpeed = so.cookMaxSpeed;
+        }
     }
 }

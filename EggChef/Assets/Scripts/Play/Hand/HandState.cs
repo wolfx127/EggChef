@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Framework;
 using Framework.FSM;
@@ -14,23 +15,13 @@ namespace Play.Hand
             //由[什么都没抓]状态 可以切换到一下状态：
             transitionTable.Add(new Transition(State.CatchEggShell,
                 b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
-            transitionTable.Add(new Transition(State.CatchEggShell,
-                b => b is HandBoard hb && hb.catchObject == CatchObject.EggShell));
+            transitionTable.Add(new Transition(State.CatchEgg,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.Egg));
         }
 
         public override void Enter(HandData caller, IBoard b)
         {
-
+            Debug.Log("手返回到空闲状态");
         }
 
         public override void Update(HandData caller, IBoard b)
@@ -57,6 +48,7 @@ namespace Play.Hand
 
         public override void Enter(HandData caller, IBoard b)
         {
+            Debug.Log("手碰到蛋框了");
             EggData egg = caller.itemGO.GetComponent<EggShell>().GetEgg();
             if (egg != null)
             {
@@ -77,7 +69,7 @@ namespace Play.Hand
 
         public override void Exit(HandData caller, IBoard b)
         {
-
+            Debug.Log("手退出抓蛋框");
         }
     }
 
@@ -92,7 +84,22 @@ namespace Play.Hand
 
         public override void Enter(HandData caller, IBoard b)
         {
+            try
+            {
+                if (caller.itemData is null)
+                {
+                    EggData egg = caller.itemGO.GetComponent<EggData>();
+                    egg.eggGO.GetComponent<Rigidbody>().useGravity = false;
+                    egg.eggGO.GetComponent<Collider>().isTrigger = true;
+                    caller.itemData = egg;
+                }
 
+                Debug.Log("手拿着鸡蛋");
+            }
+            catch(Exception e)
+            {
+                Debug.LogWarning(e);
+            }
         }
 
         public override void Update(HandData caller, IBoard b)
@@ -119,18 +126,16 @@ namespace Play.Hand
                     {
                         caller.itemGO.transform.position = caller.transform.position;
                     }
-
                     return;
                 }
             }
-
             caller.itemData = null;
             caller.itemGO = null;
-
         }
 
         public override void Exit(HandData caller, IBoard b)
         {
+            Debug.Log("手放下鸡蛋");
             //这里表示只在脱手那一刻
             if (caller.itemData is EggData egg)
             {
