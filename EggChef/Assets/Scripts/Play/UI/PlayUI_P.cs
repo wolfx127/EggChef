@@ -1,3 +1,5 @@
+using Framework;
+using Overall;
 using UnityEngine;
 
 namespace Play.UI
@@ -5,6 +7,7 @@ namespace Play.UI
     public interface IPlayUI_P
     {
         public void Subscribe();
+        public void Init();
         public void Unsubscribe();
     }
 
@@ -24,28 +27,39 @@ namespace Play.UI
         
         public void Subscribe()
         {
-            if (!playHandler)
+            if (playHandler)
+            {
+                
+            }
+            else
             {
                 Debug.Log("playHandler获取失败：PlayUI_P订阅");
-                return;
             }
-            playHandler.RefreshUIEvent += RefreshUI;
+
+            EventBus.Subscribe<UpdateMoneyEvent>(UpdateMoney);
+        }
+
+        public void Init()
+        {
+            UpdateMoney(new UpdateMoneyEvent());
         }
 
         public void Unsubscribe()
         {
-            if (!playHandler)
+            if (playHandler)
+            {
+            }
+            else
             {
                 Debug.Log("playHandler获取失败：PlayUI_P注销");
-                return;
             }
         }
 
         #region 来自m层输入
         
-        private void RefreshUI()
+        private void UpdateMoney(UpdateMoneyEvent evt)
         {
-            playUI_V.Refresh();
+            playUI_V.UpdateMoney(OverallData.money);
         }
 
         #endregion

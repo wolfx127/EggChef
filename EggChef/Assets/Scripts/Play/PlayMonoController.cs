@@ -1,6 +1,7 @@
 using System;
 using Play.Egg;
 using Play.Hand;
+using Play.UI;
 using UnityEngine;
 
 namespace Play
@@ -13,7 +14,7 @@ namespace Play
         private GameObject cameraGO;
         private HandData leftHand;
         private HandData rightHand;
-
+        
         private void Update()
         {
             leftHand.Tick(Time.deltaTime);

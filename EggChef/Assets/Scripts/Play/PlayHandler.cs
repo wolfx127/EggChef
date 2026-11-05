@@ -20,7 +20,7 @@ namespace Play
 
         #region UI事件
 
-        public event Action RefreshUIEvent;
+        public event Action UpdateMoney;
 
         #endregion
         

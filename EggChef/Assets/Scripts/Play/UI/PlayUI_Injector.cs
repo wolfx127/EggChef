@@ -24,6 +24,7 @@ namespace Play.UI
             playUI_P = new PlayUI_P(playUI_V, playHandler);
             playUI_V.Init(playUI_P, root);
             playUI_P.Subscribe();
+            playUI_P.Init();
         }
 
         private void OnDisable()

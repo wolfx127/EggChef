@@ -145,4 +145,22 @@ namespace Play.Hand
             caller.itemData = null;
         }
     }
+
+    public class HandCatchPot : BaseState<HandData>
+    {
+        public override void Enter(HandData caller, IBoard b)
+        {
+            
+        }
+
+        public override void Update(HandData caller, IBoard b)
+        {
+            
+        }
+
+        public override void Exit(HandData caller, IBoard b)
+        {
+            
+        }
+    }
 }

@@ -1,6 +1,7 @@
 using Play.Egg;
 using Play.Hand;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Framework
 {
@@ -46,6 +47,10 @@ namespace Framework
     public struct CancelCatchItemEvent : IEvent
     {
         public Side side;
+    }
+
+    public struct UpdateMoneyEvent : IEvent
+    {
     }
 }
 

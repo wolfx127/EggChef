@@ -6,7 +6,7 @@ namespace Play.UI
     public interface IPlayUI_V
     {
         public void Init(IPlayUI_P playUI_P, VisualElement root);
-        public void Refresh();
+        public void UpdateMoney(float newMoney);
     }
 
     public class PlayUI_V : IPlayUI_V
@@ -17,7 +17,7 @@ namespace Play.UI
         #region UI元素字段
         
         private VisualElement root;
-        
+        private Label moneyText;
         
 
         #endregion
@@ -28,6 +28,9 @@ namespace Play.UI
             Debug.Log("初始化：PlayUI_V");
             this.playUI_P = playUI_P;
             this.root = root;
+            
+            moneyText = root.Q<Label>("MoneyText");
+            
             CreateUI();
         }
 
@@ -37,9 +40,12 @@ namespace Play.UI
             
         }
 
-        public void Refresh()
+        private float prevMoney;
+        public void UpdateMoney(float newMoney)
         {
-            
+            float addMoney = newMoney - prevMoney;
+            //TODO:播放一段ui动画，在新钱数右侧弄个一秒的加/减号
+            moneyText.text = newMoney.ToString();
         }
     }
 }

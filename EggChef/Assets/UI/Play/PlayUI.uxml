@@ -1,6 +1,8 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="_TopPivot" style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="__LeftPivot" style="flex-grow: 1;" />
+        <ui:VisualElement name="__LeftPivot" style="flex-grow: 1;">
+            <ui:Label text="钱" name="MoneyText" style="background-color: rgba(255, 255, 255, 0.31); font-size: 14px; color: rgb(7, 123, 15);" />
+        </ui:VisualElement>
         <ui:VisualElement name="__CenterPivot" style="flex-grow: 1;" />
         <ui:VisualElement name="__RightPivot" style="flex-grow: 1;" />
     </ui:VisualElement>
