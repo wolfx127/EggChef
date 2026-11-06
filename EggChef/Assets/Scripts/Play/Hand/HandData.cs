@@ -62,10 +62,6 @@ namespace Play.Hand
             
             handFSM = new HandFSM(this);
             EventBus.Subscribe<HandMoveByCameraEvent>(MoveByCamera);
-            EventBus.Subscribe<HandMoveByMouseEvent>(MoveByMouse);
-            EventBus.Subscribe<HandFreeEvent>(HandFree);
-            EventBus.Subscribe<CatchItemEvent>(CatchItem);
-            EventBus.Subscribe<CancelCatchItemEvent>(CancelCatchItem);
         }
         
 
@@ -104,27 +100,20 @@ namespace Play.Hand
         }
 
         //接收来自相机的事件，同时相机发来一个 抓住 的状态变更操作，以及变更后的新位置
-        private void MoveByMouse(HandMoveByMouseEvent evt)//同MoveByCamera
+        public void MoveByMouse(Vector3 v)//同MoveByCamera
         {
-            //看自己是不是被抓住的那只手
-            if (evt.side == side)
-            {
-                //状态变更
-                isMouseControlling = true;
-                //挑自己对应的新位置
-                if(side == Side.left) handGO.transform.position = evt.leftV;
-                else if (side == Side.right) handGO.transform.position = evt.rightV;
-            }
+            isMouseControlling = true;
+            handGO.transform.position = v;
         }
 
-        //相机通知该手状态变为 空闲 ，手随之继续跟随相机
-        private void HandFree(HandFreeEvent evt) //同MoveByCamera
+        //该手状态变为 空闲 ，手随之继续跟随相机
+        public void HandFree() //同MoveByCamera
         {
-            if (evt.side == side) isMouseControlling = false;
+            isMouseControlling = false;
             speed = 0;
         }
 
-        private void CatchItem(CatchItemEvent evt)//这个虽然依赖事件，但其实和状态也是强依赖的，方法内频繁查改状态
+        public void CatchItem(SideData side, GameObject hit)//这个虽然依赖事件，但其实和状态也是强依赖的，方法内频繁查改状态
                                                   //而依赖的状态中，它只是由状态推导出下一状态，而事后这些状态完全独立(指本类内)
                                                   //且其中没有哪个状态顺便执行行为
         {
@@ -161,23 +150,22 @@ namespace Play.Hand
             //    接收发来的item()
             //TODO：后期还要引入一个条件，如果这个物体已经被这个手抓住了，那么另一个手不能去抓
             
-            if (evt.side.value != side) return;
+            if (side.value != this.side) return;
             if (itemGO)
             {
-                evt.side.value = side == Side.right ? Side.left : Side.NULL;
+                side.value = this.side == Side.right ? Side.left : Side.NULL;
             }
-            else if (evt.item.layer == LayerMask.NameToLayer("FreeItem") ||
-                evt.item.layer == LayerMask.NameToLayer("FreezeItem"))
+            else if (hit.layer == LayerMask.NameToLayer("FreeItem") ||
+                hit.layer == LayerMask.NameToLayer("FreezeItem"))
             {
-                itemGO = evt.item;
+                itemGO = hit;
             }
         }
 
         //把GO引用先null，是因为黑板只看GO，如果GO == null，会变成CatchNothing，于是状态机当前状态退出
         //那为什么data不在这里null? 是因为黑板不看data，保证有的状态退出时，可以执行data的逻辑，然后状态执行完记得再data置null
-        private void CancelCatchItem(CancelCatchItemEvent evt)
+        public void CancelCatchItem()
         {
-            if (evt.side != side) return;
             itemGO = null;
         }
 

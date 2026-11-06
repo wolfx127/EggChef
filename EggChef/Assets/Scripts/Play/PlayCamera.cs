@@ -27,12 +27,10 @@ namespace Play
         private float curY = 0;
 
         private Camera cam;
-        private float radius = 0;
+        public float radius = 0;
         private float horizontalGap_Percent = 0;
         private float verticalGap_Percent = 0;
         
-        private SideData side = new SideData();//用引用类型封装枚举，起到指针的效果，外部类拿到引用就能跨类改数值
-        private bool isMouseControllingHand = false;
         
         /// <summary>
         /// PlayCamera游戏摄像头初始化
@@ -72,69 +70,22 @@ namespace Play
             EventBus.Publish(new HandMoveByCameraEvent { leftV = leftHandPos, rightV = rightHandPos });
         }
 
-        //handler的[抓取(按住鼠标左键)]输入执行，让手接下来会跟着鼠标跑(跟随动作不在这，仅表示 已跟随 状态)，前提是鼠标一开始就点到手 或 点到物体
-        //接收鼠标位于屏幕的位置，制造射线一次性检测是否打到手以及物体
-        public void CatchItem(Vector2 mousePos)
+        public GameObject CatchGameObject(Vector2 screenPos, float radius)
         {
-            Ray ray = cam.ScreenPointToRay(mousePos);
-            if (!Physics.Raycast(ray, out RaycastHit hit, radius * 2f))
+            Ray ray = cam.ScreenPointToRay(screenPos);
+            GameObject go = null;
+            if (Physics.Raycast(ray, out RaycastHit hit, radius))
             {
-                side.value = Side.NULL;
-                isMouseControllingHand = false;
-                return;
+                go = hit.collider.gameObject;
             }
-            //表示 正在控制手
-            isMouseControllingHand = true;
-            //表示 控制的是哪个手
-            if (hit.collider.CompareTag("LeftHand"))
-                side.value = Side.left;
-            else if (hit.collider.CompareTag("RightHand"))
-                side.value = Side.right;
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("FreeItem") ||
-                     hit.collider.gameObject.layer == LayerMask.NameToLayer("FreezeItem"))
-            {
-                side.value = Side.right;//先通知右手，反正经过一轮广播后side会恢复成正确数值
-                EventBus.Publish(new CatchItemEvent { side = this.side, item = hit.collider.gameObject });
-                Debug.Log($"{side.value}Hand抓到道具[{hit.collider.gameObject.tag}]");
-            }
-            else isMouseControllingHand = false;
-        }
-        
-        //将鼠标点中的手执行释放物体逻辑
-        //原理同CatchItem，但是右键专属
-        public void CancelCatchItem(Vector2 mousePos)
-        {
-            if (!isMouseControllingHand) return;
-            EventBus.Publish(new CancelCatchItemEvent{side = side.value});
+            return go;
         }
 
-        //在成功让 手已跟着鼠标 的前提下，执行具体的手跟随鼠标位置的逻辑
-        //本质上是handler在借用camera的能力，去找屏幕之于世界的位置
-        public void MoveHandByMouse(Vector2 mousePos)
+        public Vector3 ScreenPosToWorldPos(Vector2 screenPos, float radius)
         {
-            //说明左右手都没给相机回信，1可能是回了但是回的null，2两个手都没空所以没回，3干脆没回，忘记写回消息的逻辑了
-            if (side.value == Side.NULL) return;
-            
-            Ray ray = cam.ScreenPointToRay(mousePos);
-            Vector3 lV = ray.GetPoint(radius);
-            Vector3 rV = ray.GetPoint(radius);
-            
-            EventBus.Publish(new HandMoveByMouseEvent{side = side.value, leftV = lV, rightV = rV});
+            Ray ray = cam.ScreenPointToRay(screenPos);
+            return ray.GetPoint(radius);
         }
 
-        //handler松开鼠标，让被控制的手恢复原样
-        public void CancelMoveHandByMouse()
-        {
-            if(side.value == Side.NULL)
-            {
-                isMouseControllingHand = false;
-                return;
-            }
-            if(side.value == Side.left)
-                EventBus.Publish(new HandFreeEvent{side = Side.left});
-            else if(side.value == Side.right)
-                EventBus.Publish(new HandFreeEvent{side = Side.right});
-            side.value = Side.NULL;
-        }
     }
 }

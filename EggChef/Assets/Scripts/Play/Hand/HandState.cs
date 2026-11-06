@@ -52,7 +52,7 @@ namespace Play.Hand
             EggData egg = caller.itemGO.GetComponent<EggShell>().GetEgg();
             if (egg != null)
             {
-                caller.itemGO = egg.eggGO;
+                caller.itemGO = egg.gameObject;
                 caller.itemData = egg;
             }
             else
@@ -89,8 +89,8 @@ namespace Play.Hand
                 if (caller.itemData is null)
                 {
                     EggData egg = caller.itemGO.GetComponent<EggData>();
-                    egg.eggGO.GetComponent<Rigidbody>().useGravity = false;
-                    egg.eggGO.GetComponent<Collider>().isTrigger = true;
+                    egg.rb.useGravity = false;
+                    egg.GetComponent<Collider>().isTrigger = true;
                     caller.itemData = egg;
                 }
 

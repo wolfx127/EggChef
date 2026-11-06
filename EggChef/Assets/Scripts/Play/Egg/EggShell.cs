@@ -26,7 +26,7 @@ namespace Play.Egg
             
             eggGO.SetActive(false);
             egg = eggGO.GetComponent<EggData>();
-            egg.Init(eggSO.perfectSpeed, eggSO.badSpeed, this);
+            egg.Init(eggSO, this);
         }
 
         public EggData GetEgg()
@@ -41,8 +41,7 @@ namespace Play.Egg
                 newEggGO.GetComponent<Rigidbody>().useGravity = false;
                 newEggGO.SetActive(true);
                 newEgg = newEggGO.GetComponent<EggData>();
-                newEgg.Init(egg.perfectSpeed, egg.badSpeed, this);
-                newEgg.eggGO = newEggGO;
+                newEgg.Init(eggSO, this);
 
                 eggCount--;
                 Debug.Log("成功给出一个新鸡蛋");
@@ -53,7 +52,7 @@ namespace Play.Egg
 
         public void ReturnEgg(EggData egg)
         {
-            Destroy(egg.eggGO);
+            Destroy(egg.gameObject);
             eggCount++;
             Debug.Log("鸡蛋已安全放回");
         }
