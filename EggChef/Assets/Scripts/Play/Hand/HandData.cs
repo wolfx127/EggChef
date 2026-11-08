@@ -36,7 +36,7 @@ namespace Play.Hand
     {
         #region 基本字段
 
-        private Side side = Side.NULL;
+        public Side side = Side.NULL;
         private GameObject handGO;
         public Transform transform => handGO.transform;
         private float speed = 1;
@@ -44,8 +44,10 @@ namespace Play.Hand
         private float curYPos_Y = 0;
         public Object itemData = null;//手持物品的数据脚本，到时候用is判断类型
         public GameObject itemGO = null;//鼠标点到的东西
-        private bool isMouseControlling = false;//被鼠标控制着
+        public bool isMouseControlling = false;//被鼠标控制着
         private bool isPut = false;//是否放下道具（指把蛋、油、煎蛋这些放进指定位置，如蛋放进锅里，煎蛋放进弹弓里）
+
+        public Vector3 targetPos;
         
 
         #endregion
@@ -88,14 +90,15 @@ namespace Play.Hand
         {
             //如果这个手没被抓住（不处于被抓住状态），就不跟随
             if (isMouseControlling) return;
+            if (itemGO && itemGO.layer == LayerMask.NameToLayer("FreezeItem")) return;
             if (side == Side.left)
             {
-                handGO.transform.position = evt.leftV;
+                targetPos = evt.leftV;
             }
 
             if (side == Side.right)
             {
-                handGO.transform.position = evt.rightV;
+                targetPos = evt.rightV;
             }
         }
 
@@ -103,7 +106,7 @@ namespace Play.Hand
         public void MoveByMouse(Vector3 v)//同MoveByCamera
         {
             isMouseControlling = true;
-            handGO.transform.position = v;
+            targetPos = v;
         }
 
         //该手状态变为 空闲 ，手随之继续跟随相机

@@ -19,36 +19,7 @@ namespace Framework
         public Vector3 leftV;
         public Vector3 rightV;
     }
-
-    /// <summary>
-    /// 手被鼠标拖动
-    /// </summary>
-    public struct HandMoveByMouseEvent : IEvent
-    {
-        public Side side;
-        public Vector3 leftV;
-        public Vector3 rightV;
-    }
-
-    public struct HandFreeEvent : IEvent
-    {
-        public Side side;
-    }
-
-    public struct CatchItemEvent : IEvent
-    {
-        public SideData side;
-        /// <summary>
-        /// 用作查看tag和layer等身份证明
-        /// </summary>
-        public GameObject item;
-    }
-
-    public struct CancelCatchItemEvent : IEvent
-    {
-        public Side side;
-    }
-
+    
     public struct UpdateMoneyEvent : IEvent
     {
     }

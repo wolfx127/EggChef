@@ -603,6 +603,7 @@ GameObject:
   - component: {fileID: 618346371}
   - component: {fileID: 618346370}
   - component: {fileID: 618346369}
+  - component: {fileID: 618346373}
   m_Layer: 8
   m_Name: Pot
   m_TagString: Pot
@@ -699,9 +700,82 @@ Transform:
   m_LocalPosition: {x: 21.5, y: 2, z: -3.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 659273600}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &618346373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618346368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d4a8493227f4f49aa7a9d5eea86e0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Play.Pot.PotData
+  handSide: 0
+  originPos: {x: 0, y: 0, z: 0}
+  potSO: {fileID: 0}
+  perfectSpeed: 0
+  badSpeed: 0
+  maxHeight: 0
+  enableOil: 0
+--- !u!1 &659273599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 659273600}
+  - component: {fileID: 659273601}
+  m_Layer: 9
+  m_Name: trigger
+  m_TagString: Pot
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &659273600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659273599}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 618346372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &659273601
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 659273599}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 36.3304, z: 1}
+  m_Center: {x: 0, y: -1.1634865, z: 0}
 --- !u!1 &788484823
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1230,8 @@ MonoBehaviour:
   eggShellGO: {fileID: 3267871784442282387}
   leftHandGO: {fileID: 1457318874}
   rightHandGO: {fileID: 169534479}
+  pot: {fileID: 618346368}
+  potSO: {fileID: 11400000, guid: eefa77d62a557234a8a2e9fb7bcf4194, type: 2}
   playHandler: {fileID: 1258224508}
   playMonoController: {fileID: 1258224506}
   eggShell: {fileID: 3267871784442282388}

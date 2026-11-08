@@ -1,5 +1,6 @@
 using Framework;
 using Overall;
+using Play.Hand;
 using SO.Play;
 using UnityEngine;
 using Object = System.Object;
@@ -26,10 +27,10 @@ namespace Play.Egg
             
             eggGO.SetActive(false);
             egg = eggGO.GetComponent<EggData>();
-            egg.Init(eggSO, this);
+            egg.Init(eggSO, Side.NULL ,this);
         }
 
-        public EggData GetEgg()
+        public EggData GetEgg(Side side)
         {
             EggData newEgg = null;
             if (eggCount > 0)
@@ -41,7 +42,7 @@ namespace Play.Egg
                 newEggGO.GetComponent<Rigidbody>().useGravity = false;
                 newEggGO.SetActive(true);
                 newEgg = newEggGO.GetComponent<EggData>();
-                newEgg.Init(eggSO, this);
+                newEgg.Init(eggSO, side ,this);
 
                 eggCount--;
                 Debug.Log("成功给出一个新鸡蛋");

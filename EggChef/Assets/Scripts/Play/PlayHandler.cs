@@ -46,6 +46,7 @@ namespace Play
                 //这样catchItem()只需要执行一次，而不是只要鼠标按着就一直catching()
                 CatchItem(playCamera.CatchGameObject(mousePos, playCamera.radius * 1.5f));
                 isMouseLeftButtonHolding = true;
+                MoveHandByMouse(playCamera.ScreenPosToWorldPos(mousePos, playCamera.radius));
             }
             //按住期间
             else if (left.isPressed)
@@ -88,6 +89,7 @@ namespace Play
         //接收鼠标位于屏幕的位置，制造射线一次性检测是否打到手以及物体
         private void CatchItem(GameObject hit)
         {
+            if (!hit) return;
             //表示 正在控制手
             isMouseControllingHand = true;
             //表示 控制的是哪个手

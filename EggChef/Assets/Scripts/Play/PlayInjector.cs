@@ -1,6 +1,7 @@
 using System;
 using Play.Egg;
 using Play.Hand;
+using Play.Pot;
 using SO.Play;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Play
         [SerializeField] private GameObject eggShellGO;
         [SerializeField] private GameObject leftHandGO;
         [SerializeField] private GameObject rightHandGO;
+        [SerializeField] private GameObject pot;
+        [SerializeField] private PotSO potSO;
 
         //被注入
         public PlayHandler playHandler;
@@ -43,6 +46,7 @@ namespace Play
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
             eggShell.Init(eggGO, eggSO, eggShellGO);
+            pot.GetComponent<PotData>().Init(potSO);
         }
     }
 }

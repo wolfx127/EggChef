@@ -1,4 +1,5 @@
 using System;
+using Play.Hand;
 using SO.Play;
 using UnityEngine;
 
@@ -22,13 +23,16 @@ namespace Play.Egg
         public Rigidbody rb;
         public Collider collider;
         private float friction = 0;
+        
+        public Side handSide = Side.NULL;
 
-        public void Init(EggSO so, EggShell eggShell)
+        public void Init(EggSO so, Side handSide, EggShell eggShell)
         {
             Debug.Log("初始化：EggData构造");
             perfectSpeed = so.perfectSpeed;
             badSpeed = so.badSpeed;
             friction = so.friction;
+            this.handSide = handSide;
             this.eggShell = eggShell;
             
             isPerfect = false;
@@ -66,6 +70,7 @@ namespace Play.Egg
 
         public void ExitFromHand()
         {
+            handSide = Side.NULL;
             if (isPerfect)
             {
                 TurnBadEgg();
