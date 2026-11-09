@@ -1,5 +1,6 @@
 using System;
 using Play.Hand;
+using Play.Pot;
 using SO.Play;
 using UnityEngine;
 
@@ -25,15 +26,23 @@ namespace Play.Egg
         private float friction = 0;
         
         public Side handSide = Side.NULL;
+        
+        private GameObject friedEggGO = null;
+        public bool isPlayingAnim = false;
+        public float animTime = 0;
+        public float animTimeCounter = 0;
 
-        public void Init(EggSO so, Side handSide, EggShell eggShell)
+        public void Init(EggSO so, Side handSide, EggShell eggShell, GameObject friedEggGO)
         {
             Debug.Log("初始化：EggData构造");
             perfectSpeed = so.perfectSpeed;
             badSpeed = so.badSpeed;
             friction = so.friction;
+            animTime = so.animTime;
+            animTimeCounter = so.animTime;
             this.handSide = handSide;
             this.eggShell = eggShell;
+            this.friedEggGO = friedEggGO;
             
             isPerfect = false;
             isBad = false;
@@ -62,9 +71,9 @@ namespace Play.Egg
             if (isBad) return;
             isBad = true;
             isPerfect = false;
-            
+
             //TODO:换模型
-            
+
             Debug.Log("敲得烂");
         }
 
@@ -101,6 +110,28 @@ namespace Play.Egg
             if (newV.x * v.x <= 0) newV.x=0;
             if (newV.y * v.y <= 0) newV.y=0;
             rb.linearVelocity = new Vector3(newV.x, rb.linearVelocity.y, newV.y);
+        }
+
+        public void PutEgg()
+        {
+            if (!isPerfect) return;
+            
+            GameObject go = Instantiate(friedEggGO, eggShell.gameObject.transform, true);
+            go.GetComponent<FriedEggData>().InitFromEgg(transform.position);
+            TurnBadEgg();
+            animTimeCounter = 0;
+        }
+
+        public void PutAnim(float dt)
+        {
+            if (animTimeCounter >= animTime)
+            {
+                isPlayingAnim = false;
+                return;
+            }
+
+            animTimeCounter += dt;
+            isPlayingAnim = true;
         }
     }
 }

@@ -15,3 +15,4 @@ MonoBehaviour:
   perfectSpeed: 30
   badSpeed: 50
   friction: 2
+  animTime: 0.4

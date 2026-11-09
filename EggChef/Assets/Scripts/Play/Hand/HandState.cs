@@ -20,10 +20,13 @@ namespace Play.Hand
                 b => b is HandBoard hb && hb.catchObject == CatchObject.Egg));
             transitionTable.Add(new Transition(State.CatchPot,
                 b => b is HandBoard hb && hb.catchObject == CatchObject.Pot));
+            transitionTable.Add(new Transition(State.CatchFriedEgg,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.FriedEgg));
         }
 
         public override void Enter(HandData caller, IBoard b)
         {
+            caller.itemData = null;
             Debug.Log("手返回到空闲状态");
         }
 
@@ -120,6 +123,12 @@ namespace Play.Hand
 
                 if (b is HandBoard hb)
                 {
+                    if (egg.isPlayingAnim)
+                    {
+                        egg.PutAnim(hb.deltaTime);
+                        return;
+                    }
+
                     if (hb.speed >= perfectSpeed && hb.speed < badSpeed)
                     {
                         egg.TurnPerfectEgg();
@@ -131,13 +140,24 @@ namespace Play.Hand
 
                     if (caller.itemGO)
                     {
-                        caller.itemGO.transform.position = caller.transform.position;
+                        if(!egg.isPlayingAnim)
+                        {
+                            caller.itemGO.transform.position = caller.transform.position;
+                        }
                     }
-                    return;
+
+                    if (egg.isPerfect && hb.isPut)
+                    {
+                        egg.PutEgg();
+                        egg.PutAnim(hb.deltaTime);
+                    }
                 }
             }
-            caller.itemData = null;
-            caller.itemGO = null;
+            else
+            {
+                caller.itemData = null;
+                caller.itemGO = null;
+            }
         }
 
         public override void Exit(HandData caller, IBoard b)
@@ -170,6 +190,7 @@ namespace Play.Hand
             caller.itemData = data;
             originalPos = data.originPos;
             data.handSide = caller.side;
+            Debug.Log("抓起锅了");
         }
 
         public override void Update(HandData caller, IBoard b)
@@ -194,13 +215,15 @@ namespace Play.Hand
             
             if (b is HandBoard hb && caller.itemData is PotData p)
             {
-                if (-hb.speed > p.badSpeed)
-                {
-                    p.BadFlip();
-                }
-                else if (-hb.speed > p.perfectSpeed)
+                if (-hb.speed > p.perfectSpeed && -hb.speed <= p.badSpeed)
                 {
                     p.PerfectFlip();
+                    Debug.Log($"翻得完美{-hb.speed}");
+                }
+                else if (-hb.speed > p.badSpeed)
+                {
+                    p.BadFlip();
+                    Debug.Log($"翻得烂{-hb.speed}");
                 }
             }
         }
@@ -210,6 +233,47 @@ namespace Play.Hand
             if (caller.itemData is PotData pot)
             {
                 pot.ExitFromHand();
+            }
+
+            caller.itemData = null;
+        }
+    }
+
+    public class CatchFriedEgg : BaseState<HandData>
+    {
+        public CatchFriedEgg()
+        {
+            transitionTable = new List<Transition>();
+            transitionTable.Add(new Transition(State.CatchNothing,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.Nothing));
+        }
+
+        public override void Enter(HandData caller, IBoard b)
+        {
+            caller.transform.position = caller.itemGO.transform.position;
+            caller.targetPos = caller.transform.position;
+
+            if (caller.itemData is null)
+            {
+                FriedEggData egg = caller.itemGO.GetComponent<FriedEggData>();
+                egg.rb.useGravity = false;
+                egg.rb.isKinematic = true;
+                egg.handSide = caller.side;
+                caller.itemData = egg;
+            }
+        }
+
+        public override void Update(HandData caller, IBoard b)
+        {
+            caller.transform.position = caller.targetPos;
+            caller.itemGO.transform.position = caller.transform.position;
+        }
+
+        public override void Exit(HandData caller, IBoard b)
+        {
+            if (caller.itemData is FriedEggData egg)
+            {
+                egg.ExitFromHand();
             }
 
             caller.itemData = null;

@@ -16,17 +16,20 @@ namespace Play.Hand
             stateTable.Add(State.CatchEggShell, new HandCatchEggShell());
             stateTable.Add(State.CatchEgg, new HandCatchEgg());
             stateTable.Add(State.CatchPot, new HandCatchPot());
+            stateTable.Add(State.CatchFriedEgg, new CatchFriedEgg());
         }
 
         public void SetBoard(float speed, 
             GameObject itemGO,
             bool isMouseControlling,
-            bool isPut)
+            bool isPut,
+            float deltaTime)
         {
             HandBoard board = (HandBoard)b;
             board.isMouseControlling = isMouseControlling;
             board.isPut = isPut;
             board.speed = speed;
+            board.deltaTime = deltaTime;
             if(!itemGO) board.catchObject = CatchObject.Nothing;
             else switch (itemGO.tag)
             {

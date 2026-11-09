@@ -23,6 +23,7 @@ namespace Play
         [SerializeField] private GameObject rightHandGO;
         [SerializeField] private GameObject pot;
         [SerializeField] private PotSO potSO;
+        [SerializeField] private GameObject friedEggGO;
 
         //被注入
         public PlayHandler playHandler;
@@ -45,7 +46,7 @@ namespace Play
             playCamera = new PlayCamera(cameraGO, cam, cameraSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
-            eggShell.Init(eggGO, eggSO, eggShellGO);
+            eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO);
             pot.GetComponent<PotData>().Init(potSO);
         }
     }

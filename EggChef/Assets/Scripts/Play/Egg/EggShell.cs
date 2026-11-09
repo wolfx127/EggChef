@@ -15,19 +15,21 @@ namespace Play.Egg
         private GameObject eggGO;
         private EggData egg;
         private GameObject eggShellGO;
+        private GameObject friedEggGO;
 
         private int eggCount {get =>OverallData.eggCount; set =>OverallData.eggCount = value; }
 
-        public void Init(GameObject eggGO, EggSO eggSO, GameObject eggShellGO)
+        public void Init(GameObject eggGO, EggSO eggSO, GameObject eggShellGO, GameObject friedEggGO)
         {
             Debug.Log("初始化：EggCase构造");
             this.eggGO = eggGO;
             this.eggSO = eggSO;
             this.eggShellGO = eggShellGO;
+            this.friedEggGO = friedEggGO;
             
             eggGO.SetActive(false);
             egg = eggGO.GetComponent<EggData>();
-            egg.Init(eggSO, Side.NULL ,this);
+            egg.Init(eggSO, Side.NULL ,this, friedEggGO);
         }
 
         public EggData GetEgg(Side side)
@@ -42,7 +44,7 @@ namespace Play.Egg
                 newEggGO.GetComponent<Rigidbody>().useGravity = false;
                 newEggGO.SetActive(true);
                 newEgg = newEggGO.GetComponent<EggData>();
-                newEgg.Init(eggSO, side ,this);
+                newEgg.Init(eggSO, side ,this, friedEggGO);
 
                 eggCount--;
                 Debug.Log("成功给出一个新鸡蛋");

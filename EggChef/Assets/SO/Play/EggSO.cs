@@ -8,5 +8,6 @@ namespace SO.Play
         public float perfectSpeed;
         public float badSpeed;
         public float friction;
+        public float animTime;
     }
 }

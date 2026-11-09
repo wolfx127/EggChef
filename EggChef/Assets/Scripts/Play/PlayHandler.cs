@@ -32,6 +32,7 @@ namespace Play
             inputAction.Enable();
             inputAction.map.Enable();
             inputAction.map.Rotation.Enable();
+            inputAction.map.Put.Enable();
         }
 
         private void Update()
@@ -68,6 +69,8 @@ namespace Play
             {
                 CancelCatchItem();
             }
+
+            HandPutItem(inputAction.map.Put.WasPressedThisFrame());
         }
 
         private void LateUpdate()
@@ -159,6 +162,16 @@ namespace Play
             else if(side.value == Side.right)
                 rightHand.HandFree();
             side.value = Side.NULL;
+        }
+
+        private void HandPutItem(bool isPut)
+        {
+            if(side.value == Side.left)
+                leftHand.PutItem(isPut);
+            else leftHand.PutItem(false);
+            if(side.value == Side.right)
+                rightHand.PutItem(isPut);
+            else rightHand.PutItem(false);
         }
     }
 }

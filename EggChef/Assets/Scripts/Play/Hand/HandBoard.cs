@@ -10,5 +10,6 @@ namespace Play.Hand
         public CatchObject catchObject = CatchObject.Nothing;
         public bool isMouseControlling = false;
         public bool isPut = false;
+        public float deltaTime = 0;
     }
 }

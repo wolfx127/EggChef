@@ -100,6 +100,15 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Put"",
+                    ""type"": ""Button"",
+                    ""id"": ""c011a01b-86cf-46de-999e-feba42ff6a6a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -157,6 +166,17 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0df9d48c-4cda-4c19-9315-a7930d006093"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Put"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -166,6 +186,7 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
         // map
         m_map = asset.FindActionMap("map", throwIfNotFound: true);
         m_map_Rotation = m_map.FindAction("Rotation", throwIfNotFound: true);
+        m_map_Put = m_map.FindAction("Put", throwIfNotFound: true);
     }
 
     ~@PlayInputAction()
@@ -247,6 +268,7 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_map;
     private List<IMapActions> m_MapActionsCallbackInterfaces = new List<IMapActions>();
     private readonly InputAction m_map_Rotation;
+    private readonly InputAction m_map_Put;
     /// <summary>
     /// Provides access to input actions defined in input action map "map".
     /// </summary>
@@ -262,6 +284,10 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "map/Rotation".
         /// </summary>
         public InputAction @Rotation => m_Wrapper.m_map_Rotation;
+        /// <summary>
+        /// Provides access to the underlying input action "map/Put".
+        /// </summary>
+        public InputAction @Put => m_Wrapper.m_map_Put;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -291,6 +317,9 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
             @Rotation.started += instance.OnRotation;
             @Rotation.performed += instance.OnRotation;
             @Rotation.canceled += instance.OnRotation;
+            @Put.started += instance.OnPut;
+            @Put.performed += instance.OnPut;
+            @Put.canceled += instance.OnPut;
         }
 
         /// <summary>
@@ -305,6 +334,9 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
             @Rotation.started -= instance.OnRotation;
             @Rotation.performed -= instance.OnRotation;
             @Rotation.canceled -= instance.OnRotation;
+            @Put.started -= instance.OnPut;
+            @Put.performed -= instance.OnPut;
+            @Put.canceled -= instance.OnPut;
         }
 
         /// <summary>
@@ -352,5 +384,12 @@ public partial class @PlayInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRotation(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Put" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPut(InputAction.CallbackContext context);
     }
 }

@@ -71,7 +71,7 @@ namespace Play.Hand
         public void Tick(float dt)
         {
             UpdateSpeed(dt);
-            handFSM.SetBoard(speed, itemGO, isMouseControlling, isPut);
+            handFSM.SetBoard(speed, itemGO, isMouseControlling, isPut, dt);
             handFSM.Tick();
         }
         
@@ -105,6 +105,7 @@ namespace Play.Hand
         //接收来自相机的事件，同时相机发来一个 抓住 的状态变更操作，以及变更后的新位置
         public void MoveByMouse(Vector3 v)//同MoveByCamera
         {
+            if (!isMouseControlling) prevPos_Y = v.y;
             isMouseControlling = true;
             targetPos = v;
         }
@@ -172,17 +173,22 @@ namespace Play.Hand
             itemGO = null;
         }
 
+        public void PutItem(bool isPut)
+        {
+            this.isPut = isPut;
+            if(isPut) Debug.Log($"{side}手试图放下物体");
+        }
+
         //获取速度
         private void UpdateSpeed(float dt)//只改状态而不驱动行为，这部分没必要进状态机。而驱动行为的逻辑确实在状态机里
                                           //所以思路倒是可以让它勉强进状态机，比如在手握鸡蛋或锅时触发
                                           //不过多个状态同时触发扔不建议进状态机，因为这意味着每个相关状态都得写一遍
                                           //简单一行计算不至于如此优化，干脆一直判断得了
         {
-            curYPos_Y = handGO.transform.position.y;
             //保证手被鼠标拖拽时才能敲鸡蛋
             if(isMouseControlling)
-                speed = (prevPos_Y - curYPos_Y) / dt;
-            prevPos_Y = handGO.transform.position.y;
+                speed = (prevPos_Y - targetPos.y) / dt;
+            prevPos_Y = targetPos.y;
         }
     }
 }

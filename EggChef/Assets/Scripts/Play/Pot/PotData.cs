@@ -42,12 +42,12 @@ namespace Play.Pot
 
         public void PerfectFlip()
         {
-            Debug.Log("翻的完美");
+            
         }
 
         public void BadFlip()
         {
-            Debug.Log("翻的烂");
+            
         }
     }
 }
