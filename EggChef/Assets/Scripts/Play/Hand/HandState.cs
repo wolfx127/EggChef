@@ -259,6 +259,8 @@ namespace Play.Hand
                 egg.rb.useGravity = false;
                 egg.rb.isKinematic = true;
                 egg.handSide = caller.side;
+                egg.isFindPot = false;
+                egg.EnterFromHand();
                 caller.itemData = egg;
             }
         }
@@ -267,6 +269,19 @@ namespace Play.Hand
         {
             caller.transform.position = caller.targetPos;
             caller.itemGO.transform.position = caller.transform.position;
+
+            if (caller.itemData is FriedEggData egg)
+            {
+                if (b is HandBoard hb)
+                {
+                    if (hb.isPut && egg.isFindPot)
+                    {
+                        caller.itemGO = null;
+                        egg.StartFry();
+                        caller.itemData = null;
+                    }
+                }
+            }
         }
 
         public override void Exit(HandData caller, IBoard b)

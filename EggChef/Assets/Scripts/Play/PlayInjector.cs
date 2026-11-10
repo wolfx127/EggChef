@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Play.Egg;
 using Play.Hand;
 using Play.Pot;
@@ -21,7 +22,7 @@ namespace Play
         [SerializeField] private GameObject eggShellGO;
         [SerializeField] private GameObject leftHandGO;
         [SerializeField] private GameObject rightHandGO;
-        [SerializeField] private GameObject pot;
+        [SerializeField] private List<GameObject> potList;
         [SerializeField] private PotSO potSO;
         [SerializeField] private GameObject friedEggGO;
 
@@ -45,9 +46,12 @@ namespace Play
             leftHand = new HandData(leftHandGO, Side.left);
             playCamera = new PlayCamera(cameraGO, cam, cameraSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
-            playMonoController.Init(cameraGO, playCamera, leftHand, rightHand);
+            
+            foreach (var pot in potList)
+                pot.GetComponent<PotData>().Init(potSO);
+            
+            playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList);
             eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO);
-            pot.GetComponent<PotData>().Init(potSO);
         }
     }
 }

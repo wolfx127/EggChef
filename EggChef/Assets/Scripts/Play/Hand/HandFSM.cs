@@ -41,7 +41,13 @@ namespace Play.Hand
                     else
                         board.catchObject = CatchObject.Nothing;
                     break;
-                case "FriedEgg": board.catchObject = CatchObject.FriedEgg; break;
+                case "FriedEgg": 
+                    FriedEggData friedEgg = itemGO.GetComponent<FriedEggData>(); 
+                    if (!friedEgg.isFrying && (friedEgg.handSide == Side.NULL || friedEgg.handSide == caller.side))
+                        board.catchObject = CatchObject.FriedEgg;
+                    else
+                        board.catchObject = CatchObject.Nothing;
+                    break;
                 case "Oil":      board.catchObject = CatchObject.Oil; break;
                 case "Pot":
                     PotData pot = itemGO.GetComponent<PotData>();

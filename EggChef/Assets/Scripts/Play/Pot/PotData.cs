@@ -1,4 +1,5 @@
 using System;
+using Play.Egg;
 using Play.Hand;
 using SO.Play;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace Play.Pot
         public Side handSide = Side.NULL;
         public Vector3 originPos;
         public PotSO potSO;
+        private GameObject friedEggGO;
+        private FriedEggData friedEggData;
         
         public float perfectSpeed;
         public float badSpeed;
@@ -20,9 +23,27 @@ namespace Play.Pot
         private float maxOil;
         public bool enableOil;
 
-        private void Awake()
+        public void StartTick()
         {
             originPos = transform.position;
+        }
+
+        public void SetEgg(FriedEggData eggData)
+        {
+            friedEggData = eggData;
+            friedEggGO = eggData.gameObject;
+            if(transform.GetComponentInChildren<FriedEggData>())
+                Debug.Log("锅里进煎蛋了");
+        }
+
+        public void Tick(float dt)
+        {
+            if (friedEggData)
+            {
+                if(friedEggData.isFrying)
+                    friedEggData.FryUpdate(dt);
+                else friedEggData.FryUpdate(0);
+            }
         }
 
         public void Init(PotSO so)
