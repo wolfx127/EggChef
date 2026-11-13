@@ -25,7 +25,7 @@ namespace Play.Egg
         private Renderer bottomFaceRenderer;
         [SerializeField] private float topCookPercent;
         [SerializeField] private float bottomCookPercent;
-        private bool isTopSide;//表示现在煎蛋是否正面朝上
+        [SerializeField]private bool isTopSide;//表示现在煎蛋是否正面朝上
         private Color rawColor;
         private Color perfectColor;
         private Color burnedColor;
@@ -48,6 +48,7 @@ namespace Play.Egg
             rawColor = so.rawFriedEgg_Color;
             perfectColor = so.perfectFriedEgg_Color;
             burnedColor = so.burnedFriedEgg_Color;
+            isTopSide = true;
             
             topFaceGO = transform.GetChild(0).gameObject;
             bottomFaceGO = transform.GetChild(1).gameObject;
@@ -157,15 +158,9 @@ namespace Play.Egg
         {
             float angle = Vector3.Angle(transform.up, Vector3.up);
             Vector3 targetUp = Vector3.up;
-            if (angle <= 90f)
-            {
-                isTopSide = true;
-            }
-            else
-            {
+            
+            if (angle > 90f)
                 targetUp = Vector3.down;
-                isTopSide = false;
-            }
 
             Quaternion aligned = Quaternion.FromToRotation(transform.up, targetUp) * transform.rotation;
 
@@ -177,9 +172,11 @@ namespace Play.Egg
 
         public void FlipFace()
         {
-            isTopSide = !isTopSide;
-            transform.Rotate(180f, 0f, 0f, Space.Self);
             SnapToFace();
+            if (Vector3.Dot(transform.up, Vector3.up) > 0f)
+                isTopSide = true;
+            else
+                isTopSide = false;
         }
 
         public void EnterFromHand()
