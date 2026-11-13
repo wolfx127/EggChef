@@ -722,6 +722,7 @@ MonoBehaviour:
   perfectSpeed: 0
   badSpeed: 0
   maxHeight: 0
+  isFlip: 0
   enableOil: 0
 --- !u!1 &659273599
 GameObject:
@@ -1123,6 +1124,8 @@ MonoBehaviour:
   - {fileID: 618346368}
   potSO: {fileID: 11400000, guid: eefa77d62a557234a8a2e9fb7bcf4194, type: 2}
   friedEggGO: {fileID: 3452420909779002532, guid: ee4c4047fe67af44894ce6bf18ea2e3e, type: 3}
+  oilGO: {fileID: 1883045152}
+  friedEggSO: {fileID: 11400000, guid: ea52d96b6be5ef54a8268c11dc119c19, type: 2}
   playHandler: {fileID: 1258224508}
   playMonoController: {fileID: 1258224506}
   eggShell: {fileID: 3267871784442282388}
@@ -1397,7 +1400,7 @@ Transform:
   m_GameObject: {fileID: 1883045152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.51, y: 1.87, z: -0.014}
+  m_LocalPosition: {x: 21.51, y: 2.09, z: 7.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1498,11 +1501,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8613407447918387138, guid: c22f871692e2af447a3dadcb13faf3a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.12
+      value: 2.79
       objectReference: {fileID: 0}
     - target: {fileID: 8613407447918387138, guid: c22f871692e2af447a3dadcb13faf3a1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.71
+      value: 1.15
       objectReference: {fileID: 0}
     - target: {fileID: 8613407447918387138, guid: c22f871692e2af447a3dadcb13faf3a1, type: 3}
       propertyPath: m_LocalRotation.w

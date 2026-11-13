@@ -1,19 +1,24 @@
 ﻿using UnityEngine;
 using Framework;
+using Play.Hand;
 
 namespace Play.Oil
 {
-    public class OilData
+    public class OilData : MonoBehaviour
     {
-        public GameObject oilGO;
-        public bool isCatch = false;//是否被抓取
-        public bool isPut = false;//是否按空格使用
+        public Side handSide = Side.NULL;
+        private Vector3 originPos;
         public bool isUnderPot = false;//是否在锅正上方
+
+        public Collider collider;
         
-        public OilData(GameObject oilGO)
+        public void Init()
         {
             Debug.Log("初始化：OilData构造");
-            this.oilGO = oilGO;
+            originPos = transform.position;
+            collider = GetComponent<Collider>();
         }
+        
+        
     }
 }

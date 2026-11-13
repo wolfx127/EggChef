@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Play.Egg;
 using Play.Hand;
+using Play.Oil;
 using Play.Pot;
 using SO.Play;
 using UnityEngine;
@@ -25,6 +26,8 @@ namespace Play
         [SerializeField] private List<GameObject> potList;
         [SerializeField] private PotSO potSO;
         [SerializeField] private GameObject friedEggGO;
+        [SerializeField] private GameObject oilGO;
+        [SerializeField] private FriedEggSO friedEggSO;
 
         //被注入
         public PlayHandler playHandler;
@@ -51,7 +54,8 @@ namespace Play
                 pot.GetComponent<PotData>().Init(potSO);
             
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList);
-            eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO);
+            eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO, friedEggSO);
+            oilGO.GetComponent<OilData>().Init();
         }
     }
 }

@@ -43,18 +43,6 @@ namespace Overall
         /// 煎蛋速度上限
         /// </summary>
         public static float cookMaxSpeed = 0;
-        /// <summary>
-        /// 生煎蛋的颜色
-        /// </summary>
-        public static Color rawFriedEgg_Color = Color.white;
-        /// <summary>
-        /// 煎的恰到好处的颜色
-        /// </summary>
-        public static Color perfectFriedEgg_Color = Color.sandyBrown;
-        /// <summary>
-        /// 煎糊的颜色
-        /// </summary>
-        public static Color burnedFriedEgg_Color = Color.black;
 
         public static void CopyFieldsBySO(OverallDataSO so)
         {
@@ -67,9 +55,6 @@ namespace Overall
             rent = so.rent;
             cookSpeed = so.cookSpeed;
             cookMaxSpeed = so.cookMaxSpeed;
-            rawFriedEgg_Color = so.rawFriedEgg_Color;
-            perfectFriedEgg_Color = so.perfectFriedEgg_Color;
-            burnedFriedEgg_Color = so.burnedFriedEgg_Color;
         }
     }
 }

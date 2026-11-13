@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PotSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.PotSO
   perfectSpeed: 10
-  badSpeed: 40
+  badSpeed: 30
   maxHeight: 5
   minOil: 0
   maxOil: 0

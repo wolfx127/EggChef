@@ -3,6 +3,7 @@ using Framework;
 using Overall;
 using Play.Hand;
 using Play.Pot;
+using SO.Play;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -25,6 +26,9 @@ namespace Play.Egg
         [SerializeField] private float topCookPercent;
         [SerializeField] private float bottomCookPercent;
         private bool isTopSide;//表示现在煎蛋是否正面朝上
+        private Color rawColor;
+        private Color perfectColor;
+        private Color burnedColor;
         
         public bool isFindPot = false;
         private float findDis = 2f;
@@ -32,7 +36,7 @@ namespace Play.Egg
 
         public Side handSide = Side.NULL;
 
-        public void InitFromEgg(Vector3 pos)
+        public void InitFromEgg(Vector3 pos, FriedEggSO so)
         {
             collider = GetComponent<Collider>();
             rb = GetComponent<Rigidbody>();
@@ -41,15 +45,18 @@ namespace Play.Egg
             rb.isKinematic = false;
             transform.position = pos;
             transform.rotation = new Quaternion(0, 0, 0, 1);
+            rawColor = so.rawFriedEgg_Color;
+            perfectColor = so.perfectFriedEgg_Color;
+            burnedColor = so.burnedFriedEgg_Color;
             
             topFaceGO = transform.GetChild(0).gameObject;
             bottomFaceGO = transform.GetChild(1).gameObject;
             topCookPercent = 0;
             bottomCookPercent = 0;
             topFaceRenderer = topFaceGO.GetComponent<Renderer>();
-            topFaceRenderer.material.color = OverallData.rawFriedEgg_Color;
+            topFaceRenderer.material.color = rawColor;
             bottomFaceRenderer = bottomFaceGO.GetComponent<Renderer>();
-            bottomFaceRenderer.material.color = OverallData.rawFriedEgg_Color;
+            bottomFaceRenderer.material.color = rawColor;
         }
 
         public void StartFry()
@@ -96,14 +103,12 @@ namespace Play.Egg
                 if(bottomCookPercent <= 50)
                 {
                     bottomFaceRenderer.material.color = 
-                        Color.Lerp(OverallData.rawFriedEgg_Color, OverallData.perfectFriedEgg_Color, 
-                            bottomCookPercent/50f);
+                        Color.Lerp(rawColor, perfectColor, bottomCookPercent/50f);
                 }
                 else
                 {
                     bottomFaceRenderer.material.color = 
-                        Color.Lerp(OverallData.rawFriedEgg_Color, OverallData.perfectFriedEgg_Color, 
-                            (bottomCookPercent-50f)/50f);
+                        Color.Lerp(perfectColor, burnedColor, (bottomCookPercent-50f)/50f);
                 }
             }
             else
@@ -119,14 +124,12 @@ namespace Play.Egg
                 if (topCookPercent <= 50)
                 {
                     topFaceRenderer.material.color = 
-                        Color.Lerp(OverallData.rawFriedEgg_Color, OverallData.perfectFriedEgg_Color,
-                        topCookPercent / 50f);
+                        Color.Lerp(rawColor, perfectColor, topCookPercent/50f);
                 }
                 else
                 {
                     topFaceRenderer.material.color = 
-                        Color.Lerp(OverallData.rawFriedEgg_Color, OverallData.perfectFriedEgg_Color,
-                        (topCookPercent - 50f) / 50f);
+                        Color.Lerp(perfectColor, burnedColor, (topCookPercent-50f)/50f);
                 }
             }
         }

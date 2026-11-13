@@ -24,6 +24,7 @@ namespace Play.Egg
         public Rigidbody rb;
         public Collider collider;
         private float friction = 0;
+        private FriedEggSO friedEggSO;
         
         public Side handSide = Side.NULL;
         
@@ -32,7 +33,7 @@ namespace Play.Egg
         public float animTime = 0;
         public float animTimeCounter = 0;
 
-        public void Init(EggSO so, Side handSide, EggShell eggShell, GameObject friedEggGO)
+        public void Init(EggSO so, Side handSide, EggShell eggShell, GameObject friedEggGO, FriedEggSO friedEggSO)
         {
             Debug.Log("初始化：EggData构造");
             perfectSpeed = so.perfectSpeed;
@@ -43,6 +44,7 @@ namespace Play.Egg
             this.handSide = handSide;
             this.eggShell = eggShell;
             this.friedEggGO = friedEggGO;
+            this.friedEggSO = friedEggSO;
             
             isPerfect = false;
             isBad = false;
@@ -112,12 +114,15 @@ namespace Play.Egg
             rb.linearVelocity = new Vector3(newV.x, rb.linearVelocity.y, newV.y);
         }
 
+        /// <summary>
+        /// 生成煎蛋
+        /// </summary>
         public void PutEgg()
         {
             if (!isPerfect) return;
             
             GameObject go = Instantiate(friedEggGO, eggShell.gameObject.transform, true);
-            go.GetComponent<FriedEggData>().InitFromEgg(transform.position);
+            go.GetComponent<FriedEggData>().InitFromEgg(transform.position, friedEggSO);
             TurnBadEgg();
             animTimeCounter = 0;
         }

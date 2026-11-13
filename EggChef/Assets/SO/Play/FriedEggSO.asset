@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c62293d1e742ec42b45f35819be9ffa, type: 3}
   m_Name: FriedEggSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.FriedEggSO
+  rawFriedEgg_Color: {r: 1, g: 1, b: 1, a: 1}
+  perfectFriedEgg_Color: {r: 0.72327036, g: 0.41046962, b: 0.0022742825, a: 1}
+  burnedFriedEgg_Color: {r: 0, g: 0, b: 0, a: 1}
