@@ -62,7 +62,7 @@ namespace Play.Egg
 
         public void StartFry()
         {
-            if (!pot)
+            if (!pot || pot.GetComponent<PotData>().CanPutEgg())
             {
                 isFrying = false;
                 return;
@@ -76,7 +76,6 @@ namespace Play.Egg
             handSide = Side.NULL;
             collider.isTrigger = false;
             rb.isKinematic = true;
-            transform.SetParent(pot.transform, false);
             transform.localPosition = Vector3.zero;
             isFrying = true;
             pot.GetComponent<PotData>().SetEgg(this);

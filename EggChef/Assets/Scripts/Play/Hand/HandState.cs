@@ -294,4 +294,22 @@ namespace Play.Hand
             caller.itemData = null;
         }
     }
+
+    public class CatchOil : BaseState<HandData>
+    {
+        public override void Enter(HandData caller, IBoard b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(HandData caller, IBoard b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Exit(HandData caller, IBoard b)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

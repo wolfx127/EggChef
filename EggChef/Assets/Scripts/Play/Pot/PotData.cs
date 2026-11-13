@@ -31,7 +31,9 @@ namespace Play.Pot
         
         private float minOil;
         private float maxOil;
-        public bool enableOil;
+        private float curOil;
+
+        public bool hasEgg;
 
         public void StartTick()
         {
@@ -40,6 +42,7 @@ namespace Play.Pot
 
         public void SetEgg(FriedEggData eggData)
         {
+            eggData.transform.SetParent(transform,false);
             friedEggData = eggData;
             friedEggGO = eggData.gameObject;
             friedEggLayer = friedEggGO.layer;
@@ -133,6 +136,16 @@ namespace Play.Pot
         {
             if (!friedEggGO) return;
             friedEggGO.transform.Rotate(0f, 0f, angleV * fixedDT, Space.Self);
+        }
+
+        public bool CanPutEgg()
+        {
+            return curOil >= minOil && !friedEggGO;
+        }
+
+        public bool CanPutOil()
+        {
+            return !friedEggGO;
         }
     }
 }

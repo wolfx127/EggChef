@@ -122,9 +122,23 @@ namespace Play.Egg
             if (!isPerfect) return;
             
             GameObject go = Instantiate(friedEggGO, eggShell.gameObject.transform, true);
-            go.GetComponent<FriedEggData>().InitFromEgg(transform.position, friedEggSO);
+            FriedEggData friedEgg = go.GetComponent<FriedEggData>();
+            friedEgg.InitFromEgg(transform.position, friedEggSO);
             TurnBadEgg();
             animTimeCounter = 0;
+            
+            if (Physics.Raycast(transform.position, Vector3.down, 
+                    out RaycastHit hit, 10f, LayerMask.GetMask("FreezeItem"),
+                    QueryTriggerInteraction.Ignore))
+            {
+                if (hit.collider.gameObject &&
+                    hit.collider.gameObject.CompareTag("Pot") &&
+                    hit.collider.TryGetComponent<PotData>(out PotData pot) &&
+                    pot.CanPutEgg())
+                {
+                    pot.SetEgg(friedEgg);
+                }
+            }
         }
 
         public void PutAnim(float dt)
