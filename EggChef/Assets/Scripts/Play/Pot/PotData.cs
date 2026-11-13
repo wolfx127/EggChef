@@ -1,7 +1,9 @@
 using System;
+using Framework;
 using Play.Egg;
 using Play.Hand;
 using SO.Play;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Play.Pot
@@ -14,10 +16,13 @@ namespace Play.Pot
         public PotSO potSO;
         private GameObject friedEggGO;
         private FriedEggData friedEggData;
+        private int friedEggLayer;
+        private UniTaskLoopHandle flipHandle;
         
         public float perfectSpeed;
         public float badSpeed;
         public float maxHeight;
+        public bool isFlip;
         
         private float minOil;
         private float maxOil;
@@ -32,18 +37,13 @@ namespace Play.Pot
         {
             friedEggData = eggData;
             friedEggGO = eggData.gameObject;
-            if(transform.GetComponentInChildren<FriedEggData>())
-                Debug.Log("锅里进煎蛋了");
+            friedEggLayer = friedEggGO.layer;
+            friedEggGO.layer = 2;
         }
 
         public void Tick(float dt)
         {
-            if (friedEggData)
-            {
-                if(friedEggData.isFrying)
-                    friedEggData.FryUpdate(dt);
-                else friedEggData.FryUpdate(0);
-            }
+            
         }
 
         public void Init(PotSO so)
@@ -61,14 +61,55 @@ namespace Play.Pot
             transform.position = originPos;
         }
 
-        public void PerfectFlip()
+        public void PerfectFlipEnter()
         {
+            if (!friedEggGO) return;
             
+            friedEggData.isFrying = false;
+            //标记使得禁止互斥行为执行
+            isFlip = true;
+            
+            flipHandle?.Stop();
+            flipHandle = UniTaskMgr.RepeatEveryFixedFrame(PerfectFlipUpdate);
+        }
+
+        private void PerfectFlipUpdate()
+        {
+            float t = Time.fixedDeltaTime;
+            float v = perfectSpeed * 1.2f;
+            float g = 9.8f;
+            //模拟重力匀加速
+            float x = v * t - 0.5f * g * t * t;
+            friedEggGO.transform.position += new Vector3(0, x, 0);
+            RollEgg(t);
+            
+            if(friedEggGO.transform.position.y <=transform.position.y)
+            {
+                PerfectFlipExit();
+            }
+        }
+
+        private void PerfectFlipExit()
+        {
+            isFlip = false;
+            friedEggData.isFrying = true;
+            friedEggData.FlipFace();
         }
 
         public void BadFlip()
         {
-            
+            if (!friedEggGO || !friedEggData || !friedEggData.isFrying || isFlip) return;
+            friedEggGO.layer = friedEggLayer;
+            friedEggData.StopFry();
+            friedEggGO = null;
+            friedEggData = null;
+        }
+
+        private void RollEgg(float fixedDT)
+        {
+            if (!friedEggGO) return;
+            float angleSpeed = 10f;
+            friedEggGO.transform.Rotate(0f, angleSpeed * fixedDT, 0f, Space.Self);
         }
     }
 }

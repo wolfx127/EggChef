@@ -21,3 +21,6 @@ MonoBehaviour:
   rent: 300
   cookSpeed: 1
   cookMaxSpeed: 1
+  rawFriedEgg_Color: {r: 1, g: 1, b: 1, a: 1}
+  perfectFriedEgg_Color: {r: 1, g: 0.7650467, b: 0.24213827, a: 1}
+  burnedFriedEgg_Color: {r: 0, g: 0, b: 0, a: 1}

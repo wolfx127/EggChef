@@ -213,11 +213,11 @@ namespace Play.Hand
             caller.transform.position = pos;
             caller.itemGO.transform.position = caller.transform.position;
             
-            if (b is HandBoard hb && caller.itemData is PotData p)
+            if (b is HandBoard hb && caller.itemData is PotData p && !p.isFlip)
             {
                 if (-hb.speed > p.perfectSpeed && -hb.speed <= p.badSpeed)
                 {
-                    p.PerfectFlip();
+                    p.PerfectFlipEnter();
                     Debug.Log($"翻得完美{-hb.speed}");
                 }
                 else if (-hb.speed > p.badSpeed)

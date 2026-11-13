@@ -166,12 +166,8 @@ namespace Play
 
         private void HandPutItem(bool isPut)
         {
-            if(side.value == Side.left)
-                leftHand.PutItem(isPut);
-            else leftHand.PutItem(false);
-            if(side.value == Side.right)
-                rightHand.PutItem(isPut);
-            else rightHand.PutItem(false);
+            leftHand.PutItem(isPut);
+            rightHand.PutItem(isPut);
         }
     }
 }

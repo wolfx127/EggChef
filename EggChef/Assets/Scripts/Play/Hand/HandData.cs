@@ -152,7 +152,6 @@ namespace Play.Hand
             //else if[发来的是freeItem]或[发来的是freezeItem]
             //    该手没空()
             //    接收发来的item()
-            //TODO：后期还要引入一个条件，如果这个物体已经被这个手抓住了，那么另一个手不能去抓
             
             if (side.value != this.side) return;
             if (itemGO)
@@ -176,7 +175,7 @@ namespace Play.Hand
         public void PutItem(bool isPut)
         {
             this.isPut = isPut;
-            if(isPut) Debug.Log($"{side}手试图放下物体");
+            if(isPut && isMouseControlling) Debug.Log($"{side}手试图放下物体");
         }
 
         //获取速度
