@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 731d0c09b187377438e7186024684910, type: 3}
   m_Name: PotSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.PotSO
-  perfectSpeed: 30
-  badSpeed: 50
+  perfectSpeed: 10
+  badSpeed: 40
   maxHeight: 5
   minOil: 0
   maxOil: 0
+  beginningFlipSpeed: 30
+  flipGravity: 60
+  flipAngleSpeed: 200

@@ -10,5 +10,8 @@ namespace SO.Play
         public float maxHeight;
         public float minOil;
         public float maxOil;
+        public float beginningFlipSpeed;
+        public float flipGravity;
+        public float flipAngleSpeed;
     }
 }

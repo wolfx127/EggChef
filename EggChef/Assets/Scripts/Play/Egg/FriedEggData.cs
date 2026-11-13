@@ -22,8 +22,8 @@ namespace Play.Egg
         private GameObject bottomFaceGO;
         private Renderer topFaceRenderer;
         private Renderer bottomFaceRenderer;
-        private float topCookPercent;
-        private float bottomCookPercent;
+        [SerializeField] private float topCookPercent;
+        [SerializeField] private float bottomCookPercent;
         private bool isTopSide;//表示现在煎蛋是否正面朝上
         
         public bool isFindPot = false;
@@ -64,9 +64,6 @@ namespace Play.Egg
             findHandle?.Stop();
             findHandle = null;
             fryHandle?.Stop();
-            //启动煎制循环
-            fryHandle = UniTaskMgr.Repeat(0.4f, FryUpdate, this.GetCancellationTokenOnDestroy());
-            
 
             handSide = Side.NULL;
             collider.isTrigger = false;
@@ -76,15 +73,15 @@ namespace Play.Egg
             isFrying = true;
             pot.GetComponent<PotData>().SetEgg(this);
             SnapToFace();
+            
+            //当前面都准备好后，再启动煎制循环
+            fryHandle = UniTaskMgr.Repeat(0.4f, FryUpdate, this.GetCancellationTokenOnDestroy());
         }
 
         private void FryUpdate()
         {
             if (!isFrying)
             {
-                fryHandle?.Stop();
-                fryHandle = null;
-                StopFry();
                 return;
             }
 
@@ -145,8 +142,8 @@ namespace Play.Egg
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = new Vector3(0, 
-                pot.GetComponent<PotData>().perfectSpeed/1.5f, 
-                Random.Range(-0.5f, 0.5f));
+                pot.GetComponent<PotData>().perfectSpeed/3f, 
+                Random.Range(-3f, 3f));
             
             isFrying = false;
             pot = null;

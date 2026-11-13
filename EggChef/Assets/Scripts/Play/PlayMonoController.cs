@@ -43,7 +43,10 @@ namespace Play
 
         private void LateUpdate()
         {
-            
+            foreach (var pot in potList)
+            {
+                pot.LatedTick(Time.deltaTime);
+            }
         }
 
         public void Init(GameObject cameraGO, PlayCamera camera, HandData leftHand, HandData rightHand, List<GameObject> potList)

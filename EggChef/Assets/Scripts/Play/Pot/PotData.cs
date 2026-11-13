@@ -23,6 +23,11 @@ namespace Play.Pot
         public float badSpeed;
         public float maxHeight;
         public bool isFlip;
+        private float eggSpeed;
+        private Vector3 eggWorldPos;
+        private float g;
+        private float beginV;
+        private float angleV;
         
         private float minOil;
         private float maxOil;
@@ -46,6 +51,14 @@ namespace Play.Pot
             
         }
 
+        public void LatedTick(float dt)
+        {
+            if (isFlip && friedEggGO)
+            {
+                friedEggGO.transform.position = eggWorldPos;
+            }
+        }
+
         public void Init(PotSO so)
         {
             perfectSpeed = so.perfectSpeed;
@@ -53,6 +66,9 @@ namespace Play.Pot
             maxHeight = so.maxHeight + originPos.y;
             minOil = so.minOil;
             maxOil = so.maxOil;
+            g = so.flipGravity;
+            beginV = so.beginningFlipSpeed;
+            angleV = so.flipAngleSpeed;
         }
 
         public void ExitFromHand()
@@ -68,6 +84,8 @@ namespace Play.Pot
             friedEggData.isFrying = false;
             //标记使得禁止互斥行为执行
             isFlip = true;
+            eggSpeed = beginV;
+            eggWorldPos = transform.position;
             
             flipHandle?.Stop();
             flipHandle = UniTaskMgr.RepeatEveryFixedFrame(PerfectFlipUpdate);
@@ -76,14 +94,14 @@ namespace Play.Pot
         private void PerfectFlipUpdate()
         {
             float t = Time.fixedDeltaTime;
-            float v = perfectSpeed * 1.2f;
-            float g = 9.8f;
             //模拟重力匀加速
-            float x = v * t - 0.5f * g * t * t;
-            friedEggGO.transform.position += new Vector3(0, x, 0);
+            eggSpeed -= t*g;
+            float v = eggSpeed;
+            eggWorldPos += new Vector3(0, v*t, 0);//缓存一下，因为执行时机和mono的update冲突了，
+                                                  //update事先带着锅的位置算好了，所以就不是相对位置而不是世界位置了
             RollEgg(t);
             
-            if(friedEggGO.transform.position.y <=transform.position.y)
+            if(eggSpeed < 0 && friedEggGO.transform.position.y <= transform.position.y + 1f)
             {
                 PerfectFlipExit();
             }
@@ -94,10 +112,16 @@ namespace Play.Pot
             isFlip = false;
             friedEggData.isFrying = true;
             friedEggData.FlipFace();
+            friedEggGO.transform.localPosition = Vector3.zero;
+            
+            flipHandle?.Stop();
+            flipHandle = null;
         }
 
         public void BadFlip()
         {
+            flipHandle?.Stop();
+            flipHandle = null;
             if (!friedEggGO || !friedEggData || !friedEggData.isFrying || isFlip) return;
             friedEggGO.layer = friedEggLayer;
             friedEggData.StopFry();
@@ -108,8 +132,7 @@ namespace Play.Pot
         private void RollEgg(float fixedDT)
         {
             if (!friedEggGO) return;
-            float angleSpeed = 10f;
-            friedEggGO.transform.Rotate(0f, angleSpeed * fixedDT, 0f, Space.Self);
+            friedEggGO.transform.Rotate(0f, 0f, angleV * fixedDT, Space.Self);
         }
     }
 }
