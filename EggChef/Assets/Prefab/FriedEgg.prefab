@@ -72,6 +72,11 @@ MonoBehaviour:
   collider: {fileID: 0}
   rb: {fileID: 0}
   isFrying: 0
+  topCookPercent: 0
+  bottomCookPercent: 0
+  isTopSide: 0
+  isFindPot: 0
+  handSide: 0
 --- !u!54 &9116338466657530262
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -91,7 +96,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

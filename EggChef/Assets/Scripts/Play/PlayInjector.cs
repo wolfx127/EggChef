@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Play.Decoration;
 using Play.Egg;
+using Play.Guest;
 using Play.Hand;
 using Play.Oil;
 using Play.Pot;
@@ -28,6 +30,14 @@ namespace Play
         [SerializeField] private GameObject friedEggGO;
         [SerializeField] private GameObject oilGO;
         [SerializeField] private FriedEggSO friedEggSO;
+        [SerializeField] private PlayTimeManagerSO playTimeManagerSO;
+        [SerializeField] private GameObject guestGO;
+        [SerializeField] private GuestSO guestSO;
+        [SerializeField] private List<RoadNode> roadNodeList;
+        [SerializeField] private List<RoadNode> seatList;
+        [SerializeField] private GuestCreator guestCreator;
+        [SerializeField] private GuestCreatorSO guestCreatorSO;
+        [SerializeField] private RoadNode startNode;
 
         //被注入
         public PlayHandler playHandler;
@@ -35,6 +45,8 @@ namespace Play
         public EggShell eggShell;
         public HandData leftHand;
         public HandData rightHand;
+        public PlayTimeManager playTimeManager;
+        public RoadNodeMgr  roadNodeMgr;
 
         private void Awake()
         {
@@ -48,6 +60,7 @@ namespace Play
             rightHand = new HandData(rightHandGO, Side.right);
             leftHand = new HandData(leftHandGO, Side.left);
             playCamera = new PlayCamera(cameraGO, cam, cameraSO);
+            playTimeManager = new PlayTimeManager(playTimeManagerSO);
             playHandler.Init(cameraGO, playCamera, leftHand, rightHand);
             
             foreach (var pot in potList)
@@ -56,6 +69,9 @@ namespace Play
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList);
             eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO, friedEggSO);
             oilGO.GetComponent<OilData>().Init();
+            
+            roadNodeMgr = new RoadNodeMgr(roadNodeList, seatList);
+            guestCreator.Init(playTimeManager, guestCreatorSO, guestGO, guestSO, roadNodeMgr);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Framework.FSM
     public enum State
     {
         NULL,
+        
         CatchOil,
         CatchPot,
         CatchEggShell,
@@ -15,7 +16,15 @@ namespace Framework.FSM
         CatchBow,
         PutOil,
         PutEgg,
-        CancelCatching
+        CancelCatching,
+        
+        Visit,
+        Wait,
+        Sit,
+        Eat,
+        Angry,
+        Satisfy,
+        Leave,
     }
 
     /// <summary>

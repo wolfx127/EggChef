@@ -12,6 +12,8 @@ TagManager:
   - FriedEgg
   - Bow
   - EggShell
+  - Seat
+  - Guest
   layers:
   - Default
   - TransparentFX
