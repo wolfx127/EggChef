@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Play.Guest
 {
+    //通过改guest的状态来驱动状态机计算，也就是说得等下一帧写黑板才能换状态
     public class GuestVisit : BaseState<GuestData>
     {
         public GuestVisit()
@@ -24,6 +25,7 @@ namespace Play.Guest
 
         public override void Update(GuestData caller, IBoard b)
         {
+            //进入排队状态
             if (Physics.Raycast(caller.transform.position,
                     caller.forward, out RaycastHit hit,
                     caller.sightDis, ~0, QueryTriggerInteraction.Ignore))
@@ -51,44 +53,12 @@ namespace Play.Guest
 
         public override void Exit(GuestData caller, IBoard b)
         {
-        }
-    }
-    
-    public class GuestSit : BaseState<GuestData>
-    {
-        private float sitTimer;
-
-        public GuestSit()
-        {
-            transitionTable = new List<Transition>();
-            transitionTable.Add(new Transition(State.Angry,
-                b => b is GuestBoard gb && gb.isAngry));
-            transitionTable.Add(new Transition(State.Eat,
-                b => b is GuestBoard gb && gb.egg));
-        }
-
-        public override void Enter(GuestData caller, IBoard b)
-        {
-            sitTimer = 0f;
-        }
-
-        public override void Update(GuestData caller, IBoard b)
-        {
-            GuestBoard board = (GuestBoard)b;
-            sitTimer += board.deltaTime;
-            if (sitTimer >= caller.sitMaxTime)
-                caller.isAngry = true;
-        }
-
-        public override void Exit(GuestData caller, IBoard b)
-        {
+            
         }
     }
     
     public class GuestWait : BaseState<GuestData>
     {
-        private float waitTimer;
-
         public GuestWait()
         {
             transitionTable = new List<Transition>();
@@ -100,7 +70,7 @@ namespace Play.Guest
 
         public override void Enter(GuestData caller, IBoard b)
         {
-            waitTimer = 0f;
+            
         }
 
         public override void Update(GuestData caller, IBoard b)
@@ -119,10 +89,44 @@ namespace Play.Guest
         }
     }
 
+    //坐等上菜
+    public class GuestSit : BaseState<GuestData>
+    {
+        public GuestSit()
+        {
+            transitionTable = new List<Transition>();
+            transitionTable.Add(new Transition(State.Angry,
+                b => b is GuestBoard gb && gb.isAngry));
+            transitionTable.Add(new Transition(State.Eat,
+                b => b is GuestBoard gb && gb.egg));
+        }
+
+        public override void Enter(GuestData caller, IBoard b)
+        {
+            caller.sitTimeCounter = 0f;
+        }
+
+        public override void Update(GuestData caller, IBoard b)
+        {
+            if(b is GuestBoard gb)
+            {
+                caller.sitTimeCounter += gb.deltaTime;
+                if (caller.sitTimeCounter >= caller.sitTime)
+                    caller.isAngry = true;
+            }
+        }
+
+        public override void Exit(GuestData caller, IBoard b)
+        {
+            
+        }
+    }
+    
+    //进食动画
     public class GuestEat : BaseState<GuestData>
     {
-        private float eatTimer;
-
+        private bool satisfied; 
+        
         public GuestEat()
         {
             transitionTable = new List<Transition>();
@@ -134,18 +138,37 @@ namespace Play.Guest
 
         public override void Enter(GuestData caller, IBoard b)
         {
-            eatTimer = 0f;
+            caller.eatTimeCounter = 0;
             caller.isSatisfied = false;
+
+            if (b is GuestBoard gb)
+            {
+                //TODO:对比意愿煎蛋
+            }
         }
 
         public override void Update(GuestData caller, IBoard b)
         {
-            if (caller.isAngry) return;
-
-            GuestBoard board = (GuestBoard)b;
-            eatTimer += board.deltaTime;
-            if (eatTimer >= caller.eatTime)
-                caller.isSatisfied = true;
+            if (b is GuestBoard gb)
+            {
+                if(caller.eatTimeCounter < caller.eatTime)
+                {
+                    caller.sitTimeCounter += gb.deltaTime;
+                    
+                    //TODO: 对接人物动画和ui气泡动画
+                }
+                else
+                {
+                    if (satisfied)
+                    {
+                        caller.isSatisfied = true;
+                    }
+                    else
+                    {
+                        caller.isAngry = true;
+                    }
+                }
+            }
         }
 
         public override void Exit(GuestData caller, IBoard b)
@@ -153,49 +176,40 @@ namespace Play.Guest
         }
     }
 
-    /// <summary>
-    /// 吃饱后的表演状态。这里可以按时间切多段动作，别把延迟塞进 Eat.Exit。
-    /// </summary>
+    
     public class GuestSatisfy : BaseState<GuestData>
     {
-        private float resultTimer;
-        private bool phase1;
-        private bool phase2;
 
         public GuestSatisfy()
         {
             transitionTable = new List<Transition>();
+            transitionTable.Add(new Transition(State.Angry,
+                b => b is GuestBoard gb && gb.isAngry));
             transitionTable.Add(new Transition(State.Leave,
                 b => b is GuestBoard gb && gb.isLeave));
         }
 
         public override void Enter(GuestData caller, IBoard b)
         {
-            resultTimer = 0f;
-            phase1 = false;
-            phase2 = false;
+            caller.isSatisfied = false;
+            caller.satisfiedTimeCounter = 0;
         }
 
         public override void Update(GuestData caller, IBoard b)
         {
-            GuestBoard board = (GuestBoard)b;
-            resultTimer += board.deltaTime;
-
-            // 多段庆祝动作：可以换成动画事件或 Timeline 回调
-            if (!phase1 && resultTimer >= 0.35f)
+            if(b is GuestBoard gb)
             {
-                phase1 = true;
-                // TODO: 放下筷子 / 动作 1
+                if (caller.satisfiedTimeCounter < caller.satisfiedTime)
+                {
+                    caller.sitTimeCounter += gb.deltaTime;
+                    //TODO:动画
+                }
+                else
+                {
+                    //TODO:给钱
+                    caller.isLeave = true;
+                }
             }
-
-            if (!phase2 && resultTimer >= 1.0f)
-            {
-                phase2 = true;
-                // TODO: 伸懒腰 / 满意表情 / 动作 2
-            }
-
-            if (resultTimer >= caller.bubbleTime)
-                caller.isLeave = true;
         }
 
         public override void Exit(GuestData caller, IBoard b)
@@ -208,8 +222,6 @@ namespace Play.Guest
     /// </summary>
     public class GuestAngry : BaseState<GuestData>
     {
-        private float resultTimer;
-
         public GuestAngry()
         {
             transitionTable = new List<Transition>();
@@ -219,17 +231,12 @@ namespace Play.Guest
 
         public override void Enter(GuestData caller, IBoard b)
         {
-            resultTimer = 0f;
+            
         }
 
         public override void Update(GuestData caller, IBoard b)
         {
-            GuestBoard board = (GuestBoard)b;
-            resultTimer += board.deltaTime;
-
-            // TODO: 生气动画 / 摔门 / 气泡
-            if (resultTimer >= caller.bubbleTime)
-                caller.isLeave = true;
+            
         }
 
         public override void Exit(GuestData caller, IBoard b)
@@ -257,12 +264,12 @@ namespace Play.Guest
         {
             if (caller.nextNode <= 0)
             {
-                //TODO: 计时器循环，循环结束后消失
+                //TODO: 走到终点后，计时器循环，循环结束后消失
             }
 
             if (b is GuestBoard board)
             {
-                //TODO: 原路返回
+                //TODO: 向节点移动
             }
         }
 

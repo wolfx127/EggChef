@@ -9,6 +9,7 @@ namespace Play.Guest
 {
     public class GuestData : MonoBehaviour
     {
+        //进店寻路
         public SeatData seat;
         public List<RoadNode> path;
         public int curNode = 0;
@@ -16,18 +17,32 @@ namespace Play.Guest
         public bool isSit = false;
         public bool isCatchNode = false;
         
+        //寻路事件
         public float sightDis = 2f;
         public bool isWait = false;
         public Vector3 forward = Vector3.zero;
         public float walkSpeed = 1f;
 
+        //独立事件，生气
         public bool isAngry = false;
-        public float sitMaxTime = 100f;
+        
+        //等菜
+        public float sitTime = 100f;
+        public float sitTimeCounter = 0;
+        
+        //吃
+        public float eatTime = 3f;
+        public float eatTimeCounter = 0;
+        
+        //吃饱喝足
         public FriedEggData truthEgg = null;
-        public float eatTime = 0;
         public bool isSatisfied = false;
+        public float satisfiedTimeCounter = 0;
+        public float satisfiedTime = 5f;
         public bool isLeave = false;
-        public float bubbleTime = 0;
+        
+        //ui气泡,每个气泡的时长都固定
+        public float uiBubbleTime = 0;
 
         public Collider collider;
         public Rigidbody rb;
@@ -96,10 +111,22 @@ namespace Play.Guest
                 isCatchNode = true;
             }
 
-            if (other.gameObject.layer == LayerMask.NameToLayer("FreeItem"))
+            if (other.gameObject.layer == LayerMask.NameToLayer("FreeItem") &&
+                other.CompareTag("FriedEgg"))
             {
                 isAngry = true;
             }
+        }
+
+        public void SetFriedEgg(GameObject friedEgg)
+        {
+            if (truthEgg) return;
+            truthEgg = friedEgg.GetComponent<FriedEggData>();
+        }
+
+        public void CompareWilling()
+        {
+            
         }
     }
 }
