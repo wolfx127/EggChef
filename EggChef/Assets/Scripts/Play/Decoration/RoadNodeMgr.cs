@@ -18,9 +18,10 @@ namespace Play.Decoration
         public Dictionary<(int start,int end), List<RoadNode>> pathTable = new();
         private float minDis = 10f;//间距超过这个值的节点视为不连通
 
-        public RoadNodeMgr(List<RoadNode> nodeList,  List<RoadNode> seatList)
+        public RoadNodeMgr(List<RoadNode> nodeList,  List<RoadNode> startNodeList, List<RoadNode> seatList)
         {
             nodeTable = new (nodeList);
+            startTable = startNodeList;
             endTable = new (seatList);
         }
 

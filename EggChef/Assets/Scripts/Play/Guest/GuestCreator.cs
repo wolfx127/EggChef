@@ -20,6 +20,8 @@ namespace Play.Guest
         private RoadNodeMgr roadNodeMgr;
         private RoadNode startNode;
 
+        private HashSet<GuestData> guestList = new();
+
         public void Init(PlayTimeManager timeMgr, GuestCreatorSO so, GameObject guestGO, GuestSO guestSO, 
             RoadNodeMgr roadNodeMgr)
         {
@@ -33,6 +35,11 @@ namespace Play.Guest
 
         public void Tick(float dt)
         {
+            foreach (var g in guestList)
+            {
+                g.Tick(dt);
+            }
+            
             CreateGap(dt);
         }
 
@@ -51,9 +58,16 @@ namespace Play.Guest
             GameObject go = Instantiate(guestGO, transform, true);
             SeatData seat = roadNodeMgr.GetRandomSeat();
             List<RoadNode> path = roadNodeMgr.FindPath(startNode, seat.GetComponent<RoadNode>());
-            go.GetComponent<GuestData>().StartTick(path, seat);
+            go.GetComponent<GuestData>().StartTick(path, seat, this);
+            
+            guestList.Add(go.GetComponent<GuestData>());
             
             todayGuestCount++;
+        }
+
+        public void DestroyGuest(GuestData guest)
+        {
+            guestList.Remove(guest);
         }
         
     }

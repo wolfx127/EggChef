@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Framework;
 using Overall;
+using Play.Bow;
 using Play.Hand;
 using Play.Pot;
 using SO.Play;
@@ -18,6 +19,7 @@ namespace Play.Egg
         
         public bool isFrying = false;
         private GameObject pot;
+        private GameObject bow;
         private UniTaskLoopHandle fryHandle;
         private GameObject topFaceGO;
         private GameObject bottomFaceGO;
@@ -33,6 +35,8 @@ namespace Play.Egg
         public bool isFindPot = false;
         private float findDis = 2f;
         private UniTaskLoopHandle findHandle;//表示方法（进程）执行的状态，开始、循环、暂停、继续
+        
+        public bool isFindBow = false;
 
         public Side handSide = Side.NULL;
 
@@ -181,7 +185,7 @@ namespace Play.Egg
         public void EnterFromHand()
         {
             findHandle?.Stop();
-            findHandle = UniTaskMgr.Repeat(0.1f, FindPot, this.GetCancellationTokenOnDestroy());
+            findHandle = UniTaskMgr.Repeat(0.1f, Find, this.GetCancellationTokenOnDestroy());
         }
 
         public void ExitFromHand()
@@ -200,24 +204,39 @@ namespace Play.Egg
             Debug.Log("煎蛋已脱手");
         }
 
-        private void FindPot()
+        public void PutBow()
+        {
+            if (bow)
+            {
+                bow.GetComponent<BowData>().friedEgg = this;
+            }
+        }
+
+        private void Find()
         {
             if (Physics.Raycast(transform.position, Vector3.down, 
                     out RaycastHit hit, findDis, LayerMask.GetMask("FreezeItem"),
-                    QueryTriggerInteraction.Ignore))
+                    QueryTriggerInteraction.Ignore) && hit.collider.gameObject)
             {
-                if (hit.collider.gameObject &&
-                    hit.collider.gameObject.CompareTag("Pot"))
+                if (hit.collider.gameObject.CompareTag("Pot"))
                 {
                     pot = hit.collider.gameObject;
                     isFindPot = true;
                     Debug.Log("找到锅了");
+                }
+                else if (hit.collider.CompareTag("Bow"))
+                {
+                    bow = hit.collider.gameObject;
+                    isFindBow = true;
+                    Debug.Log("找到弓了");
                 }
             }
             else
             {
                 isFindPot = false;
                 pot = null;
+                isFindBow = false;
+                bow = null;
             }
         }
     }

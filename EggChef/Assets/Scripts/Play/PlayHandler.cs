@@ -86,8 +86,7 @@ namespace Play
             this.leftHand = leftHand;
             this.rightHand = rightHand;
         }
-        
-        
+
         //handler的[抓取(按住鼠标左键)]输入执行，让手接下来会跟着鼠标跑(跟随动作不在这，仅表示 已跟随 状态)，前提是鼠标一开始就点到手 或 点到物体
         //接收鼠标位于屏幕的位置，制造射线一次性检测是否打到手以及物体
         private void CatchItem(GameObject hit)

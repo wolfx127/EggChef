@@ -1,4 +1,5 @@
 using Framework.FSM;
+using Play.Bow;
 using Play.Egg;
 using Play.Pot;
 using UnityEngine;
@@ -16,7 +17,8 @@ namespace Play.Hand
             stateTable.Add(State.CatchEggShell, new HandCatchEggShell());
             stateTable.Add(State.CatchEgg, new HandCatchEgg());
             stateTable.Add(State.CatchPot, new HandCatchPot());
-            stateTable.Add(State.CatchFriedEgg, new CatchFriedEgg());
+            stateTable.Add(State.CatchFriedEgg, new HandCatchFriedEgg());
+            stateTable.Add(State.CatchBow, new HandCatchBow());
         }
 
         public void SetBoard(float speed, 
@@ -56,7 +58,13 @@ namespace Play.Hand
                     else
                         board.catchObject = CatchObject.Nothing;
                     break;
-                case "Bow":      board.catchObject = CatchObject.Bow; break;
+                case "Bow":      
+                    BowData bow = itemGO.GetComponent<BowData>();
+                    if(bow.handSide == Side.NULL || bow.handSide == caller.side)
+                        board.catchObject = CatchObject.Bow; 
+                    else 
+                        board.catchObject = CatchObject.Nothing;
+                    break;
                 default:         board.catchObject = CatchObject.Nothing; break;
             }
         }

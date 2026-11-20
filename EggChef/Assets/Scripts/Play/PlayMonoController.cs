@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Play.Egg;
+using Play.Guest;
 using Play.Hand;
 using Play.Pot;
 using Play.UI;
@@ -17,6 +18,7 @@ namespace Play
         private HandData leftHand;
         private HandData rightHand;
         private List<PotData> potList = new List<PotData>();
+        private GuestCreator guestCreator;
 
         private void Start()
         {
@@ -34,6 +36,7 @@ namespace Play
             {
                 pot.Tick(Time.deltaTime);
             }
+            guestCreator.Tick(Time.deltaTime);
         }
 
         private void FixedUpdate()
@@ -49,7 +52,8 @@ namespace Play
             }
         }
 
-        public void Init(GameObject cameraGO, PlayCamera camera, HandData leftHand, HandData rightHand, List<GameObject> potList)
+        public void Init(GameObject cameraGO, PlayCamera camera, HandData leftHand, HandData rightHand, 
+            List<GameObject> potList, GuestCreator guestCreator)
         {
             Debug.Log("初始化：PlayMonoController");
             this.cameraGO = cameraGO;
@@ -58,6 +62,7 @@ namespace Play
             this.rightHand = rightHand;
             foreach (var pot in potList)
                 this.potList.Add(pot.GetComponent<PotData>());
+            this.guestCreator = guestCreator;
         }
     }
 }

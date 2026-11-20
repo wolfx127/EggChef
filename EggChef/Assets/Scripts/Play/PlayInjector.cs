@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Play.Bow;
 using Play.Decoration;
 using Play.Egg;
 using Play.Guest;
@@ -27,17 +28,19 @@ namespace Play
         [SerializeField] private GameObject rightHandGO;
         [SerializeField] private List<GameObject> potList;
         [SerializeField] private PotSO potSO;
-        [SerializeField] private GameObject friedEggGO;
         [SerializeField] private GameObject oilGO;
+        [SerializeField] private GameObject friedEggGO;
         [SerializeField] private FriedEggSO friedEggSO;
+        [SerializeField] private GameObject bowGO;
+        [SerializeField] private BowSO bowSO;
         [SerializeField] private PlayTimeManagerSO playTimeManagerSO;
         [SerializeField] private GameObject guestGO;
         [SerializeField] private GuestSO guestSO;
         [SerializeField] private List<RoadNode> roadNodeList;
+        [SerializeField] private List<RoadNode> startNodeList;
         [SerializeField] private List<RoadNode> seatList;
         [SerializeField] private GuestCreator guestCreator;
         [SerializeField] private GuestCreatorSO guestCreatorSO;
-        [SerializeField] private RoadNode startNode;
 
         //被注入
         public PlayHandler playHandler;
@@ -66,12 +69,15 @@ namespace Play
             foreach (var pot in potList)
                 pot.GetComponent<PotData>().Init(potSO);
             
-            playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList);
             eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO, friedEggSO);
             oilGO.GetComponent<OilData>().Init();
+            bowGO.GetComponent<BowData>().Init(bowSO);
             
-            roadNodeMgr = new RoadNodeMgr(roadNodeList, seatList);
+            roadNodeMgr = new RoadNodeMgr(roadNodeList, startNodeList, seatList);
             guestCreator.Init(playTimeManager, guestCreatorSO, guestGO, guestSO, roadNodeMgr);
+            
+            
+            playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList, guestCreator);
         }
     }
 }

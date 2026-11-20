@@ -218,7 +218,7 @@ namespace Play.Guest
     }
 
     /// <summary>
-    /// 生气状态，播完一段生气表现后离场。
+    /// 生气状态，播完一段生气动画后转身离场。
     /// </summary>
     public class GuestAngry : BaseState<GuestData>
     {
@@ -243,10 +243,7 @@ namespace Play.Guest
         {
         }
     }
-
-    /// <summary>
-    /// 离场。当前直接延迟销毁，之后可以改成沿出门路径走。
-    /// </summary>
+    
     public class GuestLeave : BaseState<GuestData>
     {
         public GuestLeave()
@@ -265,6 +262,7 @@ namespace Play.Guest
             if (caller.nextNode <= 0)
             {
                 //TODO: 走到终点后，计时器循环，循环结束后消失
+                caller.Leave();
             }
 
             if (b is GuestBoard board)
@@ -275,6 +273,7 @@ namespace Play.Guest
 
         public override void Exit(GuestData caller, IBoard b)
         {
+            
         }
     }
 }

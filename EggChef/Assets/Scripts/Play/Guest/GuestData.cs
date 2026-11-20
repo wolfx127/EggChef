@@ -44,6 +44,7 @@ namespace Play.Guest
         //ui气泡,每个气泡的时长都固定
         public float uiBubbleTime = 0;
 
+        private GuestCreator creator;
         public Collider collider;
         public Rigidbody rb;
         private GuestFSM FSM;
@@ -54,7 +55,7 @@ namespace Play.Guest
             walkSpeed = so.walkSpeed;
         }
 
-        public void StartTick(List<RoadNode> path, SeatData seat)
+        public void StartTick(List<RoadNode> path, SeatData seat, GuestCreator creator)
         {
             FSM = new GuestFSM(this);
             this.path = path;
@@ -62,6 +63,7 @@ namespace Play.Guest
             curNode = 0;
             if(path.Count > 1) nextNode = 1;
             
+            this.creator = creator;
             collider = GetComponent<Collider>();
             rb = GetComponent<Rigidbody>();
         }
@@ -127,6 +129,11 @@ namespace Play.Guest
         public void CompareWilling()
         {
             
+        }
+
+        public void Leave()
+        {
+            creator.DestroyGuest(this);
         }
     }
 }

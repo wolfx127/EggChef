@@ -44,6 +44,7 @@ namespace Play.Hand
         private float curYPos_Y = 0;
         public Object itemData = null;//手持物品的数据脚本，到时候用is判断类型
         public GameObject itemGO = null;//鼠标点到的东西
+        public bool wasMouseControlling = false;
         public bool isMouseControlling = false;//被鼠标控制着
         private bool isPut = false;//是否放下道具（指把蛋、油、煎蛋这些放进指定位置，如蛋放进锅里，煎蛋放进弹弓里）
 
@@ -105,7 +106,16 @@ namespace Play.Hand
         //接收来自相机的事件，同时相机发来一个 抓住 的状态变更操作，以及变更后的新位置
         public void MoveByMouse(Vector3 v)//同MoveByCamera
         {
-            if (!isMouseControlling) prevPos_Y = v.y;
+            if (isMouseControlling)
+            {
+                wasMouseControlling = false;
+            }
+
+            if (!isMouseControlling)
+            {
+                prevPos_Y = v.y;
+                wasMouseControlling = true;
+            }
             isMouseControlling = true;
             targetPos = v;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Framework;
 using Framework.FSM;
+using Play.Bow;
 using Play.Egg;
 using Play.Pot;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace Play.Hand
                 b => b is HandBoard hb && hb.catchObject == CatchObject.Pot));
             transitionTable.Add(new Transition(State.CatchFriedEgg,
                 b => b is HandBoard hb && hb.catchObject == CatchObject.FriedEgg));
+            transitionTable.Add(new Transition(State.CatchBow,
+                b =>  b is HandBoard hb && hb.catchObject == CatchObject.Bow));
         }
 
         public override void Enter(HandData caller, IBoard b)
@@ -239,9 +242,9 @@ namespace Play.Hand
         }
     }
 
-    public class CatchFriedEgg : BaseState<HandData>
+    public class HandCatchFriedEgg : BaseState<HandData>
     {
-        public CatchFriedEgg()
+        public HandCatchFriedEgg()
         {
             transitionTable = new List<Transition>();
             transitionTable.Add(new Transition(State.CatchNothing,
@@ -280,6 +283,13 @@ namespace Play.Hand
                         egg.StartFry();
                         caller.itemData = null;
                     }
+
+                    if (hb.isPut && egg.isFindBow)
+                    {
+                        caller.itemGO = null;
+                        egg.PutBow();
+                        caller.itemData = null;
+                    }
                 }
             }
         }
@@ -295,7 +305,7 @@ namespace Play.Hand
         }
     }
 
-    public class CatchOil : BaseState<HandData>
+    public class HandCatchOil : BaseState<HandData>
     {
         public override void Enter(HandData caller, IBoard b)
         {
@@ -310,6 +320,53 @@ namespace Play.Hand
         public override void Exit(HandData caller, IBoard b)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class HandCatchBow : BaseState<HandData>
+    {
+        public HandCatchBow()
+        {
+            transitionTable = new List<Transition>();
+            transitionTable.Add(new Transition(State.CatchNothing,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.Nothing));
+        }
+        public override void Enter(HandData caller, IBoard b)
+        {
+            caller.transform.position = caller.itemGO.transform.position;
+            var data = caller.itemGO.GetComponent<BowData>();
+            caller.itemData = data;
+            data.handSide = caller.side;
+            Debug.Log("抓到弓了");
+            data.StartDrawTrack();
+        }
+
+        public override void Update(HandData caller, IBoard b)
+        {
+            caller.transform.position = caller.targetPos;
+            if(caller.itemData is BowData bow)
+            {
+                if (caller.isMouseControlling)
+                {
+                    bow.WriteDrawTrackField(caller.transform.position);
+                }
+                else
+                {
+                    bow.StopDrawTrack();
+                    caller.itemGO = null;
+                }
+            }
+        }
+
+        public override void Exit(HandData caller, IBoard b)
+        {
+            if (caller.itemData is BowData bow)
+            {
+                bow.StopDrawTrack();
+                bow.handSide = Side.NULL;
+            }
+
+            caller.itemData = null;
         }
     }
 }
