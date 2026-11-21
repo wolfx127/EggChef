@@ -1,16 +1,13 @@
 using UnityEngine;
 
-public class RoadNode : MonoBehaviour
+namespace Play.Decoration
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class RoadNode : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = new Color(0.2f, 0.8f, 1f, 0.6f);
+            Gizmos.DrawSphere(transform.position, 0.5f);
+        }
     }
 }

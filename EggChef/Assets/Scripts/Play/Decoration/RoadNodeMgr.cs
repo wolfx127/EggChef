@@ -21,8 +21,21 @@ namespace Play.Decoration
         public RoadNodeMgr(List<RoadNode> nodeList,  List<RoadNode> startNodeList, List<RoadNode> seatList)
         {
             nodeTable = new (nodeList);
+            
+            foreach (var n in startNodeList)
+                if (n && !nodeTable.Contains(n)) nodeTable.Add(n);
+            foreach (var n in seatList)
+                if (n && !nodeTable.Contains(n)) nodeTable.Add(n);
+
             startTable = startNodeList;
             endTable = new (seatList);
+
+            Debug.Log($"[RoadNodeMgr] road={nodeList.Count} start={startNodeList.Count} seat={seatList.Count} => nodeTable={nodeTable.Count}");
+        }
+
+        public RoadNode GetRandomStartNode()
+        {
+            return startTable[Random.Range(0, startTable.Count)];
         }
 
         public SeatData GetRandomSeat()
@@ -36,20 +49,33 @@ namespace Play.Decoration
         /// <param name="startNode"></param>
         /// <param name="endNode"></param>
         /// <returns>索引0是起点，索引count-1是终点和seat语义相同</returns>
-        public List<RoadNode> FindPath(RoadNode startNode, RoadNode endNode)
+        public List<RoadNode> FindPath(RoadNode startNode, RoadNode endNode, float distance = 0)
         {
+            if (distance > 1)
+            {
+                minDis = distance;
+            }
+
             int start = 0;
             int end = 0;
             if (!startIndex.TryGetValue(startNode, out start))
             {
                 start = nodeTable.IndexOf(startNode);
-                if (start < 0 || start >= nodeTable.Count) return new List<RoadNode>();
+                if (start < 0 || start >= nodeTable.Count)
+                {
+                    Debug.LogError($"[FindPath] 起点不在 nodeTable: {startNode?.name}");
+                    return new List<RoadNode>();
+                }
                 startIndex[startNode] = start;
             }
             if (!endIndex.TryGetValue(endNode, out end))
             {
                 end = nodeTable.IndexOf(endNode);
-                if(end < 0 || end >= nodeTable.Count) return new List<RoadNode>();
+                if(end < 0 || end >= nodeTable.Count)
+                {
+                    Debug.LogError($"[FindPath] 终点不在 nodeTable: {endNode?.name}（座位上那个 RoadNode）");
+                    return new List<RoadNode>();
+                }
                 endIndex[endNode] = end;
             }
             
@@ -86,6 +112,7 @@ namespace Play.Decoration
                     path.Add(nodeTable[start]);
                     path.Reverse();
                     pathTable[(start, end)] = path;
+                    Debug.Log($"[FindPath] {startNode?.name} -> {endNode?.name} 成功，path={path.Count}");
                     return path;
                 }
 
@@ -108,6 +135,7 @@ namespace Play.Decoration
                 }
             }
 
+            Debug.LogWarning($"[FindPath] {startNode?.name} -> {endNode?.name} 不连通（nodeTable={nodeTable.Count}, minDis={minDis}）");
             return path;
         }
     }

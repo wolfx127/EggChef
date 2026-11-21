@@ -55,6 +55,9 @@ namespace Play
         {
             playHandler = GetComponent<PlayHandler>();
             playMonoController = GetComponent<PlayMonoController>();
+            bowGO.GetComponent<Renderer>().material.color = new Color32(255, 255, 255, 0);
+            
+            
         }
         
         //onEnable能确保这些mono实例化完
@@ -74,8 +77,8 @@ namespace Play
             bowGO.GetComponent<BowData>().Init(bowSO);
             
             roadNodeMgr = new RoadNodeMgr(roadNodeList, startNodeList, seatList);
-            guestCreator.Init(playTimeManager, guestCreatorSO, guestGO, guestSO, roadNodeMgr);
             
+            guestCreator.Init(playTimeManager, guestCreatorSO, guestGO, guestSO, roadNodeMgr);
             
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList, guestCreator);
         }

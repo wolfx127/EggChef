@@ -349,6 +349,14 @@ namespace Play.Hand
                 if (caller.isMouseControlling)
                 {
                     bow.WriteDrawTrackField(caller.transform.position);
+                    if (b is HandBoard hb)
+                    {
+                        if (hb.isPut)
+                        {
+                            bow.LaunchFriedEgg();
+                            caller.itemGO = null;
+                        }
+                    }
                 }
                 else
                 {

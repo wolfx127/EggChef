@@ -30,9 +30,11 @@ namespace Play.Bow
         
         public Vector3 forward = new Vector3();
         private float speed = 12;
+        private float launchHeight = 1;
 
         public FriedEggData friedEgg;
         public Side handSide = Side.NULL;
+        public float g => -Physics.gravity.y;
         
         public void Init(BowSO so)
         {
@@ -78,7 +80,7 @@ namespace Play.Bow
                  trackBallPosListBackIndex < trackBallPosList.Length; 
                  x += drawTrackBallGapDis)
             {
-                Vector3 p = transform.position + Vector3.up * 0.5f + DrawDeltaPos(x);
+                Vector3 p = transform.position + Vector3.up * launchHeight + DrawDeltaPos(x);
                 if (p.y <= trackGroundY) break;
                 trackBallPosList[trackBallPosListBackIndex++] = p;
             }
@@ -103,7 +105,7 @@ namespace Play.Bow
         //抛物线方程，输入相对于朝向的横坐标，返回对应的世界坐标
         private Vector3 DrawDeltaPos(float X)
         {
-            float g = 9.8f;
+            float g = 9.81f;
 
             Vector3 dir = forward.normalized;
             Vector3 horizontal = new Vector3(dir.x, 0f, dir.z);
@@ -115,6 +117,22 @@ namespace Play.Bow
             float y = X * tanA - g * X * X * (1f + tanA * tanA) / (2f * speed * speed);
 
             return horizontal / cosA * X + Vector3.up * y;
+        }
+
+        public void LaunchFriedEgg()
+        {
+            if (!friedEgg)
+                return;
+            friedEgg.transform.parent = null;
+            friedEgg.Launch(forward, speed);
+            friedEgg = null;
+        }
+
+        public void PutEgg(FriedEggData friedEgg)
+        {
+            this.friedEgg = friedEgg;
+            friedEgg.transform.parent = transform;
+            friedEgg.transform.localPosition = new Vector3(0, launchHeight, 0);
         }
     }
 }

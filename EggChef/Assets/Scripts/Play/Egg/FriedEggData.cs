@@ -66,7 +66,7 @@ namespace Play.Egg
 
         public void StartFry()
         {
-            if (!pot || pot.GetComponent<PotData>().CanPutEgg())
+            if (!pot || !pot.GetComponent<PotData>().CanPutEgg())
             {
                 isFrying = false;
                 return;
@@ -80,7 +80,8 @@ namespace Play.Egg
             handSide = Side.NULL;
             collider.isTrigger = false;
             rb.isKinematic = true;
-            transform.localPosition = Vector3.zero;
+
+            transform.localPosition = new Vector3(0, 0.3f, 0);
             isFrying = true;
             pot.GetComponent<PotData>().SetEgg(this);
             SnapToFace();
@@ -149,7 +150,7 @@ namespace Play.Egg
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = new Vector3(0, 
-                pot.GetComponent<PotData>().perfectSpeed/3f, 
+                pot.GetComponent<PotData>().perfectSpeed, 
                 Random.Range(-3f, 3f));
             
             isFrying = false;
@@ -208,7 +209,9 @@ namespace Play.Egg
         {
             if (bow)
             {
-                bow.GetComponent<BowData>().friedEgg = this;
+                bow.GetComponent<BowData>().PutEgg(this);
+                rb.isKinematic = true;
+                rb.useGravity = false;
             }
         }
 
@@ -218,17 +221,30 @@ namespace Play.Egg
                     out RaycastHit hit, findDis, LayerMask.GetMask("FreezeItem"),
                     QueryTriggerInteraction.Ignore) && hit.collider.gameObject)
             {
-                if (hit.collider.gameObject.CompareTag("Pot"))
+                if (hit.collider.gameObject.CompareTag("Pot") &&
+                    hit.collider.TryGetComponent(out PotData potData) &&
+                    potData.CanPutEgg())
                 {
+                    bow = null;
+                    isFindBow = false;
                     pot = hit.collider.gameObject;
                     isFindPot = true;
                     Debug.Log("找到锅了");
                 }
                 else if (hit.collider.CompareTag("Bow"))
                 {
+                    pot = null;
+                    isFindPot = false;
                     bow = hit.collider.gameObject;
                     isFindBow = true;
                     Debug.Log("找到弓了");
+                }
+                else
+                {
+                    pot = null;
+                    isFindPot = false;
+                    bow = null;
+                    isFindBow = false;
                 }
             }
             else
@@ -238,6 +254,13 @@ namespace Play.Egg
                 isFindBow = false;
                 bow = null;
             }
+        }
+
+        public void Launch(Vector3 forward, float speed)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+            rb.linearVelocity = forward * speed;
         }
     }
 }

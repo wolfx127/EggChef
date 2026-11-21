@@ -105,7 +105,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 128
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -127,7 +127,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Play.Guest.GuestData
   seat: {fileID: 0}
   path: []
-  isSeat: 0
+  curNode: 0
+  nextNode: 0
+  isSit: 0
+  isCatchNode: 0
+  sightDis: 10
+  isWait: 0
+  forward: {x: 0, y: 0, z: 0}
+  walkSpeed: 10
+  isAngry: 0
+  sitTime: 100
+  sitTimeCounter: 0
+  eatTime: 3
+  eatTimeCounter: 0
+  truthEgg: {fileID: 0}
+  isSatisfied: 0
+  satisfiedTimeCounter: 0
+  satisfiedTime: 5
+  isLeave: 0
+  uiBubbleTime: 0
+  collider: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!54 &3069980535207448188
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -147,7 +167,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

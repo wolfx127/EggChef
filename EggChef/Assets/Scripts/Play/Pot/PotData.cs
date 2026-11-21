@@ -31,7 +31,7 @@ namespace Play.Pot
         
         private float minOil;
         private float maxOil;
-        private float curOil;
+        [SerializeField] private float curOil;
 
         public bool hasEgg;
 

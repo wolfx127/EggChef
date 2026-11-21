@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GuestSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.GuestSO
   sightDis: 10
+  walkSpeed: 10

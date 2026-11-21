@@ -47,6 +47,7 @@ namespace Play.Guest
 
                     caller.nextNode++;
                     caller.isCatchNode = false;
+                    Debug.Log($"{caller.gameObject}当前节点{caller.curNode}, 下一节点{caller.nextNode}");
                 }
             }
         }

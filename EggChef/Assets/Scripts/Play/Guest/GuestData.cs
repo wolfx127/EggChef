@@ -60,6 +60,7 @@ namespace Play.Guest
             FSM = new GuestFSM(this);
             this.path = path;
             this.seat = seat;
+            Debug.Log($"[StartTick] guest={name} path={(path == null ? -1 : path.Count)} seat={seat?.name}");
             curNode = 0;
             if(path.Count > 1) nextNode = 1;
             
@@ -78,9 +79,16 @@ namespace Play.Guest
 
         public void FixedTick(float fixedDt)
         {
+            if (path == null || path.Count == 0 || nextNode < 0 || nextNode >= path.Count)
+            {
+                Debug.LogError($"[FixedTick] 路径非法 path={(path == null ? -1 : path.Count)} nextNode={nextNode} guest={name}");
+                return;
+            }
+
             if(!isSit && !isWait)
             {
                 forward = (path[nextNode].transform.position - transform.position).normalized;
+                forward.y = 0;
                 rb.MovePosition(transform.position + fixedDt * walkSpeed * forward);
 
                 if (forward.sqrMagnitude > 0.0001f)
@@ -108,9 +116,11 @@ namespace Play.Guest
             if (!isCatchNode && 
                 other.gameObject.CompareTag("RoadNode") &&
                 other.gameObject.TryGetComponent(out RoadNode roadNode) &&
-                roadNode == path[nextNode])
+                roadNode == path[nextNode] && 
+                !roadNode.Equals(path[curNode]))
             {
                 isCatchNode = true;
+                Debug.Log($"{gameObject}走到路径点{nextNode}了");
             }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("FreeItem") &&

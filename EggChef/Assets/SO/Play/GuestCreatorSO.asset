@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971492c0ccd6dfc4ca119f4843580771, type: 3}
   m_Name: GuestCreatorSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.GuestCreatorSO
-  createGapTime: 600
-  roadNodeLinkDis: 10
+  createGapTime: 5
+  roadNodeLinkDis: 6

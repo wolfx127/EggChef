@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e33823a190c3c049a98902041b73755, type: 3}
   m_Name: BowSO
   m_EditorClassIdentifier: Assembly-CSharp::SO.Play.BowSO
-  drawTrackBallGapDis: 0.3
+  drawTrackBallGapDis: 1
   minDis_horizontal: 0
   maxDis_horizontal: 0
   minDis_vertical: 0

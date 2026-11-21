@@ -26,6 +26,7 @@ namespace Play
             {
                 pot.StartTick();
             }
+            guestCreator.StartTick();
         }
 
         private void Update()
@@ -41,7 +42,7 @@ namespace Play
 
         private void FixedUpdate()
         {
-            
+            guestCreator.FixedTick(Time.fixedDeltaTime);
         }
 
         private void LateUpdate()
