@@ -51,12 +51,12 @@ namespace Play.Decoration
 
         public void SetFriedEgg(GameObject friedEgg)
         {
-            Debug.Log($"{gameObject}座位接收到一个煎蛋");
-            if (guest)
+            if (guest || !this.friedEgg)
             {
-                if (!this.friedEgg && friedEgg.CompareTag("FriedEgg"))
+                if (friedEgg.CompareTag("FriedEgg"))
                 {
                     this.friedEgg = friedEgg;
+                    Debug.Log($"{gameObject}座位接到煎蛋");
                     friedEgg.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
                     guest.SetFriedEgg(friedEgg);
                     friedEgg.transform.position = plate.transform.position + Vector3.up * 1.2f;
