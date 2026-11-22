@@ -8,49 +8,61 @@ namespace Play.Decoration
     {
         public GuestData guest;
 
-        public GameObject plate;
-        public GameObject chair;
+        [SerializeField] private GameObject plate;
+        [SerializeField] private GameObject guestTriggerGO;
 
         private GameObject friedEgg;
-        
-        private Collider guestCollider;
-        private Collider plateCollider;
 
         public void Init()
         {
             if (!plate)
             {
-                plate = transform.GetChild(0).gameObject;
+                plate = transform.Find("Plate").gameObject;
                 if (!plate)
                 {
-                    Debug.Log("座位没找到盘子");
+                    Debug.Log($"{gameObject}座位没找到盘子");
                     return;
                 }
             }
+
+            if (!guestTriggerGO)
+            {
+                guestTriggerGO = transform.Find("GuestTrigger").gameObject;
+                if (!guestTriggerGO)
+                {
+                    Debug.Log($"{gameObject}座位没找到客人触发器");
+                }
+            }
+
             plate.SetActive(false);
-            
-            plateCollider = plate.GetComponent<Collider>();
-            guestCollider = GetComponent<Collider>();
-            guestCollider.isTrigger = true;
-            plateCollider.isTrigger = true;
+            guestTriggerGO.SetActive(true);
         }
 
         public void SetGuest(GuestData guest)
         {
             this.guest = guest;
-            guestCollider.enabled = false;
+            guestTriggerGO.SetActive(false);
             plate.SetActive(true);
             
-            //TODO:摆正客人位置
-            
+            guest.transform.position = guestTriggerGO.transform.position;
+            guest.transform.forward = (guestTriggerGO.transform.position - plate.transform.position).normalized;
             
         }
 
         public void SetFriedEgg(GameObject friedEgg)
         {
-            this.friedEgg = friedEgg;
-            guest.SetFriedEgg(friedEgg);
-            
+            Debug.Log($"{gameObject}座位接收到一个煎蛋");
+            if (guest)
+            {
+                if (!this.friedEgg && friedEgg.CompareTag("FriedEgg"))
+                {
+                    this.friedEgg = friedEgg;
+                    friedEgg.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                    guest.SetFriedEgg(friedEgg);
+                    friedEgg.transform.position = plate.transform.position + Vector3.up * 1.2f;
+                    friedEgg.transform.forward = (guestTriggerGO.transform.position - plate.transform.position).normalized;
+                }
+            }
         }
     }
 }

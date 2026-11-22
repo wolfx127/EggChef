@@ -1,7 +1,9 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Framework;
 using Overall;
 using Play.Bow;
+using Play.Decoration;
 using Play.Hand;
 using Play.Pot;
 using SO.Play;
@@ -217,6 +219,7 @@ namespace Play.Egg
 
         private void Find()
         {
+            if (pot || bow) return;
             if (Physics.Raycast(transform.position, Vector3.down, 
                     out RaycastHit hit, findDis, LayerMask.GetMask("FreezeItem"),
                     QueryTriggerInteraction.Ignore) && hit.collider.gameObject)
@@ -258,9 +261,19 @@ namespace Play.Egg
 
         public void Launch(Vector3 forward, float speed)
         {
+            collider.isTrigger = false;
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = forward * speed;
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            var seat = other.GetComponentInParent<SeatData>();
+            if (seat)
+            {
+                seat.SetFriedEgg(gameObject);
+            }
         }
     }
 }

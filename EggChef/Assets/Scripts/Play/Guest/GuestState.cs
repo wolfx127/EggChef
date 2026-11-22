@@ -104,6 +104,7 @@ namespace Play.Guest
 
         public override void Enter(GuestData caller, IBoard b)
         {
+            Debug.Log($"{caller.gameObject}客人落座");
             caller.sitTimeCounter = 0f;
         }
 
@@ -254,6 +255,8 @@ namespace Play.Guest
 
         public override void Enter(GuestData caller, IBoard b)
         {
+            caller.rb.isKinematic = false;
+            caller.collider.isTrigger = false;
             caller.curNode = caller.path.Count - 1;
             caller.nextNode = caller.curNode - 1;
         }

@@ -104,13 +104,20 @@ namespace Play.Guest
 
         public void OnTriggerEnter(Collider other)
         {
-            if (!isSit &&
-                other.gameObject.CompareTag("Seat") &&
-                other.gameObject.TryGetComponent(out SeatData seatData) &&
-                seatData == seat)
+            if (!isSit && !isLeave)
             {
-                isSit = true;
-                seatData.guest = this;
+                var seatData = other.GetComponentInParent<SeatData>();
+                if (seatData && seatData == seat)
+                {
+                    isSit = true;
+                    seatData.SetGuest(this);
+                    rb.linearVelocity = Vector3.zero;
+                    Debug.Log($"{gameObject}客人落座{seatData}");
+                }
+                else
+                {
+                    isSit = false;
+                }
             }
 
             if (!isCatchNode && 
@@ -122,16 +129,26 @@ namespace Play.Guest
                 isCatchNode = true;
                 Debug.Log($"{gameObject}走到路径点{nextNode}了");
             }
+            else
+            {
+                isCatchNode = false;
+            }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("FreeItem") &&
                 other.CompareTag("FriedEgg"))
             {
                 isAngry = true;
+                Debug.Log($"{gameObject}客人生气了");
+            }
+            else
+            {
+                isAngry = false;
             }
         }
 
         public void SetFriedEgg(GameObject friedEgg)
         {
+            Debug.Log("客人吃到煎蛋");
             if (truthEgg) return;
             truthEgg = friedEgg.GetComponent<FriedEggData>();
         }

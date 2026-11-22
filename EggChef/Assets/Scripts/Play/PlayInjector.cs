@@ -79,6 +79,9 @@ namespace Play
             roadNodeMgr = new RoadNodeMgr(roadNodeList, startNodeList, seatList);
             
             guestCreator.Init(playTimeManager, guestCreatorSO, guestGO, guestSO, roadNodeMgr);
+
+            foreach (var seat in seatList)
+                seat.GetComponentInParent<SeatData>().Init();
             
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList, guestCreator);
         }

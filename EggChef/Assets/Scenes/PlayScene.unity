@@ -2706,6 +2706,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Seat (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9060411868977306503, guid: 4f5fb743609137e43aa0b168bb0ef630, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
