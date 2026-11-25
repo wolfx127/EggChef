@@ -1,0 +1,19 @@
+{
+    "FileVersion": 1,
+    "PackageName": "PlayPackage",
+    "PackageVersion": "1.0",
+    "Entries": [
+        {
+            "BundleGuid": "5dda5ee7663abc22e413e1849b33daba",
+            "FileName": "5dda5ee7663abc22e413e1849b33daba.bundle"
+        },
+        {
+            "BundleGuid": "98c134b49b58fd9bb78041fecfdd3e16",
+            "FileName": "98c134b49b58fd9bb78041fecfdd3e16.bundle"
+        },
+        {
+            "BundleGuid": "a22f2d7af84dd746f7d1e94f89affdb9",
+            "FileName": "a22f2d7af84dd746f7d1e94f89affdb9.bundle"
+        }
+    ]
+}

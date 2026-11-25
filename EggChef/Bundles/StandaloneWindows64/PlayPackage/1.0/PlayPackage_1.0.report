@@ -1,0 +1,273 @@
+{
+    "Summary": {
+        "YooVersion": "3.0.7",
+        "UnityVersion": "6000.2.14f1",
+        "BuildDate": "2026/11/25 23:22:14",
+        "BuildSeconds": 4,
+        "BuildTarget": 19,
+        "BuildPipeline": "ScriptableBuildPipeline",
+        "BuildBundleType": 2,
+        "BuildPackageName": "PlayPackage",
+        "BuildPackageVersion": "1.0",
+        "BuildPackageNote": "2026/11/25 23:22:09",
+        "UniqueBundleName": true,
+        "EnableAddressable": false,
+        "SupportExtensionless": true,
+        "LocationToLower": false,
+        "IncludeAssetGuid": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "ClearBuildCacheFiles": true,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": true,
+        "SingleReferencedPackAlone": true,
+        "EncryptionServicesClassName": "YooAsset.Editor.EncryptionNone",
+        "ManifestProcessServicesClassName": "YooAsset.Editor.ManifestEncryptorNone",
+        "ManifestRestoreServicesClassName": "YooAsset.Editor.ManifestDecryptorNone",
+        "FileNameStyle": 0,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": false,
+        "ReplaceAssetPathWithAddress": false,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "playpackage_unityshaders.bundle",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 9,
+        "MainAssetTotalCount": 7,
+        "AllBundleTotalCount": 3,
+        "AllBundleTotalSize": 142420,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/Egg.prefab",
+            "AssetGuid": "6e9a3a93033494c42bc19fce19259648",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/Eggshell.prefab",
+            "AssetGuid": "c22f871692e2af447a3dadcb13faf3a1",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/FriedEgg.prefab",
+            "AssetGuid": "ee4c4047fe67af44894ce6bf18ea2e3e",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/Guest.prefab",
+            "AssetGuid": "a5db014768a18f84ea82fda3c9119dec",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/RoadNode.prefab",
+            "AssetGuid": "f90a3fcccc1b73841a0b0029670938ac",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [],
+            "DependBundles": [
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/Seat.prefab",
+            "AssetGuid": "4f5fb743609137e43aa0b168bb0ef630",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                },
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Play/TrackBall.mat",
+            "AssetGuid": "ee72bf28a8130ca4a8d1fa7aa50621a2",
+            "AssetTags": [],
+            "MainBundleName": "playpackage_assets_resource_play.bundle",
+            "MainBundleSize": 9924,
+            "DependAssets": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ],
+            "DependBundles": [
+                "playpackage_unityshaders.bundle"
+            ]
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "playpackage_assets_resource_play.bundle",
+            "FileName": "5dda5ee7663abc22e413e1849b33daba.bundle",
+            "FileHash": "5dda5ee7663abc22e413e1849b33daba",
+            "FileCrc": 3395964370,
+            "FileSize": 9924,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+                "playpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resource/Play/Egg.prefab",
+                    "AssetGUID": "6e9a3a93033494c42bc19fce19259648"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/Eggshell.prefab",
+                    "AssetGUID": "c22f871692e2af447a3dadcb13faf3a1"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/FriedEgg.prefab",
+                    "AssetGUID": "ee4c4047fe67af44894ce6bf18ea2e3e"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/Guest.prefab",
+                    "AssetGUID": "a5db014768a18f84ea82fda3c9119dec"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/RoadNode.prefab",
+                    "AssetGUID": "f90a3fcccc1b73841a0b0029670938ac"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/Seat.prefab",
+                    "AssetGUID": "4f5fb743609137e43aa0b168bb0ef630"
+                },
+                {
+                    "AssetPath": "Assets/Resource/Play/TrackBall.mat",
+                    "AssetGUID": "ee72bf28a8130ca4a8d1fa7aa50621a2"
+                }
+            ]
+        },
+        {
+            "BundleName": "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle",
+            "FileName": "a22f2d7af84dd746f7d1e94f89affdb9.bundle",
+            "FileHash": "a22f2d7af84dd746f7d1e94f89affdb9",
+            "FileCrc": 116339390,
+            "FileSize": 3068,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "playpackage_unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "playpackage_assets_resource_play.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat",
+                    "AssetGUID": "31321ba15b8f8eb4c954353edc038b1d"
+                }
+            ]
+        },
+        {
+            "BundleName": "playpackage_unityshaders.bundle",
+            "FileName": "98c134b49b58fd9bb78041fecfdd3e16.bundle",
+            "FileHash": "98c134b49b58fd9bb78041fecfdd3e16",
+            "FileCrc": 1855183354,
+            "FileSize": 129428,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "playpackage_assets_resource_play.bundle",
+                "playpackage_share_packages_com_unity_render-pipelines_universal_runtime_materials.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader",
+                    "AssetGUID": "933532a4fcc9baf4fa0491de14d08ed7"
+                }
+            ]
+        }
+    ],
+    "IndependentAssets": []
+}
