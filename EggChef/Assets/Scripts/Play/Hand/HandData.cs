@@ -199,5 +199,13 @@ namespace Play.Hand
                 speed = (prevPos_Y - targetPos.y) / dt;
             prevPos_Y = targetPos.y;
         }
+
+        public void Destroy()
+        {
+            handFSM = null;
+            EventBus.Unsubscribe<HandMoveByCameraEvent>(MoveByCamera);
+            itemGO = null;
+            itemData = null;
+        }
     }
 }

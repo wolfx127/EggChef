@@ -18,6 +18,7 @@ namespace Play.Hand
             stateTable.Add(State.CatchEgg, new HandCatchEgg());
             stateTable.Add(State.CatchPot, new HandCatchPot());
             stateTable.Add(State.CatchFriedEgg, new HandCatchFriedEgg());
+            stateTable.Add(State.CatchOil, new HandCatchOil());
             stateTable.Add(State.CatchBow, new HandCatchBow());
         }
 

@@ -123,9 +123,24 @@ namespace Play.Bow
         {
             if (!friedEgg)
                 return;
+            if (friedEgg.handSide != Side.NULL)
+            {
+                friedEgg = null;
+                return;
+            }
+
             friedEgg.transform.parent = null;
             friedEgg.Launch(forward, speed);
             friedEgg = null;
+        }
+
+        public void DeleteFriedEgg(FriedEggData data)
+        {
+            if (friedEgg && data.Equals(friedEgg))
+            {
+                friedEgg.transform.parent = null;
+                friedEgg = null;
+            }
         }
 
         public void PutEgg(FriedEggData friedEgg)

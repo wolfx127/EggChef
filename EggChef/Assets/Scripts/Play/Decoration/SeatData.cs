@@ -51,7 +51,7 @@ namespace Play.Decoration
 
         public void SetFriedEgg(GameObject friedEgg)
         {
-            if (guest || !this.friedEgg)
+            if (guest && !this.friedEgg)
             {
                 if (friedEgg.CompareTag("FriedEgg"))
                 {

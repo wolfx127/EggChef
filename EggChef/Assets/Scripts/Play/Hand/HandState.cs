@@ -4,6 +4,7 @@ using Framework;
 using Framework.FSM;
 using Play.Bow;
 using Play.Egg;
+using Play.Oil;
 using Play.Pot;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace Play.Hand
                 b => b is HandBoard hb && hb.catchObject == CatchObject.Pot));
             transitionTable.Add(new Transition(State.CatchFriedEgg,
                 b => b is HandBoard hb && hb.catchObject == CatchObject.FriedEgg));
+            transitionTable.Add(new Transition(State.CatchOil,
+                b =>  b is HandBoard hb && hb.catchObject == CatchObject.Oil));
             transitionTable.Add(new Transition(State.CatchBow,
                 b =>  b is HandBoard hb && hb.catchObject == CatchObject.Bow));
         }
@@ -283,8 +286,7 @@ namespace Play.Hand
                         egg.StartFry();
                         caller.itemData = null;
                     }
-
-                    if (hb.isPut && egg.isFindBow)
+                    else if (hb.isPut && egg.isFindBow)
                     {
                         caller.itemGO = null;
                         egg.PutBow();
@@ -307,19 +309,47 @@ namespace Play.Hand
 
     public class HandCatchOil : BaseState<HandData>
     {
+        public HandCatchOil()
+        {
+            transitionTable = new List<Transition>();
+            transitionTable.Add(new Transition(State.CatchNothing,
+                b => b is HandBoard hb && hb.catchObject == CatchObject.Nothing));
+        }
         public override void Enter(HandData caller, IBoard b)
         {
-            throw new NotImplementedException();
+            caller.targetPos = caller.itemGO.transform.position;
+            OilData data = caller.itemGO.GetComponent<OilData>();
+            caller.itemData = data;
+            data.OnCatchEnter(caller.side);
         }
 
         public override void Update(HandData caller, IBoard b)
         {
-            throw new NotImplementedException();
+            caller.transform.position = caller.targetPos;
+            caller.itemGO.transform.position = caller.transform.position;
+            if (caller.itemData is OilData oil)
+            {
+                if (b is HandBoard hb)
+                {
+                    if (hb.isPut && oil.CanPour())
+                    {
+                        oil.EnterPour(hb.deltaTime);
+                    }
+                    else if(!hb.isPut && oil.isPouring)
+                    {
+                        oil.CancelPour();
+                    }
+                }
+            }
         }
 
         public override void Exit(HandData caller, IBoard b)
         {
-            throw new NotImplementedException();
+            if (caller.itemData is OilData oil)
+            {
+                oil.OnCatchExit();
+            }
+            caller.itemData = null;
         }
     }
 

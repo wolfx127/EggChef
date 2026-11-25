@@ -76,13 +76,10 @@ namespace Play.Guest
 
         public override void Update(GuestData caller, IBoard b)
         {
-            if (Physics.Raycast(caller.transform.position,
-                    caller.forward, out RaycastHit hit,
-                    caller.sightDis, ~0, QueryTriggerInteraction.Ignore))
-            {
-                if (!hit.collider.CompareTag("Guest"))
-                    caller.isWait = false;
-            }
+            caller.isWait = Physics.Raycast(caller.transform.position,
+                                caller.forward, out RaycastHit hit,
+                                caller.sightDis, ~0, QueryTriggerInteraction.Ignore)
+                            && hit.collider.CompareTag("Guest");
         }
 
         public override void Exit(GuestData caller, IBoard b)

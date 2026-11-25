@@ -2298,6 +2298,7 @@ MonoBehaviour:
   - {fileID: 618346368}
   potSO: {fileID: 11400000, guid: eefa77d62a557234a8a2e9fb7bcf4194, type: 2}
   oilGO: {fileID: 1883045152}
+  oilSO: {fileID: 11400000, guid: 9edb3c1951123f646a6c189251f40c04, type: 2}
   friedEggGO: {fileID: 3452420909779002532, guid: ee4c4047fe67af44894ce6bf18ea2e3e, type: 3}
   friedEggSO: {fileID: 11400000, guid: ea52d96b6be5ef54a8268c11dc119c19, type: 2}
   bowGO: {fileID: 63537854}
@@ -3181,7 +3182,6 @@ GameObject:
   - component: {fileID: 1883045155}
   - component: {fileID: 1883045154}
   - component: {fileID: 1883045153}
-  - component: {fileID: 1883045157}
   - component: {fileID: 1883045158}
   m_Layer: 7
   m_Name: Oil
@@ -3282,33 +3282,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1883045157
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1883045152}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 14
-  m_CollisionDetection: 0
 --- !u!114 &1883045158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3322,7 +3295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Play.Oil.OilData
   handSide: 0
-  isUnderPot: 0
+  isPouring: 0
   collider: {fileID: 0}
 --- !u!1001 &1917482064
 PrefabInstance:

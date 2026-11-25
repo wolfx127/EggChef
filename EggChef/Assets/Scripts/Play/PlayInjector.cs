@@ -29,6 +29,7 @@ namespace Play
         [SerializeField] private List<GameObject> potList;
         [SerializeField] private PotSO potSO;
         [SerializeField] private GameObject oilGO;
+        [SerializeField] private OilSO oilSO;
         [SerializeField] private GameObject friedEggGO;
         [SerializeField] private FriedEggSO friedEggSO;
         [SerializeField] private GameObject bowGO;
@@ -73,7 +74,7 @@ namespace Play
                 pot.GetComponent<PotData>().Init(potSO);
             
             eggShell.Init(eggGO, eggSO, eggShellGO, friedEggGO, friedEggSO);
-            oilGO.GetComponent<OilData>().Init();
+            oilGO.GetComponent<OilData>().Init(oilSO);
             bowGO.GetComponent<BowData>().Init(bowSO);
             
             roadNodeMgr = new RoadNodeMgr(roadNodeList, startNodeList, seatList);
@@ -84,6 +85,12 @@ namespace Play
                 seat.GetComponentInParent<SeatData>().Init();
             
             playMonoController.Init(cameraGO, playCamera, leftHand, rightHand, potList, guestCreator);
+        }
+
+        private void OnDestroy()
+        {
+            leftHand.Destroy();
+            rightHand.Destroy();
         }
     }
 }

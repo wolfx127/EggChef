@@ -70,9 +70,13 @@ namespace Play.Egg
         {
             if (!pot || !pot.GetComponent<PotData>().CanPutEgg())
             {
+                handSide = Side.NULL;
                 isFrying = false;
                 return;
             }
+
+            isFindBow = false;
+            bow = null;
 
             //蛋已经进锅，不用再找锅了
             findHandle?.Stop();
@@ -187,6 +191,16 @@ namespace Play.Egg
 
         public void EnterFromHand()
         {
+            if (pot)
+            {
+                pot.GetComponent<PotData>().DeleteFriedEgg(this);
+                pot = null;
+            }
+            if (bow)
+            {
+                bow.GetComponent<BowData>().DeleteFriedEgg(this);
+                bow = null;
+            }
             findHandle?.Stop();
             findHandle = UniTaskMgr.Repeat(0.1f, Find, this.GetCancellationTokenOnDestroy());
         }
@@ -211,6 +225,7 @@ namespace Play.Egg
         {
             if (bow)
             {
+                handSide = Side.NULL;
                 bow.GetComponent<BowData>().PutEgg(this);
                 rb.isKinematic = true;
                 rb.useGravity = false;
@@ -219,7 +234,6 @@ namespace Play.Egg
 
         private void Find()
         {
-            if (pot || bow) return;
             if (Physics.Raycast(transform.position, Vector3.down, 
                     out RaycastHit hit, findDis, LayerMask.GetMask("FreezeItem"),
                     QueryTriggerInteraction.Ignore) && hit.collider.gameObject)
@@ -234,7 +248,13 @@ namespace Play.Egg
                     isFindPot = true;
                     Debug.Log("找到锅了");
                 }
-                else if (hit.collider.CompareTag("Bow"))
+                else
+                {
+                    pot = null;
+                    isFindPot = false;
+                }
+
+                if (hit.collider.CompareTag("Bow"))
                 {
                     pot = null;
                     isFindPot = false;
@@ -244,8 +264,6 @@ namespace Play.Egg
                 }
                 else
                 {
-                    pot = null;
-                    isFindPot = false;
                     bow = null;
                     isFindBow = false;
                 }
@@ -274,6 +292,14 @@ namespace Play.Egg
             {
                 seat.SetFriedEgg(gameObject);
             }
+        }
+
+        public void OnDestroy()
+        {
+            findHandle?.Stop();
+            findHandle = null;
+            fryHandle?.Stop();
+            fryHandle = null;
         }
     }
 }

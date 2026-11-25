@@ -83,7 +83,13 @@ namespace Play.Pot
         public void PerfectFlipEnter()
         {
             if (!friedEggGO) return;
-            
+            if (friedEggData.handSide != Side.NULL)
+            {
+                friedEggGO = null;
+                friedEggData = null;
+                return;
+            }
+
             friedEggData.isFrying = false;
             //标记使得禁止互斥行为执行
             isFlip = true;
@@ -123,6 +129,13 @@ namespace Play.Pot
 
         public void BadFlip()
         {
+            if (!friedEggGO) return;
+            if (friedEggData.handSide != Side.NULL)
+            {
+                friedEggGO = null;
+                friedEggData = null;
+                return;
+            }
             flipHandle?.Stop();
             flipHandle = null;
             if (!friedEggGO || !friedEggData || !friedEggData.isFrying || isFlip) return;
@@ -146,6 +159,31 @@ namespace Play.Pot
         public bool CanPutOil()
         {
             return !friedEggGO;
+        }
+
+        public void AddOil(float oil)
+        {
+            curOil += oil;
+        }
+
+        public void DeleteFriedEgg(FriedEggData data)
+        {
+            if (friedEggData && friedEggData.Equals(data))
+            {
+                friedEggData.StopFry();
+                friedEggData = null;
+            }
+            if(friedEggGO)
+            {
+                friedEggGO.transform.SetParent(null, true);
+                friedEggGO = null;
+            }
+        }
+
+        public void OnDestroy()
+        {
+            flipHandle?.Stop();
+            flipHandle = null;
         }
     }
 }
