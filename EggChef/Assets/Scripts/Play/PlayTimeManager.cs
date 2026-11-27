@@ -31,9 +31,9 @@ namespace Play
         /// <summary>
         /// 给ui按钮用
         /// </summary>
-        private void Settle()
+        private void IntoSettleScene()
         {
-            OverallSceneManager.Instance.PlayToSettle();
+            OverallSceneMgr.Instance.ChangeScene("SettleScene", "PlayScene");
         }
     }
 }

@@ -1,0 +1,11 @@
+{
+    "FileVersion": 1,
+    "PackageName": "StartPackage",
+    "PackageVersion": "1.0",
+    "Entries": [
+        {
+            "BundleGuid": "9c343e6760f0c735eb7475592ffca8a9",
+            "FileName": "9c343e6760f0c735eb7475592ffca8a9.bundle"
+        }
+    ]
+}

@@ -1,0 +1,76 @@
+{
+    "Summary": {
+        "YooVersion": "3.0.7",
+        "UnityVersion": "6000.2.14f1",
+        "BuildDate": "2026/11/27 11:12:38",
+        "BuildSeconds": 9,
+        "BuildTarget": 19,
+        "BuildPipeline": "ScriptableBuildPipeline",
+        "BuildBundleType": 2,
+        "BuildPackageName": "StartPackage",
+        "BuildPackageVersion": "1.0",
+        "BuildPackageNote": "2026/11/27 11:12:29",
+        "UniqueBundleName": true,
+        "EnableAddressable": false,
+        "SupportExtensionless": true,
+        "LocationToLower": false,
+        "IncludeAssetGuid": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "ClearBuildCacheFiles": true,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": true,
+        "SingleReferencedPackAlone": true,
+        "EncryptionServicesClassName": "YooAsset.Editor.EncryptionNone",
+        "ManifestProcessServicesClassName": "YooAsset.Editor.ManifestEncryptorNone",
+        "ManifestRestoreServicesClassName": "YooAsset.Editor.ManifestDecryptorNone",
+        "FileNameStyle": 0,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": false,
+        "ReplaceAssetPathWithAddress": false,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "startpackage_unityshaders.bundle",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 1,
+        "MainAssetTotalCount": 1,
+        "AllBundleTotalCount": 1,
+        "AllBundleTotalSize": 229406,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Resource/Start/StartBGI.png",
+            "AssetGuid": "9045beb98d1ae784ca93218e4bcf270d",
+            "AssetTags": [],
+            "MainBundleName": "startpackage_assets_resource_start.bundle",
+            "MainBundleSize": 229406,
+            "DependAssets": [],
+            "DependBundles": []
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "startpackage_assets_resource_start.bundle",
+            "FileName": "9c343e6760f0c735eb7475592ffca8a9.bundle",
+            "FileHash": "9c343e6760f0c735eb7475592ffca8a9",
+            "FileCrc": 34478888,
+            "FileSize": 229406,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resource/Start/StartBGI.png",
+                    "AssetGUID": "9045beb98d1ae784ca93218e4bcf270d"
+                }
+            ]
+        }
+    ],
+    "IndependentAssets": []
+}

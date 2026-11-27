@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InitialDataMgr
   overallDataSO: {fileID: 11400000, guid: 604ea0d13bcb4a349b16991161f1553d, type: 2}
+  UIGO: {fileID: 1213300740}
 --- !u!4 &1972294076
 Transform:
   m_ObjectHideFlags: 0

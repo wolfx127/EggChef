@@ -27,7 +27,7 @@ namespace StartToPlay
             isLoading = true;
             Debug.Log("点击进入游戏");
 
-            OverallSceneManager.Instance.StartToConstant();
+            OverallSceneMgr.Instance.ChangeScene("PlayScene", "StartScene");
         }
     }
 }
